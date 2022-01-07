@@ -1,7 +1,0 @@
-NYC Real Estate Building
-4 Tables:  
-Tenants; Insects & Rodents; Pets; Employees
-
-Relationships: 
-Tenants can have some of the other tables in their building
-

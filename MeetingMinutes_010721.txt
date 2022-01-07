@@ -1,0 +1,14 @@
+NYC Real Estate Building
+4 Tables:  
+Tenants; Insects & Rodents; Pets; Employees
+
+Relationships: 
+Tenants can have some of the other tables in their building
+
+Russell to be away 1/20 to 1/23
+Next Call: 1/14, 6pm  
+Weekend, week up to 1/20: Parts 1 and 2
+
+Before 1/14 Call:
+Sending emails back and forth after Sunday afternoon
+Potential call mid-week to discuss further development of part 1
