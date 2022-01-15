@@ -12,3 +12,9 @@ Weekend, week up to 1/20: Parts 1 and 2
 Before 1/14 Call:
 Sending emails back and forth after Sunday afternoon
 Potential call mid-week to discuss further development of part 1
+
+
+1/14 Call:
+
+1.) Discussion on if Apartment Floor is an entity?  -- RF to follow-up ED discussion comment
+2.) JS and RF to make changes and communicate via email over next few days.
