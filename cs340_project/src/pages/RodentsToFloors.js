@@ -2,7 +2,7 @@ import React from "react";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
 import Header from "../components/Header";
 
-function Rodents() {
+function RodentsToFloors() {
     return(
         <Header></Header>
 
@@ -12,4 +12,4 @@ function Rodents() {
 
 
 
-    export default Rodents;
+    export default RodentsToFloors;
