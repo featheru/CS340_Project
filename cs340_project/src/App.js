@@ -1,21 +1,19 @@
+import { Link } from "react-router-dom";
 import './App.css';
-import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 
-function App() {
+export default function App() {
   return (
-    <Router>
     <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/AptOwners">Apartment Owners</Link>
-          </li>
-
-        </ul>
+      <h1>Beavers Development</h1>
+      <nav
+        style={{
+          borderBottom: "solid 1px",
+          paddingBottom: "1rem"
+        }}
+      >
+        <Link to="/aptOwners">AptOwners</Link> |{" "}
+        <Link to="/rodents">Rodents</Link>
       </nav>
     </div>
-    </Router>
   );
 }
-
-export default App;
