@@ -1,10 +1,11 @@
 import React from "react";
-import { MdDeleteForever, MdEdit } from "react-icons/md";
 import Header from "../components/Header";
+import EditButton from "../components/EditButton";
+import DeleteButton from "../components/DeleteButton";
 
 function RodentsToFloors() {
     return(
-        <><Header></Header>
+        <><Header/>
         <h1 class = "DatabaseTitle">Rodents To Apartment Floors</h1>
         <p class = "DatabaseText">Rodents to Apartment Floors Tables links rodents to a given floor.  A rodent can be on multiple floors 
         at a given time and a floor can have multiple rodents.</p>
@@ -13,23 +14,23 @@ function RodentsToFloors() {
                 <tr>
                     <th>Rodent ID [int]</th>
                     <th>Floor Number [int]</th>
-                    <th></th>
-                    <th></th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>93</td>
                     <td>55</td>
-                    <td><MdEdit /></td>
-                    <td><MdDeleteForever /></td>
+                    <td><EditButton/></td>
+                    <td><DeleteButton/></td>
                 </tr>
             </tbody>
         </table></>
 
 
 
-    )};
+    )}
 
 
 

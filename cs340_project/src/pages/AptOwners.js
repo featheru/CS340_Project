@@ -1,10 +1,11 @@
 import React from "react";
-import { MdDeleteForever, MdEdit } from "react-icons/md";
 import Header from "../components/Header";
+import EditButton from "../components/EditButton";
+import DeleteButton from "../components/DeleteButton";
 
 function AptOwners() {
     return(
-        <><Header></Header>
+        <><Header/>
         <h1 class = "DatabaseTitle">Apartment Owners</h1>
         <p class = "DatabaseText">AptOwners, or Apartment Owners, database table tracks current and past apartment owners in a
         building by giving each owner a unique ID while storing the owner's first, last name, and SSN.</p>
@@ -15,8 +16,8 @@ function AptOwners() {
                     <th>First Name [varchar]</th>
                     <th>Last Name [varchar]</th>
                     <th>SSN [varchar]</th>
-                    <th></th>
-                    <th></th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,8 +26,8 @@ function AptOwners() {
                     <td>Testy</td>
                     <td>Testerson</td>
                     <td>123-456-7890</td>
-                    <td><MdEdit /></td>
-                    <td><MdDeleteForever /></td>
+                    <td><EditButton/></td>
+                    <td><DeleteButton/></td>
                 </tr>
             </tbody>
         </table></>

@@ -1,10 +1,11 @@
 import React from "react";
-import { MdDeleteForever, MdEdit } from "react-icons/md";
 import Header from "../components/Header";
+import EditButton from "../components/EditButton";
+import DeleteButton from "../components/DeleteButton";
 
 function Rodents() {
     return(
-        <><Header></Header>
+        <><Header/>
         <h1 class = "DatabaseTitle">Rodents</h1>
         <p class = "DatabaseText">Rodent entity tracks all information related to rodents in the building. Rodents do
         not get removed from database after extermination or leaving the building</p>
@@ -13,23 +14,23 @@ function Rodents() {
                 <tr>
                     <th>Rodent ID [int]</th>
                     <th>Rodent Name [varchar]</th>
-                    <th></th>
-                    <th></th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>93</td>
                     <td>PizzaRat</td>
-                    <td><MdEdit /></td>
-                    <td><MdDeleteForever /></td>
+                    <td><EditButton/></td>
+                    <td><DeleteButton/></td>
                 </tr>
             </tbody>
         </table></>
 
 
 
-    )};
+    )}
 
 
 
