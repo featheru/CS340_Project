@@ -1,9 +1,12 @@
 
       Front End Based Website addres needs to build to
+      (only needed first time) npm install
       npm run build
-      npm install -g serve
+      (only needed first time) npm install -g serve
       serve -s build
       http://flip1.engr.oregonstate.edu:INSERTPORTNUM
+
+      http://flip1.engr.oregonstate.edu:42309
 
       For Local Builds: 
       Builds to localhost:portNum

@@ -5,15 +5,18 @@ import Header from "../components/Header";
 function AptOwners() {
     return(
         <><Header></Header>
+        <h1 class = "DatabaseTitle">Apartment Owners</h1>
+        <p class = "DatabaseText">AptOwners, or Apartment Owners, database table tracks current and past apartment owners in a
+        building by giving each owner a unique ID while storing the owner's first, last name, and SSN.</p>
         <table id="AptOwners">
             <thead>
                 <tr>
-                    <th>ownerID</th>
-                    <th>firstName</th>
-                    <th>lastName</th>
-                    <th>ssn</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <th>Owner ID [int]</th>
+                    <th>First Name [varchar]</th>
+                    <th>Last Name [varchar]</th>
+                    <th>SSN [varchar]</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
