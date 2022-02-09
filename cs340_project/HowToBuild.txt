@@ -1,22 +1,33 @@
+Building on Flip Server:
 
-      Front End Based Website addres needs to build to
-      (only needed first time) npm install
-      npm run build
-      (only needed first time) npm install -g serve
-      serve -s build
-      http://flip1.engr.oregonstate.edu:INSERTPORTNUM
+(only needed first time)  npm install
+npm run build
+(only needed first time) npm install -g serve
+serve -s build
+http://flip1.engr.oregonstate.edu:INSERTPORTNUM
 
-      http://flip1.engr.oregonstate.edu:42309
+      example:
+      http://flip1.engr.oregonstate.edu:36109
 
-      For Local Builds: 
-      Builds to localhost:portNum
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
 
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+For Local Builds: 
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
+Builds to localhost:portNum
+To begin the development, run `npm start` or `yarn start`.
+To create a production bundle, use `npm run build` or `yarn build`.
+
+Other Misc. Info:
+
+Notice the use of %PUBLIC_URL% in the tags above.
+It will be replaced with the URL of the `public` folder during the build.
+Only files inside the `public` folder can be referenced from the HTML.
+
+Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+work correctly both with client-side routing and a non-root public URL.
+Learn how to configure a non-root public URL by running `npm run build`.
+
+
+<div>
+          <siteTitle id = "title">Beaver Development Database Tables</siteTitle>
+          <img class = "BeaverHeader" src = "./WinkyBeaverJPG.jpg" alt ="Beaver Pic--TBD"></img>
+        </div>

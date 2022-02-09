@@ -1,10 +1,12 @@
 import React from "react";
 import Header from "../components/Header";
+import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 function Apts() {
     return(
         <><Header/>
+        <SideBar />
         <h1 class = "DatabaseTitle">Apartments</h1>
         <p class = "DatabaseText">Apts, or Apartments, database table tracks floor specific information of each
         apartment and is used to link rodents to specific floors</p>

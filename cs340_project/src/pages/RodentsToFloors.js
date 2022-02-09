@@ -1,11 +1,13 @@
 import React from "react";
 import Header from "../components/Header";
+import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 
 function RodentsToFloors() {
     return(
         <><Header/>
+        <SideBar />
         <h1 class = "DatabaseTitle">Rodents To Apartment Floors</h1>
         <p class = "DatabaseText">Rodents to Apartment Floors Tables links rodents to a given floor.  A rodent can be on multiple floors 
         at a given time and a floor can have multiple rodents.</p>

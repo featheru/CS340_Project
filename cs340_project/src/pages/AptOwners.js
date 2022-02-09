@@ -1,11 +1,13 @@
 import React from "react";
 import Header from "../components/Header";
+import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 
 function AptOwners() {
     return(
         <><Header/>
+        <SideBar />
         <h1 class = "DatabaseTitle">Apartment Owners</h1>
         <p class = "DatabaseText">AptOwners, or Apartment Owners, database table tracks current and past apartment owners in a
         building by giving each owner a unique ID while storing the owner's first, last name, and SSN.</p>

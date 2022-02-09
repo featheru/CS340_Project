@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import Header from "../components/Header";
+import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 import {MdAdd, MdCancel} from "react-icons/md";
@@ -34,6 +35,7 @@ function AptFloors() {
 
     return(
         <><Header/>
+        <SideBar />
         <h1 class = "DatabaseTitle">Apartment Floors</h1>
         <p class = "DatabaseText">AptFloors, or Apartment Floors, database table tracks floor specific information of each
         apartment and is used to link rodents to specific floors</p>

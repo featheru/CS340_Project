@@ -1,12 +1,12 @@
 import './App.css';
 import Header from './components/Header';
+import SideBar from './components/SideBar';
 
 export default function App() {
   return (
     <div>
-      <Header></Header>
-      <h1>Welcome to Beavers Development!!!</h1>
-
+      <Header/>
+      <SideBar />
     </div>
   );
 }

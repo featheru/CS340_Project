@@ -1,11 +1,13 @@
 import React from "react";
 import Header from "../components/Header";
+import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 
 function PriceHistory() {
     return(
         <><Header/>
+        <SideBar />
         <h1 class = "DatabaseTitle">Price History</h1>
         <p class = "DatabaseText">Price History database table contains information realted to each
         specific sale of the aprtment between the selling owner and buying owner</p>

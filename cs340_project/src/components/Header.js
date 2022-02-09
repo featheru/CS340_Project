@@ -12,14 +12,13 @@ const HeaderLink = ({ page }) => {
 const Header = () => {
     return (
       <div className='header'>
-        <HeaderLink page='' />
-        <HeaderLink page='aptOwners' />
-        <HeaderLink page='apts' />
-        <HeaderLink page='aptFloors' />
-        <HeaderLink page='priceHistory' />
-        <HeaderLink page='rodents' />
-        <HeaderLink page='rodentsToFloors' />
-
+          <HeaderLink page='' />
+          <HeaderLink page='aptOwners' />
+          <HeaderLink page='apts' />
+          <HeaderLink page='aptFloors' />
+          <HeaderLink page='priceHistory' />
+          <HeaderLink page='rodents' />
+          <HeaderLink page='rodentsToFloors' />
       </div>
     );
   };
