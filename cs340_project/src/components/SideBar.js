@@ -2,10 +2,15 @@
 
 import React from 'react';
 import { slide as Menu } from 'react-burger-menu';
+import beaver from './WinkyBeaverJPG.jpg';
 
 export default props => {
   return (
     <Menu>
+      <div>
+          <h1 id = "title">Beaver Development Database Tables</h1>
+          <img class = "BeaverHeader" src = {beaver} alt ="Beaver Pic--TBD"></img>
+      </div>
       <a className="menu-item">Beaver Development User Database Tables</a>
       <a className="menu-item">Project Step 3 Draft</a>
       <a className="menu-item">CS 340: Intro to Databases</a>

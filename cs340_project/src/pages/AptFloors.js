@@ -25,8 +25,6 @@ function AptFloors() {
                     </td>
                 </tr>
             </table>
-
-
         </div>
     };
     const onAddClick = event => {
@@ -34,11 +32,11 @@ function AptFloors() {
     };
 
     return(
-        <><Header/>
+        <>
+        <Header/>
         <SideBar />
         <h1 class = "DatabaseTitle">Apartment Floors</h1>
-        <p class = "DatabaseText">AptFloors, or Apartment Floors, database table tracks floor specific information of each
-        apartment and is used to link rodents to specific floors</p>
+        <p class = "DatabaseText">Apartment Floor table tracks floor specific information of each apartment including fire exits.</p>
         <table id="AptFloors">
             <thead>
                 <tr>
@@ -49,24 +47,20 @@ function AptFloors() {
                 </tr>
             </thead>
             <tbody>
-            <AptFloor/>
+                <SampleAptFloor/>
             </tbody>
         </table>
-            {aptFloorList}
-            <div>
-                <MdAdd onClick={onAddClick}>Add New Apt</MdAdd>
-            </div>
+        {aptFloorList}
+        <div>
+            <MdAdd text = "Add New Apt Floor" onClick={onAddClick}>Add New Apt Floor</MdAdd>
+        </div>
         </>
-
-
-
-
-    )}
-
+    )
+}
 
 // TODO: replace dummy data with DB inputs.
 // Row of AptFloor data
-function AptFloor() {
+function SampleAptFloor() {
     return(
         <tr>
             <td>55</td>
@@ -74,8 +68,7 @@ function AptFloor() {
             <td><EditButton/></td>
             <td><DeleteButton/></td>
         </tr>
+)}
 
-    )
-}
 
-    export default AptFloors;
+export default AptFloors;

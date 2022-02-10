@@ -4,12 +4,39 @@ import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 function Apts() {
+    const [aptList, setApt] = useState([]);
+    const AptInput = () => {
+        return <div>
+            <table>
+                <tr>
+                    <td>
+                        <input placeholder="Apartment Number"/>
+                    </td>
+                    <td>
+                        <input placeholder="Floor Number"/>
+                    </td>
+                    <td>
+                        <input placeholder="Square Footage"/>
+                    </td>
+                    <td>
+                        <MdAdd/>
+                    </td>
+                    <td>
+                        <MdCancel/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    };
+    const onAddClick = event => {
+        setAptOwnerList(aptList.concat(<AptInput key={aptList.length} />));
+    };
     return(
-        <><Header/>
+        <>
+        <Header/>
         <SideBar />
         <h1 class = "DatabaseTitle">Apartments</h1>
-        <p class = "DatabaseText">Apts, or Apartments, database table tracks floor specific information of each
-        apartment and is used to link rodents to specific floors</p>
+        <p class = "DatabaseText">Apartments database table tracks specific information regarding an apartment including the floor number, and apartment number.</p>
         <table id="Apts">
             <thead>
                 <tr>
@@ -22,17 +49,35 @@ function Apts() {
             </thead>
             <tbody>
                 <tr>
-                    <td>55</td>
-                    <td>666</td>
-                    <td>2</td>
-                    <td><EditButton/></td>
-                    <td><DeleteButton/></td>
+                    <SampleApts/>
                 </tr>
             </tbody>
-        </table></>
+        </table>
+        {aptList}
+        <div>
+            <MdAdd text = "Add New Apartment" onClick={onAddClick}>Add New Apt</MdAdd>
+        </div>
+        
+        
+        </>
+    )
+}
 
 
+// TODO: replace dummy data with DB inputs.
+// Row of AptFloor data
+function SampleApts() {
+    return(
+        <tr>
+            <td>55</td>
+            <td>666</td>
+            <td>2</td>
+            <td><EditButton/></td>
+            <td><DeleteButton/></td>
+        </tr>
+
+    )
+}
 
 
-    )}
-    export default Apts;
+export default Apts;

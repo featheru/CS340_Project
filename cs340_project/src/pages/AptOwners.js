@@ -5,12 +5,40 @@ import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 
 function AptOwners() {
+    const [aptOwnerList, setAptOwners] = useState([]);
+    const AptOwnerInput = () => {
+        return <div>
+            <table>
+                <tr>
+                    <td>
+                        <input placeholder="First Name"/>
+                    </td>
+                    <td>
+                        <input placeholder="Last Name"/>
+                    </td>
+                    <td>
+                        <input placeholder="SSN"/>
+                    </td>
+                    <td>
+                        <MdAdd/>
+                    </td>
+                    <td>
+                        <MdCancel/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    };
+    const onAddClick = event => {
+        setAptOwnerList(aptFloorList.concat(<AptOwnerInput key={aptOwnerList.length} />));
+    };
     return(
-        <><Header/>
+        <>
+        <Header/>
         <SideBar />
-        <h1 class = "DatabaseTitle">Apartment Owners</h1>
-        <p class = "DatabaseText">AptOwners, or Apartment Owners, database table tracks current and past apartment owners in a
-        building by giving each owner a unique ID while storing the owner's first, last name, and SSN.</p>
+        <h1 class = "DatabaseTitle">Apartment Owners Table</h1>
+        <p class = "DatabaseText">Apartment Owners database table tracks current and past apartment owners at Beaver Development by giving each owner a 
+        unique ID, and storing each owners first and last name as well as SSN.</p>
         <table id="AptOwners">
             <thead>
                 <tr>
@@ -24,18 +52,31 @@ function AptOwners() {
             </thead>
             <tbody>
                 <tr>
-                    <td>0</td>
-                    <td>Testy</td>
-                    <td>Testerson</td>
-                    <td>123-456-7890</td>
-                    <td><EditButton/></td>
-                    <td><DeleteButton/></td>
+                    <SampleAptOwner/>
                 </tr>
             </tbody>
-        </table></>
+        </table>
+        {aptOwnerList}
+        <div>
+            <MdAdd text = "Add New Apartment Owner" onClick={onAddClick}>Add New Apt Owner</MdAdd>
+        </div>
+        </>
+    )
+}
 
-
-
+// TODO: replace dummy data with DB inputs.
+// Row of AptFloor data
+function SampleAptOwner() {
+    return(
+        <tr>
+            <td>0</td>
+            <td>Testy</td>
+            <td>Testerson</td>
+            <td>123-456-7890</td>
+            <td><EditButton/></td>
+            <td><DeleteButton/></td>
+        </tr>
+        
 
     )
 }
