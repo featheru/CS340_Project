@@ -1,11 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
+import {MdAdd, MdCancel} from "react-icons/md";
 
 function Rodents() {
-    const [rodentList, setRodent] = useState([]);
+    const [rodentList, setRodentList] = useState([]);
     const RodentInput = () => {
         return <div>
             <table>
@@ -31,8 +32,8 @@ function Rodents() {
         <Header/>
         <SideBar />
         <h1 class = "DatabaseTitle">Rodents</h1>
-        <p class = "DatabaseText">Rodent table tracks all information related to rodents in the building. Rodents do
-        not get removed from database after extermination or leaving the building and the only info tracked is the name</p>
+        <p class = "DatabaseText">Rodent table tracks all information related to rodents in the building. Rodents do not get removed from database <br></br>
+        after extermination or leaving the building and the only info tracked is the name</p>
         <table id="Price History">
             <thead>
                 <tr>
@@ -48,9 +49,8 @@ function Rodents() {
         </table>
         {rodentList}
         <div>
-            <MdAdd text = "Add New Building Rodent" onClick={onAddClick}>Add New Building Rodent</MdAdd>
-        </div>
-        
+            <MdAdd onClick={onAddClick}></MdAdd>
+        </div>        
         </>
     )
 }

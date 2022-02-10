@@ -3,12 +3,13 @@
 }
 
 #title {
-  min-height: 200vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(20px + 4vmin);
+  align-items: left;
+  justify-content: left;
+  text-align: left;
+  font-size: calc(10px + 2vmin);
   color: black;
 }
 
@@ -34,6 +35,9 @@
     transform: rotate(360deg);
   }
 }
+table {
+  margin: 0px auto;
+}
 
 td, th {
   border: 1px solid #ddd;
@@ -48,13 +52,14 @@ th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: orange;
-  color: white;
+  background-color: lightsalmon;
+  color: black;
 }
 
 html,
 body {
-  margin: 0;
+  text-align: center;
+  margin: 100;
 }
 
 #App {
@@ -75,20 +80,12 @@ body {
   transition: color 0.2s;
 }
 
-.bm-item:hover {
-  color: white;
-}
-
 .bm-burger-button {
   position: fixed;
   width: 36px;
   height: 30px;
   left: 36px;
   top: 36px;
-}
-
-.bm-burger-bars {
-  background: #373a47;
 }
 
 .bm-cross-button {
@@ -100,15 +97,17 @@ body {
   background: #bdc3c7;
 }
 
+.bm-burger-bars {
+  background: #373a47;
+}
+
 .bm-menu {
   background: #373a47;
   padding: 2.5em 1.5em 0;
   font-size: 1.15em;
+  text-align: left;
 }
 
-.bm-morph-shape {
-  fill: #373a47;
-}
 
 .bm-item-list {
   color: #b8b7ad;

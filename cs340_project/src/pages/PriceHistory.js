@@ -1,11 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
+import {MdAdd, MdCancel} from "react-icons/md";
 
 function PriceHistory() {
-    const [phList, setPH] = useState([]);
+    const [phList, setPHList] = useState([]);
     const PHInput = () => {
         return <div>
             <table>
@@ -43,7 +44,7 @@ function PriceHistory() {
         <Header/>
         <SideBar />
         <h1 class = "DatabaseTitle">Price History</h1>
-        <p class = "DatabaseText">Price History table tracks information related to a purchase of an apartment by the buying owner from the seller owner.  Information tracked include
+        <p class = "DatabaseText">Price History table tracks information related to a purchase of an apartment by the buying owner from the seller owner.  Information tracked include <br></br>
         price, date of Sale, and apartment number</p>
         <table id="PriceHistory">
             <thead>

@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
+import {MdAdd, MdCancel} from "react-icons/md";
 function Apts() {
-    const [aptList, setApt] = useState([]);
+    const [aptList, setAptList] = useState([]);
     const AptInput = () => {
         return <div>
             <table>
@@ -29,7 +30,7 @@ function Apts() {
         </div>
     };
     const onAddClick = event => {
-        setAptOwnerList(aptList.concat(<AptInput key={aptList.length} />));
+        setAptList(aptList.concat(<AptInput key={aptList.length} />));
     };
     return(
         <>
@@ -48,9 +49,7 @@ function Apts() {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <SampleApts/>
-                </tr>
+                <SampleApts/>
             </tbody>
         </table>
         {aptList}

@@ -1,11 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
+import {MdAdd, MdCancel} from "react-icons/md";
 
 function AptOwners() {
-    const [aptOwnerList, setAptOwners] = useState([]);
+    const [aptOwnerList, setAptOwnersList] = useState([]);
     const AptOwnerInput = () => {
         return <div>
             <table>
@@ -30,14 +31,14 @@ function AptOwners() {
         </div>
     };
     const onAddClick = event => {
-        setAptOwnerList(aptFloorList.concat(<AptOwnerInput key={aptOwnerList.length} />));
+        setAptOwnersList(aptOwnerList.concat(<AptOwnerInput key={aptOwnerList.length} />));
     };
     return(
         <>
         <Header/>
         <SideBar />
         <h1 class = "DatabaseTitle">Apartment Owners Table</h1>
-        <p class = "DatabaseText">Apartment Owners database table tracks current and past apartment owners at Beaver Development by giving each owner a 
+        <p class = "DatabaseText">Apartment Owners database table tracks current and past apartment owners at Beaver Development by giving each owner a <br></br>
         unique ID, and storing each owners first and last name as well as SSN.</p>
         <table id="AptOwners">
             <thead>
@@ -51,9 +52,7 @@ function AptOwners() {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <SampleAptOwner/>
-                </tr>
+                <SampleAptOwner/>
             </tbody>
         </table>
         {aptOwnerList}

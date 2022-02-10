@@ -1,11 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
+import {MdAdd, MdCancel} from "react-icons/md";
 
 function RodentsToFloors() {
-    const [rodentToFloorList, setRodentToFloor] = useState([]);
+    const [rodentToFloorList, setRodentToFloorList] = useState([]);
     const RodentToFloorInput = () => {
         return <div>
             <table>
