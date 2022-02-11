@@ -4,6 +4,7 @@ import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 import {MdAdd, MdCancel} from "react-icons/md";
+import FilterColumn from "../components/FilterColumn";
 
 function AptOwners() {
     const [aptOwnerList, setAptOwnersList] = useState([]);
@@ -43,7 +44,7 @@ function AptOwners() {
         <table id="AptOwners">
             <thead>
                 <tr>
-                    <th>Owner ID [int]</th>
+                    <th>Owner ID [int]<FilterColumn fieldToSearch="ownerID"/></th>
                     <th>First Name [varchar]</th>
                     <th>Last Name [varchar]</th>
                     <th>SSN [varchar]</th>

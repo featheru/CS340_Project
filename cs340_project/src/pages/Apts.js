@@ -4,6 +4,7 @@ import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 import {MdAdd, MdCancel} from "react-icons/md";
+import FilterColumn from "../components/FilterColumn";
 function Apts() {
     const [aptList, setAptList] = useState([]);
     const AptInput = () => {
@@ -41,7 +42,7 @@ function Apts() {
         <table id="Apts">
             <thead>
                 <tr>
-                    <th>Apartment Number [int]</th>
+                    <th>Apartment Number [int]<FilterColumn fieldToSearch="aptNum"/></th>
                     <th>Square Footage (ft^2) [int]</th>
                     <th>Floor Number</th>
                     <th>Edit</th>

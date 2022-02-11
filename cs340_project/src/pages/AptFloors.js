@@ -4,6 +4,7 @@ import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 import {MdAdd, MdCancel} from "react-icons/md";
+import FilterColumn from "../components/FilterColumn";
 
 function AptFloors() {
     const [aptFloorList, setAptFloorList] = useState([]);
@@ -40,7 +41,7 @@ function AptFloors() {
         <table id="AptFloors">
             <thead>
                 <tr>
-                    <th>Floor Number [int]</th>
+                    <th>Floor Number [int]<FilterColumn fieldToSearch="floorNum"/></th>
                     <th>Fire Exits [int]</th>
                     <th>Edit</th>
                     <th>Delete</th>

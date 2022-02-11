@@ -4,6 +4,7 @@ import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 import {MdAdd, MdCancel} from "react-icons/md";
+import FilterColumn from "../components/FilterColumn";
 
 function PriceHistory() {
     const [phList, setPHList] = useState([]);
@@ -49,7 +50,7 @@ function PriceHistory() {
         <table id="PriceHistory">
             <thead>
                 <tr>
-                    <th>Invoice Number [varchar]</th>
+                    <th>Invoice Number [varchar]<FilterColumn fieldToSearch="invoiceNum"/></th>
                     <th>Seller ID [int]</th>
                     <th>Buyer ID [int]</th>
                     <th>Apartment Number [int]</th>

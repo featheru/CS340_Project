@@ -4,6 +4,7 @@ import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 import {MdAdd, MdCancel} from "react-icons/md";
+import FilterColumn from "../components/FilterColumn";
 
 function Rodents() {
     const [rodentList, setRodentList] = useState([]);
@@ -37,7 +38,7 @@ function Rodents() {
         <table id="Price History">
             <thead>
                 <tr>
-                    <th>Rodent ID [int]</th>
+                    <th>Rodent ID [int]<FilterColumn fieldToSearch="rodentID"/></th>
                     <th>Rodent Name [varchar]</th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -49,7 +50,7 @@ function Rodents() {
         </table>
         {rodentList}
         <div>
-            <MdAdd onClick={onAddClick}></MdAdd>
+            <MdAdd onClick={onAddClick}/>
         </div>        
         </>
     )
