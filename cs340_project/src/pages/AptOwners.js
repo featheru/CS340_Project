@@ -1,12 +1,36 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 import {MdAdd, MdCancel} from "react-icons/md";
+import {AptOwnerDummyData} from "../data/AptOwnerDummyData.js"
 
 function AptOwners() {
     const [aptOwnerList, setAptOwnersList] = useState([]);
+
+    const [inEditMode, setInEditMode] = useState({
+        status: false,
+        rowKey: null
+    });
+    const [firstName, setFirstName] = useState(null);
+
+    const onEdit = ({id, currentFirstName}) => {
+        setInEditMode({
+            status: true,
+            rowKey: id
+        })
+        setFirstName(currentFirstName);
+    }
+
+    const loadAptOwners = async () => {
+        setAptOwnersList(AptOwnerDummyData);
+    };
+
+    useEffect(() => {
+        loadAptOwners();
+    }, []);
+
     const AptOwnerInput = () => {
         return <div>
             <table>
@@ -33,6 +57,35 @@ function AptOwners() {
     const onAddClick = event => {
         setAptOwnersList(aptOwnerList.concat(<AptOwnerInput key={aptOwnerList.length} />));
     };
+
+    function AptOwnerList({aptOwners}){
+        return(
+            <tbody>{aptOwners.map((aptOwner, i) => <AptOwner aptOwner={aptOwner} key={i} />)}</tbody>
+
+        )
+    }
+
+
+    function AptOwner({aptOwner}) {
+        return(
+            <tr>
+                <td>{aptOwner.ownerID}</td>
+                <td>{
+                    inEditMode.status && inEditMode.rowKey === aptOwner.id ? (
+                        <input value={firstName}
+                               onChange={(event) => setFirstName(event.target.value)}
+                        />
+                    ) : (
+                        aptOwner.firstName
+                    )
+                }</td>
+                <td>{aptOwner.lastName}</td>
+                <td>{aptOwner.ssn}</td>
+                <td><button onClick={() => onEdit({id: aptOwner.id, currentUnitPrice: aptOwner.firstName})}/></td>
+                <td><DeleteButton/></td>
+            </tr>
+        )
+    }
     return(
         <>
         <Header/>
@@ -51,34 +104,14 @@ function AptOwners() {
                     <th>Delete</th>
                 </tr>
             </thead>
-            <tbody>
-                <SampleAptOwner/>
-            </tbody>
+            <AptOwnerList aptOwners={aptOwnerList}/>
         </table>
-        {aptOwnerList}
+
         <div>
             <MdAdd text = "Add New Apartment Owner" onClick={onAddClick}>Add New Apt Owner</MdAdd>
         </div>
         </>
     )
 }
-
-// TODO: replace dummy data with DB inputs.
-// Row of AptFloor data
-function SampleAptOwner() {
-    return(
-        <tr>
-            <td>0</td>
-            <td>Testy</td>
-            <td>Testerson</td>
-            <td>123-456-7890</td>
-            <td><EditButton/></td>
-            <td><DeleteButton/></td>
-        </tr>
-        
-
-    )
-}
-
 
 export default AptOwners;
