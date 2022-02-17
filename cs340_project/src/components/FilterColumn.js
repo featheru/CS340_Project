@@ -7,10 +7,11 @@ function FilterColumn(props){
 
     const [showField, setShowField] = useState(false);
     return(
-        <div>
+        <div className={"filter-column"}>
             <MdFilterAlt onClick={() => {toggleField()
             }}/>
-            {showField ? <SearchField /> : null}
+            {showField ? <SearchField /> : <text>Filter</text>}
+
         </div>
     );
 }
