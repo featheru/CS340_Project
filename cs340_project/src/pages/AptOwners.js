@@ -45,9 +45,9 @@ function AptOwners() {
             <thead>
                 <tr>
                     <th>Owner ID [int]<FilterColumn fieldToSearch="ownerID"/></th>
-                    <th>First Name [varchar]</th>
-                    <th>Last Name [varchar]</th>
-                    <th>SSN [varchar]</th>
+                    <th>First Name [varchar]<FilterColumn fieldToSearch={"firstName"}/></th>
+                    <th>Last Name [varchar]<FilterColumn fieldToSearch={"lastName"}/></th>
+                    <th>SSN [varchar]<FilterColumn fieldToSearch={"ssn"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>

@@ -39,7 +39,7 @@ function Rodents() {
             <thead>
                 <tr>
                     <th>Rodent ID [int]<FilterColumn fieldToSearch="rodentID"/></th>
-                    <th>Rodent Name [varchar]</th>
+                    <th>Rodent Name [varchar] <FilterColumn fieldToSearch={"rodentName"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>

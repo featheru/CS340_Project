@@ -43,8 +43,8 @@ function Apts() {
             <thead>
                 <tr>
                     <th>Apartment Number [int]<FilterColumn fieldToSearch="aptNum"/></th>
-                    <th>Square Footage (ft^2) [int]</th>
-                    <th>Floor Number</th>
+                    <th>Square Footage (ft^2) [int]<FilterColumn fieldToSearch={"sqFeet"}/></th>
+                    <th>Floor Number<FilterColumn fieldToSearch={"floorNum"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>

@@ -4,6 +4,7 @@ import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
 import {MdAdd, MdCancel} from "react-icons/md";
+import FilterColumn from "../components/FilterColumn";
 
 function RodentsToFloors() {
     const [rodentToFloorList, setRodentToFloorList] = useState([]);
@@ -39,8 +40,8 @@ function RodentsToFloors() {
         <table id="Price History">
             <thead>
                 <tr>
-                    <th>Rodent ID [int]</th>
-                    <th>Floor Number [int]</th>
+                    <th>Rodent ID [int]<FilterColumn fieldToSearch={"rodentID"}/></th>
+                    <th>Floor Number [int]<FilterColumn fieldToSearch={"floorNum"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>

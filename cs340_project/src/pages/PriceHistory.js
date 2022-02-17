@@ -51,11 +51,11 @@ function PriceHistory() {
             <thead>
                 <tr>
                     <th>Invoice Number [varchar]<FilterColumn fieldToSearch="invoiceNum"/></th>
-                    <th>Seller ID [int]</th>
-                    <th>Buyer ID [int]</th>
-                    <th>Apartment Number [int]</th>
-                    <th>Date of Sale(Yyyy-Mm-Dd) [dateTime]</th>
-                    <th>Price($) [int]</th>
+                    <th>Seller ID [int]<FilterColumn fieldToSearch={"sellerID"}/></th>
+                    <th>Buyer ID [int]<FilterColumn fieldToSearch={"buyerID"}/></th>
+                    <th>Apartment Number [int]<FilterColumn fieldToSearch={"aptNum"}/></th>
+                    <th>Date of Sale(Yyyy-Mm-Dd) [dateTime]<FilterColumn fieldToSearch={"dateSale"}/></th>
+                    <th>Price($) [int]<FilterColumn fieldToSearch={"price"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>

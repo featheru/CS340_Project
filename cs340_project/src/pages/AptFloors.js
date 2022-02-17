@@ -42,7 +42,7 @@ function AptFloors() {
             <thead>
                 <tr>
                     <th>Floor Number [int]<FilterColumn fieldToSearch="floorNum"/></th>
-                    <th>Fire Exits [int]</th>
+                    <th>Fire Exits [int]<FilterColumn fieldToSearch={"fireExits"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
