@@ -12,12 +12,12 @@ export default props => {
           <img class = "BeaverHeader" src = {beaver} width ="100" height = "100" alt ="Beaver Pic--TBD"></img>
       </div>
       <a className="menu-item">Beaver Development User Database Tables</a>
-      <a className="menu-item">Project Step 3 Draft</a>
+      <a className="menu-item">Project Step 3 Final</a>
       <a className="menu-item">CS 340: Intro to Databases</a>
       <a className="menu-item">Group 93</a>
       <a className="menu-item">Russell Feathers</a>
       <a className="menu-item">Jonathon Shea</a>
-      <a className="menu-item">Due Date: 02/10/22</a>
+      <a className="menu-item">Due Date: 02/17/22</a>
     </Menu>
   );
 };

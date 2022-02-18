@@ -8,9 +8,7 @@ import FilterColumn from "../components/FilterColumn";
 function Apts() {
     const [aptList, setAptList] = useState([]);
     const AptInput = () => {
-        return <div>
-            <table>
-                <tr>
+        return <tr>
                     <td>
                         <input placeholder="Apartment Number"/>
                     </td>
@@ -27,8 +25,6 @@ function Apts() {
                         <MdCancel/>
                     </td>
                 </tr>
-            </table>
-        </div>
     };
     const onAddClick = event => {
         setAptList(aptList.concat(<AptInput key={aptList.length} />));
@@ -51,9 +47,9 @@ function Apts() {
             </thead>
             <tbody>
                 <SampleApts/>
+                {aptList}
             </tbody>
         </table>
-        {aptList}
         <div>
             <MdAdd text = "Add New Apartment" onClick={onAddClick}>Add New Apt</MdAdd>
         </div>

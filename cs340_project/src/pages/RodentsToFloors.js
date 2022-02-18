@@ -9,9 +9,7 @@ import FilterColumn from "../components/FilterColumn";
 function RodentsToFloors() {
     const [rodentToFloorList, setRodentToFloorList] = useState([]);
     const RodentToFloorInput = () => {
-        return <div>
-            <table>
-                <tr>
+        return <tr>
                     <td>
                         <input placeholder="Rodent ID"/>
                     </td>
@@ -25,8 +23,6 @@ function RodentsToFloors() {
                         <MdCancel/>
                     </td>
                 </tr>
-            </table>
-        </div>
     };
     const onAddClick = event => {
         setRodentToFloorList(rodentToFloorList.concat(<RodentToFloorInput key={rodentToFloorList.length} />));
@@ -48,11 +44,11 @@ function RodentsToFloors() {
             </thead>
             <tbody>
                 <SampleRodentsToFloors/>
+                {rodentToFloorList}
             </tbody>
         </table>
-        {rodentToFloorList}
         <div>
-            <MdAdd text = "Add New Rodent to Floor Relationship" onClick={onAddClick}>Add New Rodent to Floor Relationship</MdAdd>
+            <MdAdd onClick={onAddClick}>Add New Rodent to Floor Relationship</MdAdd>
         </div>
         
         </>

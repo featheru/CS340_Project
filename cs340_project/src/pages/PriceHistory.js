@@ -9,9 +9,8 @@ import FilterColumn from "../components/FilterColumn";
 function PriceHistory() {
     const [phList, setPHList] = useState([]);
     const PHInput = () => {
-        return <div>
-            <table>
-                <tr>
+        return <tr>
+                    <td></td>
                     <td>
                         <input placeholder="Seller ID"/>
                     </td>
@@ -34,8 +33,6 @@ function PriceHistory() {
                         <MdCancel/>
                     </td>
                 </tr>
-            </table>
-        </div>
     };
     const onAddClick = event => {
         setPHList(phList.concat(<PHInput key={phList.length} />));
@@ -54,7 +51,7 @@ function PriceHistory() {
                     <th>Seller ID [int]<FilterColumn fieldToSearch={"sellerID"}/></th>
                     <th>Buyer ID [int]<FilterColumn fieldToSearch={"buyerID"}/></th>
                     <th>Apartment Number [int]<FilterColumn fieldToSearch={"aptNum"}/></th>
-                    <th>Date of Sale(Yyyy-Mm-Dd) [dateTime]<FilterColumn fieldToSearch={"dateSale"}/></th>
+                    <th>Date of Sale [dateTime]<FilterColumn fieldToSearch={"dateSale"}/></th>
                     <th>Price($) [int]<FilterColumn fieldToSearch={"price"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -62,9 +59,9 @@ function PriceHistory() {
             </thead>
             <tbody>
                 <SamplePH/>
+                {phList}
             </tbody>
         </table>
-        {phList}
         <div>
             <MdAdd text = "Add New Apartment Purchase" onClick={onAddClick}>Add New Apartment Purchase</MdAdd>
         </div>

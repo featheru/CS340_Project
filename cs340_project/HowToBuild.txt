@@ -1,5 +1,5 @@
 Building on Flip Server:
-
+Set Integrated Terminal to correct location (cs340_project)
 (only needed first time)  npm install
 npm run build
 (only needed first time) npm install -g serve

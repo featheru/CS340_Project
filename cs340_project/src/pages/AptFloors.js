@@ -9,9 +9,7 @@ import FilterColumn from "../components/FilterColumn";
 function AptFloors() {
     const [aptFloorList, setAptFloorList] = useState([]);
     const AptFloorInput = () => {
-        return<div>
-            <table>
-                <tr>
+        return<tr>
                     <td>
                         <input placeholder="Floor number"/>
                     </td>
@@ -25,8 +23,6 @@ function AptFloors() {
                         <MdCancel/>
                     </td>
                 </tr>
-            </table>
-        </div>
     };
     const onAddClick = event => {
         setAptFloorList(aptFloorList.concat(<AptFloorInput key={aptFloorList.length} />));
@@ -49,12 +45,11 @@ function AptFloors() {
             </thead>
             <tbody>
                 <SampleAptFloor/>
+                {aptFloorList}
+                
             </tbody>
         </table>
-        {aptFloorList}
-        <div>
-            <MdAdd text = "Add New Apt Floor" onClick={onAddClick}>Add New Apt Floor</MdAdd>
-        </div>
+        <MdAdd onClick={onAddClick}>Add New Apt Floor</MdAdd>
         </>
     )
 }

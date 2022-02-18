@@ -9,9 +9,8 @@ import FilterColumn from "../components/FilterColumn";
 function Rodents() {
     const [rodentList, setRodentList] = useState([]);
     const RodentInput = () => {
-        return <div>
-            <table>
-                <tr>
+        return <tr>
+                    <td></td>
                     <td>
                         <input placeholder="Rodent Name"/>
                     </td>
@@ -22,8 +21,6 @@ function Rodents() {
                         <MdCancel/>
                     </td>
                 </tr>
-            </table>
-        </div>
     };
     const onAddClick = event => {
         setRodentList(rodentList.concat(<RodentInput key={rodentList.length} />));
@@ -46,9 +43,9 @@ function Rodents() {
             </thead>
             <tbody>
                 <SampleRodents/>
+                {rodentList}
             </tbody>
         </table>
-        {rodentList}
         <div>
             <MdAdd onClick={onAddClick}/>
         </div>        

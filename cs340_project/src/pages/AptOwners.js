@@ -9,9 +9,8 @@ import FilterColumn from "../components/FilterColumn";
 function AptOwners() {
     const [aptOwnerList, setAptOwnersList] = useState([]);
     const AptOwnerInput = () => {
-        return <div>
-            <table>
-                <tr>
+        return <tr>
+                    <td></td>
                     <td>
                         <input placeholder="First Name"/>
                     </td>
@@ -28,8 +27,6 @@ function AptOwners() {
                         <MdCancel/>
                     </td>
                 </tr>
-            </table>
-        </div>
     };
     const onAddClick = event => {
         setAptOwnersList(aptOwnerList.concat(<AptOwnerInput key={aptOwnerList.length} />));
@@ -54,9 +51,9 @@ function AptOwners() {
             </thead>
             <tbody>
                 <SampleAptOwner/>
+                {aptOwnerList}
             </tbody>
         </table>
-        {aptOwnerList}
         <div>
             <MdAdd text = "Add New Apartment Owner" onClick={onAddClick}>Add New Apt Owner</MdAdd>
         </div>
