@@ -72,24 +72,24 @@ ALTER TABLE RodentsToFloors ADD FOREIGN KEY (floorNum) REFERENCES AptFloors (flo
 -- Part B: Sample Data Insertion --
 -- NOTES: : used to show where code insertion is --
 
-INSERT INTO AptOwners VALUES 
+INSERT INTO AptOwners (firstName, lastName, ssn) VALUES 
 (Alex,Rodriguez,666666666), (Jennifer,Lopez,333333333), (Bill,DeBlasio,999999999), (Corner,Guy,111222333), (Corporate,FatCat,232323231);
 
-INSERT INTO Apts VALUES 
+INSERT INTO Apts (aptNum, sqFeet, floorNum, ownerID) VALUES 
 (1,666,55), (2,1113,55), (3,2009,44), (4,756,33), (5,73,11);
 
-INSERT INTO AptFloors VALUES 
+INSERT INTO AptFloors (floorNum, fireExits) VALUES 
 (1,3), (2, 2), (3,9), (4,9), (11,1), (33,1), (44,1), (55,1);
 
-INSERT INTO PriceHistory VALUES 
+INSERT INTO PriceHistory (invoiceNum, sellerID, buyerID, aptNum, dateSale, price) VALUES 
 (Alex,Rodriguez,666666666), (Jennifer,Lopez,333333333), (Bill,DeBlasio,999999999), (Imma,Bug,111222333), (Corporate,FatCat,232323231);
 
-INSERT INTO Rodents VALUES 
+INSERT INTO Rodents (rodentName) VALUES 
 (PizzaRat), (MutantRat), (NinjaRat), (Imma), (Bug);
 
 -- Based on assumption of ID values for Rodents --
 INSERT INTO RodentsToFloors VALUES 
-(1,33), (1,44), (1,55), (4,11), (5,55)
+(1,33), (1,44), (1,55), (4,11), (5,55);
 
 -- Part C: Data Manipulation Queries --
 
@@ -97,9 +97,9 @@ INSERT INTO RodentsToFloors VALUES
 
 SELECT * FROM AptOwners;
 SELECT * FROM AptOwners WHERE ownerID = :ownerIDInp;
-SELECT * FROM AptOwners WHERE firstName LIKE "%firstNameInp%"
-SELECT * FROM AptOwners WHERE lastName LIKE "%lastNameInp%"
-SELECT * FROM AptOwners WHERE ssn LIKE "%ssnInp%"
+SELECT * FROM AptOwners WHERE firstName LIKE "%firstNameInp%";
+SELECT * FROM AptOwners WHERE lastName LIKE "%lastNameInp%";
+SELECT * FROM AptOwners WHERE ssn LIKE "%ssnInp%";
 
 INSERT INTO AptOwners (firstName, lastName, ssn)
 VALUES (:firstNameInp, :lastNameInp, :ssnInp);
