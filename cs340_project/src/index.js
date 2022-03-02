@@ -11,10 +11,8 @@ import Apts from "./pages/Apts";
 import PriceHistory from "./pages/PriceHistory";
 import Rodents from "./pages/Rodents";
 import RodentsToFloors from "./pages/RodentsToFloors";
-import pool from "./DatabaseConnection";
 
-const rootElement = document.getElementById("root")
-
+const rootElement = document.getElementById("root");
 
 // Routing for all pages.
 render(
@@ -34,10 +32,6 @@ render(
 
 );
 
-App.get('/aptFloors', function(req, res)
-{
-  let query1 = "SELECT * FROM aptFloors;";               // Define our query
-  pool.query(query1, function(error, rows, fields){    // Execute the query
-    res.render('index', {data: rows});                  // Render the index.hbs file, and also send the renderer
-  })                                                      // an object where 'data' is equal to the 'rows' we
-});
+
+
+

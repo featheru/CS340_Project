@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
@@ -8,13 +8,19 @@ import FilterColumn from "../components/FilterColumn";
 import App from "../App";
 
 function AptFloors() {
+    useEffect(() => {
+        loadAptFloors();
+    }, []);
+
+
     const [aptFloorList, setAptFloorList] = useState([]);
 
     const loadAptFloors = async () => {
-        const response = await fetch('/aptFloors');
+        const response = await fetch('http://localhost:3000/aptFloors');
         const aptFloorList = await response.json();
         setAptFloorList(aptFloorList);
     }
+
 
     const AptFloorInput = () => {
         return<tr>
