@@ -33,8 +33,8 @@ function Apts() {
         <>
         <Header/>
         <SideBar />
-        <h1 class = "DatabaseTitle">Apartments</h1>
-        <p class = "DatabaseText">Apartments database table tracks specific information regarding an apartment including the floor number, and apartment number.</p>
+        <h1>Apartments</h1>
+        <p>Apartments database table tracks specific information regarding an apartment including the floor number, and apartment number.</p>
         <table id="Apts">
             <thead>
                 <tr>
@@ -51,7 +51,7 @@ function Apts() {
             </tbody>
         </table>
         <div>
-            <MdAdd text = "Add New Apartment" onClick={onAddClick}>Add New Apt</MdAdd>
+            <MdAdd onClick={onAddClick}/>
         </div>
         
         

@@ -29,8 +29,8 @@ function Rodents() {
         <>
         <Header/>
         <SideBar />
-        <h1 class = "DatabaseTitle">Rodents</h1>
-        <p class = "DatabaseText">Rodent table tracks all information related to rodents in the building. Rodents do not get removed from database <br></br>
+        <h1>Rodents</h1>
+        <p>Rodent table tracks all information related to rodents in the building. Rodents do not get removed from database <br></br>
         after extermination or leaving the building and the only info tracked is the name</p>
         <table id="Price History">
             <thead>

@@ -31,8 +31,8 @@ function RodentsToFloors() {
         <>
         <Header/>
         <SideBar />
-        <h1 class = "DatabaseTitle">Rodents To Apartment Floors</h1>
-        <p class = "DatabaseText">Rodents to Apartment Floors table tracks the possibly multiple floors that rodents are currently on at a given period of time</p>
+        <h1>Rodents To Apartment Floors</h1>
+        <p>Rodents to Apartment Floors table tracks the possibly multiple floors that rodents are currently on at a given period of time</p>
         <table id="Price History">
             <thead>
                 <tr>

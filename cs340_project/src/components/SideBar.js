@@ -9,7 +9,7 @@ export default props => {
     <Menu>
       <div>
           <h1 id = "menu-item">Beaver Development Database Tables</h1>
-          <img class = "BeaverHeader" src = {beaver} width ="100" height = "100" alt ="Beaver Pic--TBD"></img>
+          <img src = {beaver} width ="100" height = "100" alt ="Beaver Pic--TBD"></img>
       </div>
       <a className="menu-item">Beaver Development User Database Tables</a>
       <a className="menu-item">Project Step 3 Final</a>

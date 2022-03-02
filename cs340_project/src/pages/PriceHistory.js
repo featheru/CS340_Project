@@ -41,8 +41,8 @@ function PriceHistory() {
         <>
         <Header/>
         <SideBar />
-        <h1 class = "DatabaseTitle">Price History</h1>
-        <p class = "DatabaseText">Price History table tracks information related to a purchase of an apartment by the buying owner from the seller owner.  Information tracked include <br></br>
+        <h1>Price History</h1>
+        <p>Price History table tracks information related to a purchase of an apartment by the buying owner from the seller owner.  Information tracked include <br></br>
         price, date of Sale, and apartment number</p>
         <table id="PriceHistory">
             <thead>
