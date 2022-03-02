@@ -1,6 +1,7 @@
 import express from 'express';
 const PORT = 3000;
 import mysql from 'mysql';
+import cors from 'cors';
 
 
 var connection = mysql.createConnection({
@@ -19,7 +20,10 @@ connection.connect(function(err) {
     console.log('connected as id ' + connection.threadId);
 });
 
+
 const app = express();
+app.use(cors());
+
 
 app.get('/aptFloors', function(req, res)
 {
