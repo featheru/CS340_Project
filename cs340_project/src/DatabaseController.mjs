@@ -1,5 +1,5 @@
 import express from 'express';
-const PORT = 3000;
+const PORT = 6363;
 import mysql from 'mysql';
 import cors from 'cors';
 
@@ -25,7 +25,7 @@ const app = express();
 app.use(cors());
 
 
-app.get('/aptFloors', function(req, res)
+app.get('/GET/aptFloors', function(req, res)
 {
     connection.query("SELECT * FROM `AptFloors`",  {timeout: 40000} , function(error, results, fields){
         if(error){
@@ -33,10 +33,31 @@ app.get('/aptFloors', function(req, res)
             res.end();
         }
         res.json(results);
-    });                                                  // an object where 'data' is equal to the 'rows' we
+    });                                                 
+});
+
+app.post('/POST/aptFloors', function(req, res)
+{
+    var mysql = req.app.get('mysql');
+    var sql = "INSERT INTO AptFloors (floorNum, fireExits) VALUES (?,?)";
+    let {floorNum, fireExits} = req.body;
+    //var jsonDecode = JSON.parse(req.body);
+    //console.log(jsonDecode)
+    var inserts = [floorNum, fireExits];
+    sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+        if(error){
+            res.status(400);
+            console.log(JSON.stringify(error))
+            res.write(JSON.stringify(error));
+            res.end();
+        }else{
+            res.status(201);
+            res.end();
+        }
+    });
 });
 
 
 app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}...`);
+    console.log("Express started on http://localhost:"+PORT+"; press Ctrl-C to terminate.");
 });
