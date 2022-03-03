@@ -38,6 +38,17 @@ app.get('/GET/aptFloors', function(req, res)
     });                                                 
 });
 
+app.get('/GET/aptFloors/:_id', function(req, res)
+{
+    connection.query(`SELECT * FROM AptFloors WHERE floorNum = ${req.params._id}`,  {timeout: 40000} , function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        res.json(results);
+    });
+});
+
 app.post('/POST/aptFloors', function(req, res)
 {
     var sql = "INSERT INTO AptFloors (floorNum, fireExits) VALUES (?,?)";

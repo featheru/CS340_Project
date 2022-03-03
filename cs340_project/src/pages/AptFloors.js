@@ -16,7 +16,13 @@ function AptFloors() {
     const [addField, setAddField] = useState([])
 
     const loadAptFloors = async () => {
-        const response = await fetch('http://localhost:6363/GET/aptFloors');
+        const response = await fetch('http://flip2.engr.oregonstate.edu:6363/GET/aptFloors');
+        const aptFloorList = await response.json();
+        setAptFloorList(aptFloorList);
+    }
+
+    const filterResults = async (id) => {
+        const response = await fetch(`http://flip2.engr.oregonstate.edu:6363/GET/aptFloors/${id}`)
         const aptFloorList = await response.json();
         setAptFloorList(aptFloorList);
     }
@@ -29,7 +35,7 @@ function AptFloors() {
         const newAptFloor = {floorNum, fireExits}
         console.log(JSON.stringify(newAptFloor));
         //console.log(JSON.stringify(newAptFloor));
-        const response = await fetch('http://localhost:6363/POST/aptFloors', {
+        const response = await fetch('http://flip2.engr.oregonstate.edu:6363/POST/aptFloors', {
             method: 'POST',
             body: JSON.stringify(newAptFloor),
             headers: {
@@ -37,11 +43,11 @@ function AptFloors() {
             }
         });
         if(response.status === 201){
-            alert("Successfully added the exercise!");
+            alert("Successfully added the record!");
             loadAptFloors();
             removeAddClick();
         } else {
-            alert(`Failed to add exercise, status code = ${response.status}`);
+            alert(`Failed to add record, status code = ${response.status}`);
         }
     }
 
@@ -69,7 +75,7 @@ function AptFloors() {
             <table id="aptFloors">
                 <thead>
                 <tr>
-                    <th>floorNum</th>
+                    <th>floorNum <FilterColumn fieldToSearch={"floorNum"}/></th>
                     <th>fireExits</th>
                     <th>Edit</th>
                     <th>Delete</th>
