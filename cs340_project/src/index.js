@@ -11,8 +11,6 @@ import Apts from "./pages/Apts";
 import PriceHistory from "./pages/PriceHistory";
 import Rodents from "./pages/Rodents";
 import RodentsToFloors from "./pages/RodentsToFloors";
-
-
 const rootElement = document.getElementById("root");
 
 // Routing for all pages.
@@ -29,4 +27,10 @@ render(
     </Routes>
   </BrowserRouter>,
   rootElement
+
+
 );
+
+
+
+
