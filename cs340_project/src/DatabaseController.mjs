@@ -2,7 +2,7 @@ import express from 'express';
 const PORT = 6363;
 import mysql from 'mysql';
 import cors from 'cors';
-
+import bodyParser from 'body-parser';
 
 var connection = mysql.createConnection({
     host: 'classmysql.engr.oregonstate.edu',
@@ -23,6 +23,8 @@ connection.connect(function(err) {
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 
 app.get('/GET/aptFloors', function(req, res)
@@ -38,13 +40,9 @@ app.get('/GET/aptFloors', function(req, res)
 
 app.post('/POST/aptFloors', function(req, res)
 {
-    var mysql = req.app.get('mysql');
     var sql = "INSERT INTO AptFloors (floorNum, fireExits) VALUES (?,?)";
-    let {floorNum, fireExits} = req.body;
-    //var jsonDecode = JSON.parse(req.body);
-    //console.log(jsonDecode)
-    var inserts = [floorNum, fireExits];
-    sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+    var inserts = [req.body.floorNum, req.body.fireExits];
+    connection.query(sql,inserts,function(error, results, fields){
         if(error){
             res.status(400);
             console.log(JSON.stringify(error))
