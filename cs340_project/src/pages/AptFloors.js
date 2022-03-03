@@ -12,78 +12,101 @@ function AptFloors() {
         loadAptFloors();
     }, []);
 
-
     const [aptFloorList, setAptFloorList] = useState([]);
+    const [addField, setAddField] = useState([])
 
     const loadAptFloors = async () => {
-        const response = await fetch('http://localhost:3000/aptFloors');
+        const response = await fetch('http://localhost:6363/GET/aptFloors');
         const aptFloorList = await response.json();
         setAptFloorList(aptFloorList);
+    }
+
+    const addAptFloors = async() => {
+        
+        //const newAptFloor = {floorNum: document.getElementById("floorNumInp").value, fireExits: document.getElementById("fireExitInp").value};
+        let floorNum = document.getElementById("floorNumInp").value;
+        let fireExits = document.getElementById("fireExitInp").value;
+        const newAptFloor = {floorNum, fireExits}
+        console.log(JSON.stringify(newAptFloor));
+        //console.log(JSON.stringify(newAptFloor));
+        const response = await fetch('http://localhost:6363/POST/aptFloors', {
+            method: 'POST',
+            body: JSON.stringify(newAptFloor),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if(response.status === 201){
+            alert("Successfully added the exercise!");
+            loadAptFloors();
+            removeAddClick();
+        } else {
+            alert(`Failed to add exercise, status code = ${response.status}`);
+        }
     }
 
 
     const AptFloorInput = () => {
         return<tr>
-                    <td>
-                        <input placeholder="Floor number"/>
-                    </td>
-                    <td>
-                        <input placeholder="Fire exits"/>
-                    </td>
-                    <td>
-                        <MdAdd/>
-                    </td>
-                    <td>
-                        <MdCancel/>
-                    </td>
+                    <td><input id="floorNumInp" placeholder="Enter Floor Number Here" /></td>
+                    <td><input id="fireExitInp" placeholder="Enter Fire Exits Here"/></td>
+                    <td><MdAdd onClick = {addAptFloors}/></td>
+                    <td><MdCancel onClick = {removeAddClick}/></td>
                 </tr>
     };
+
     const onAddClick = event => {
-        setAptFloorList(aptFloorList.concat(<AptFloorInput key={aptFloorList.length} />));
+        setAddField(<AptFloorInput/>);
     };
+
+    const removeAddClick = event => {
+        setAddField();
+    };
+
+    // Row of AptFloor data
+    function AptFloorList({ aptFloors}) {
+        return (
+            <table id="aptFloors">
+                <thead>
+                <tr>
+                    <th>floorNum</th>
+                    <th>fireExits</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                {addField}
+                {aptFloors.map((aptFloor, idx) => <AptFloor aptFloor={aptFloor} key={idx} />)}
+                </tbody>
+            </table>
+        );
+    }
+
+    function AptFloor({ aptFloor}) {
+        return (
+            <tr>
+                <td>{aptFloor.floorNum}</td>
+                <td>{aptFloor.fireExits}</td>
+                <td><EditButton/></td>
+                <td><DeleteButton/></td>
+            </tr>
+        );
+    }
 
     return(
         <>
         <Header/>
-        <SideBar />
-        <h1 class = "DatabaseTitle">Apartment Floors</h1>
-        <p class = "DatabaseText">Apartment Floor table tracks floor specific information of each apartment including fire exits.</p>
+        <SideBar/>
+        <h1>Apartment Floors</h1>
+        <p>Apartment Floor table tracks floor specific information of each apartment including fire exits.</p>
         <AptFloorList aptFloors={aptFloorList}/>
-        <MdAdd onClick={onAddClick}>Add New Apt Floor</MdAdd>
+        <MdAdd onClick={onAddClick}></MdAdd>
         </>
     )
 }
 
-// TODO: replace dummy data with DB inputs.
-// Row of AptFloor data
-function AptFloorList({ aptFloors}) {
-    return (
-        <table id="aptFloors">
-            <thead>
-            <tr>
-                <th>floorNum</th>
-                <th>fireExits</th>
-                <th>Edit</th>
-                <th>Delete</th>
-            </tr>
-            </thead>
-            <tbody>
-            {aptFloors.map((aptFloor, i) => <AptFloor aptFloor={aptFloor} key={i} />)}
-            </tbody>
-        </table>
-    );
-}
 
-function AptFloor({ aptFloor}) {
-    return (
-        <tr>
-            <td>{aptFloor.floorNum}</td>
-            <td>{aptFloor.fireExits}</td>
-            <td><EditButton/></td>
-            <td><DeleteButton/></td>
-        </tr>
-    );
-}
 
 
 export default AptFloors;
