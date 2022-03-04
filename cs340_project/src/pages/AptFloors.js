@@ -14,15 +14,17 @@ function AptFloors() {
 
     const [aptFloorList, setAptFloorList] = useState([]);
     const [addField, setAddField] = useState([])
+    const dbAddress = 'http://flip2.engr.oregonstate.edu:6363/GET/aptFloors';
+    const dbAddressLocal = 'http://localhost:6363/GET/aptFloors/'
 
     const loadAptFloors = async () => {
-        const response = await fetch('http://flip2.engr.oregonstate.edu:6363/GET/aptFloors');
+        const response = await fetch(`${dbAddressLocal}`);
         const aptFloorList = await response.json();
         setAptFloorList(aptFloorList);
     }
 
     const filterResults = async (id) => {
-        const response = await fetch(`http://flip2.engr.oregonstate.edu:6363/GET/aptFloors/${id}`)
+        const response = await fetch(`${dbAddressLocal}${id}`)
         const aptFloorList = await response.json();
         setAptFloorList(aptFloorList);
     }
@@ -70,12 +72,12 @@ function AptFloors() {
     };
 
     // Row of AptFloor data
-    function AptFloorList({ aptFloors}) {
+    function AptFloorList({ aptFloors, filterResults}) {
         return (
             <table id="aptFloors">
                 <thead>
                 <tr>
-                    <th>floorNum <FilterColumn fieldToSearch={"floorNum"}/></th>
+                    <th>floorNum <FilterColumn fieldToSearch={"floorNum"} onChange={filterResults}/></th>
                     <th>fireExits</th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -106,8 +108,8 @@ function AptFloors() {
         <SideBar/>
         <h1>Apartment Floors</h1>
         <p>Apartment Floor table tracks floor specific information of each apartment including fire exits.</p>
-        <AptFloorList aptFloors={aptFloorList}/>
-        <MdAdd onClick={onAddClick}></MdAdd>
+        <AptFloorList aptFloors={aptFloorList}  filterResults={filterResults}/>
+        <MdAdd onClick={onAddClick}/>
         </>
     )
 }

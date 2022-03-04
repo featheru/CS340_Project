@@ -38,13 +38,14 @@ app.get('/GET/aptFloors', function(req, res)
     });                                                 
 });
 
-app.get('/GET/aptFloors/:_id', function(req, res)
+app.get('/GET/aptFloors/:id', function(req, res)
 {
-    connection.query(`SELECT * FROM AptFloors WHERE floorNum = ${req.params._id}`,  {timeout: 40000} , function(error, results, fields){
+    connection.query(`SELECT * FROM AptFloors WHERE floorNum = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.end();
         }
+        console.log('Success!')
         res.json(results);
     });
 });
