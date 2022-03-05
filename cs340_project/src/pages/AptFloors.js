@@ -19,13 +19,13 @@ function AptFloors() {
     const dbAddressLocal = 'http://localhost:6363/GET/aptFloors/'
 
     const loadAptFloors = async () => {
-        const response = await fetch(`${dbAddressLocal}`);
+        const response = await fetch(`${dbAddress}`);
         const aptFloorList = await response.json();
         setAptFloorList(aptFloorList);
     }
 
     const filterResults = async (id) => {
-        const response = await fetch(`${dbAddressLocal}${id}`)
+        const response = await fetch(`${dbAddress}${id}`)
         const aptFloorList = await response.json();
         setAptFloorList(aptFloorList);
     }
