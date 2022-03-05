@@ -32,7 +32,7 @@ function Rodents() {
             }
         });
         if(response.status === 201){
-            alert("Successfully added the record!");
+            alert("Successfully added the rodent record!");
             loadRodents();
             removeAddClick();
         } else {
