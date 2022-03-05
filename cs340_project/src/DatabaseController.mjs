@@ -208,6 +208,37 @@ app.post('/POST/rodentsToFloors', function(req, res)
     });
 });
 
+app.delete('/DELETE/aptFloors/:floorNum', function(req, res)
+{
+
+    var sql = `DELETE FROM AptFloors WHERE floorNum = ?`;
+    //var del = [req.params.floorNum];
+    connection.query(sql,[req.params.floorNum],function(error, results){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        console.log('Success!')
+        res.json(results);
+    });
+});
+
+//TODO: Finish Backend routes for Delete
+app.delete('/DELETE/aptOwners/:floorNum', function(req, res)
+{
+
+    var sql = `DELETE FROM AptFloors WHERE floorNum = ?`;
+    //var del = [req.params.floorNum];
+    connection.query(sql,[req.params.floorNum],function(error, results){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        console.log('Success!')
+        res.json(results);
+    });
+});
+
 
 app.listen(PORT, () => {
     console.log("Express started on http://localhost:"+PORT+"; press Ctrl-C to terminate.");
