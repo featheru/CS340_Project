@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel} from "react-icons/md";
+import {MdAdd, MdCancel, MdEdit, MdDelete} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
-import * as db from "../ServerConstant";
+import {AddressInUse} from "../ServerConstant.js";
 
 function RodentsToFloors() {
     useEffect(() => {
@@ -16,9 +16,9 @@ function RodentsToFloors() {
     const [addField, setAddField] = useState([]);
 
     const loadRodentsToFloors = async () => {
-        const response = await fetch(db.AddressInUse + '/GET/rodentsToFloors');
+        const response = await fetch(`${AddressInUse}/GET/rodentsToFloors`);
         const rodentToFloorList = await response.json();
-        setPHList(rodentToFloorList);
+        setRodentToFloorList(rodentToFloorList);
     }
 
     const addRTF = async() => {
@@ -26,7 +26,7 @@ function RodentsToFloors() {
         let floorNum = document.getElementById("floorNumInp").value;
         const newRTF = {rodentID, floorNum}
         //console.log(JSON.stringify(newAptOwner));
-        const response = await fetch(db.AddressInUse + '/POST/rodentsToFloors', {
+        const response = await fetch(`${AddressInUse}/POST/rodentsToFloors`, {
             method: 'POST',
             body: JSON.stringify(newRTF),
             headers: {
@@ -39,6 +39,19 @@ function RodentsToFloors() {
             removeAddClick();
         } else {
             alert(`Failed to add record, status code = ${response.status}`);
+        }
+    }
+
+    const delRodentsToFloors = async(rodentID, floorNum) => {
+        console.log(`Starting process with ${rodentID}+${floorNum}`)
+        const response = await fetch(`${AddressInUse}/DELETE/priceHistory/${rodentID}/${floorNum}`, {
+            method: 'DELETE'
+        });
+        if(response.status >= 200 && response.status < 400){
+            alert("Successfully deleted the record!");
+            document.getElementById(`${rodentID}-${floorNum}`).remove();
+        } else {
+            alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
 
@@ -80,11 +93,11 @@ function RodentsToFloors() {
         }
         function RTFmap({rtf}) {
             return (
-                <tr>
+                <tr id={`${rtf.rodentID}-${rtf.floorNum}`}>
                     <td>{rtf.rodentID}</td>
                     <td>{rtf.floorNum}</td>
-                    <td><EditButton/></td>
-                    <td><DeleteButton/></td>
+                    <td><MdEdit/></td>
+                    <td><MdDelete onClick={() => delRodentsToFloors(rtf.rodentID,rtf.floorNum)}/></td>
                 </tr>
             );
         }
@@ -95,7 +108,7 @@ function RodentsToFloors() {
             <SideBar />
             <h1>Rodents To Apartment Floors</h1>
             <p>Rodents to Apartment Floors table tracks the possibly multiple floors that rodents are currently on at a given period of time</p>
-            <RTFList rtfList={rodentToFloorList} filterResults={filterResults}/>
+            <RTFList rtfList={rodentToFloorList}/>
             <MdAdd onClick={onAddClick}></MdAdd>
             </>
             

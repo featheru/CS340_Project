@@ -3,10 +3,10 @@ import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel} from "react-icons/md";
+import {MdAdd, MdCancel, MdDelete, MdEdit} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
 import App from "../App";
-import * as db from "../ServerConstant";
+import {AddressInUse} from "../ServerConstant.js";
 
 function AptFloors() {
     useEffect(() => {
@@ -15,29 +15,29 @@ function AptFloors() {
 
     const [aptFloorList, setAptFloorList] = useState([]);
     const [addField, setAddField] = useState([])
-    const dbAddress = 'http://flip2.engr.oregonstate.edu:6363/GET/aptFloors';
-    const dbAddressLocal = 'http://localhost:6363/GET/aptFloors/'
+    //const dbAddress = 'http://flip2.engr.oregonstate.edu:6363/GET/aptFloors';
+    //const dbAddressLocal = 'http://localhost:6363/GET/aptFloors/'
 
     const loadAptFloors = async () => {
-        const response = await fetch(`${dbAddress}`);
+        console.log("MakingRequest")
+        console.log(`${AddressInUse}/GET/aptFloors`)
+        const response = await fetch(`${AddressInUse}/GET/aptFloors`);
         const aptFloorList = await response.json();
+        console.log(response);
         setAptFloorList(aptFloorList);
     }
 
     const filterResults = async (id) => {
-        const response = await fetch(`${dbAddress}${id}`)
+        const response = await fetch(`${AddressInUse}/GET/aptFloors${id}`)
         const aptFloorList = await response.json();
         setAptFloorList(aptFloorList);
     }
 
-    const addAptFloors = async() => {
-        
-        //const newAptFloor = {floorNum: document.getElementById("floorNumInp").value, fireExits: document.getElementById("fireExitInp").value};
+    const addAptFloors = async() => {        
         let floorNum = document.getElementById("floorNumInp").value;
         let fireExits = document.getElementById("fireExitInp").value;
         const newAptFloor = {floorNum, fireExits}
-        //console.log(JSON.stringify(newAptFloor));
-        const response = await fetch('http://flip2.engr.oregonstate.edu:6363/POST/aptFloors', {
+        const response = await fetch(`${AddressInUse}/POST/aptFloors`, {
             method: 'POST',
             body: JSON.stringify(newAptFloor),
             headers: {
@@ -53,23 +53,20 @@ function AptFloors() {
         }
     }
 
-    const delAptFloors = async() => {
-        //IN PROGRESS
-        const response = await fetch(db.AddressInUse + '/DELETE/aptFloors', {
-            method: 'POST',
-            body: JSON.stringify(newAptFloor),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+    const delAptFloors = async(flrNum) => {
+        console.log(`Starting process with ${flrNum}`)
+        const response = await fetch(`${AddressInUse}/DELETE/aptFloors/${flrNum}`, {
+            method: 'DELETE'
         });
-        if(response.status === 201){
+        console.log(`Fetched ${flrNum}`)
+        console.log(response.status)
+        if(response.status >= 200 && response.status < 400){
             alert("Successfully deleted the record!");
-            loadAptFloors();
+            document.getElementById(`${flrNum}`).remove();
         } else {
             alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
-
 
     const AptFloorInput = () => {
         return<tr>
@@ -110,11 +107,11 @@ function AptFloors() {
 
     function AptFloor({ aptFloor}) {
         return (
-            <tr>
+            <tr id={aptFloor.floorNum}>
                 <td>{aptFloor.floorNum}</td>
                 <td>{aptFloor.fireExits}</td>
-                <td><EditButton/></td>
-                <td><DeleteButton/></td>
+                <td><MdEdit/></td>
+                <td><MdDelete onClick={() => delAptFloors(aptFloor.floorNum)}/></td>
             </tr>
         );
     }
