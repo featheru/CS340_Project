@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel} from "react-icons/md";
+import {MdAdd, MdCancel, MdDelete, MdEdit} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
-import * as db from "../ServerConstant";
+import {AddressInUse} from "../ServerConstant.js";
 
 function AptOwners() {
     useEffect(() => {
@@ -16,7 +16,7 @@ function AptOwners() {
     const [addField, setAddField] = useState([])
 
     const loadAptOwners = async () => {
-        const response = await fetch(db.AddressInUse + '/GET/aptOwners');
+        const response = await fetch(`${AddressInUse}/GET/aptOwners`);
         const aptOwnersList = await response.json();
         setAptOwnersList(aptOwnersList);
     }
@@ -27,7 +27,7 @@ function AptOwners() {
         let ssn = document.getElementById("ssnInp").value;
         const newAptOwner = {firstName, lastName, ssn}
         //console.log(JSON.stringify(newAptOwner));
-        const response = await fetch(db.AddressInUse + '/POST/aptOwners', {
+        const response = await fetch(`${AddressInUse}/POST/aptOwners`, {
             method: 'POST',
             body: JSON.stringify(newAptOwner),
             headers: {
@@ -40,6 +40,19 @@ function AptOwners() {
             removeAddClick();
         } else {
             alert(`Failed to add record, status code = ${response.status}`);
+        }
+    }
+
+    const delAptOwners = async(ownerID) => {
+        console.log(`Starting process with ${ownerID}`)
+        const response = await fetch(`${AddressInUse}/DELETE/aptOwners/${ownerID}`, {
+            method: 'DELETE'
+        });
+        if(response.status >= 200 && response.status < 400){
+            alert("Successfully deleted the record!");
+            document.getElementById(`${ownerID}`).remove();
+        } else {
+            alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
 
@@ -85,13 +98,13 @@ function AptOwners() {
 
     function AptOwner({ aptOwner}) {
         return (
-            <tr>
+            <tr id={aptOwner.ownerID}>
                 <td>{aptOwner.ownerID}</td>
                 <td>{aptOwner.firstName}</td>
                 <td>{aptOwner.lastName}</td>
                 <td>{aptOwner.ssn}</td>
-                <td><EditButton/></td>
-                <td><DeleteButton/></td>
+                <td><MdEdit/></td>
+                <td><MdDelete onClick={() => delAptOwners(aptOwner.ownerID)}/></td>
             </tr>
         );
     }
@@ -104,7 +117,7 @@ function AptOwners() {
         <h1>Apartment Owners Table</h1>
         <p>Apartment Owners database table tracks current and past apartment owners at Beaver Development by giving each owner a <br></br>
         unique ID, and storing each owners first and last name as well as SSN.</p>
-        <AptOwnerList aptOwners={aptOwnerList}  filterResults={filterResults}/>
+        <AptOwnerList aptOwners={aptOwnerList}/>
         <MdAdd onClick={onAddClick}/>
         </>
     )

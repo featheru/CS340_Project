@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel} from "react-icons/md";
+import {MdAdd, MdCancel, MdDelete, MdEdit} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
-import * as db from "../ServerConstant";
+import {AddressInUse} from "../ServerConstant.js";
 
 function Apts() {
     useEffect(() => {
@@ -16,7 +16,7 @@ function Apts() {
     const [addField, setAddField] = useState([]);
 
     const loadApts = async () => {
-        const response = await fetch(db.AddressInUse + '/GET/apts');
+        const response = await fetch(`${AddressInUse}/GET/apts`);
         const aptList = await response.json();
         setAptList(aptList);
     }
@@ -27,7 +27,7 @@ function Apts() {
         let floorNum = document.getElementById("floorNumInp").value;
         const newApt = {aptNum, sqFeet, floorNum}
         //console.log(JSON.stringify(newAptOwner));
-        const response = await fetch(db.AddressInUse + '/POST/apts', {
+        const response = await fetch(`${AddressInUse}/POST/apts`, {
             method: 'POST',
             body: JSON.stringify(newApt),
             headers: {
@@ -40,6 +40,19 @@ function Apts() {
             removeAddClick();
         } else {
             alert(`Failed to add record, status code = ${response.status}`);
+        }
+    }
+
+    const delApts = async(aptNum) => {
+        console.log(`Starting process with ${aptNum}`)
+        const response = await fetch(`${AddressInUse}/DELETE/apts/${aptNum}`, {
+            method: 'DELETE'
+        });
+        if(response.status >= 200 && response.status < 400){
+            alert("Successfully deleted the record!");
+            document.getElementById(`${aptNum}`).remove();
+        } else {
+            alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
 
@@ -84,12 +97,12 @@ function Apts() {
 
     function Apt({apt}) {
         return (
-            <tr>
+            <tr id={apt.aptNum}>
                 <td>{apt.aptNum}</td>
                 <td>{apt.sqFeet}</td>
                 <td>{apt.floorNum}</td>
-                <td><EditButton/></td>
-                <td><DeleteButton/></td>
+                <td><MdEdit/></td>
+                <td><MdDelete onClick={() => delApts(apt.aptNum)}/></td>
             </tr>
         );
     }
@@ -100,7 +113,7 @@ function Apts() {
         <SideBar />
         <h1 class = "DatabaseTitle">Apartments</h1>
         <p class = "DatabaseText">Apartments database table tracks specific information regarding an apartment including the floor number, and apartment number.</p>
-        <AptList apts={aptList}  filterResults={filterResults}/>
+        <AptList apts={aptList}/>
         <MdAdd onClick={onAddClick}/>        
         </>
     )

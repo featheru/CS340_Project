@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel} from "react-icons/md";
+import {MdAdd, MdCancel, MdDelete, MdEdit} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
-import * as db from "../ServerConstant";
+import {AddressInUse} from "../ServerConstant.js";
 
 function PriceHistory() {
     useEffect(() => {
@@ -16,7 +16,7 @@ function PriceHistory() {
     const [addField, setAddField] = useState([]);
 
     const loadPriceHistory = async () => {
-        const response = await fetch(db.AddressInUse + '/GET/priceHistory');
+        const response = await fetch(`${AddressInUse}/GET/priceHistory`);
         const phList = await response.json();
         setPHList(phList);
     }
@@ -29,7 +29,7 @@ function PriceHistory() {
         let price = document.getElementById("priceInp").value;
         const newPH = {sellerID, buyerID, aptNum, dateSale, price}
         //console.log(JSON.stringify(newAptOwner));
-        const response = await fetch(db.AddressInUse + '/POST/priceHistory', {
+        const response = await fetch(`${AddressInUse}/POST/priceHistory`, {
             method: 'POST',
             body: JSON.stringify(newPH),
             headers: {
@@ -42,6 +42,19 @@ function PriceHistory() {
             removeAddClick();
         } else {
             alert(`Failed to add record, status code = ${response.status}`);
+        }
+    }
+
+    const delPH = async(invoiceNum) => {
+        console.log(`Starting process with ${invoiceNum}`)
+        const response = await fetch(`${AddressInUse}/DELETE/priceHistory/${invoiceNum}`, {
+            method: 'DELETE'
+        });
+        if(response.status >= 200 && response.status < 400){
+            alert("Successfully deleted the record!");
+            document.getElementById(`${invoiceNum}`).remove();
+        } else {
+            alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
 
@@ -90,14 +103,14 @@ function PriceHistory() {
     }
     function PH({ph}) {
         return (
-            <tr>
+            <tr id={ph.invoiceNum}>
                 <td>{ph.invoiceNum}</td>
                 <td>{ph.sellerID}</td>
                 <td>{ph.buyerID}</td>
                 <td>{ph.aptNum}</td>
                 <td>{ph.dateSale}</td>
-                <td><EditButton/></td>
-                <td><DeleteButton/></td>
+                <td><MdEdit/></td>
+                <td><MdDelete onClick={() => delPH(ph.invoiceNum)}/></td>
             </tr>
         );
     }
@@ -109,7 +122,7 @@ function PriceHistory() {
         <h1 class = "DatabaseTitle">Price History</h1>
         <p class = "DatabaseText">Price History table tracks information related to a purchase of an apartment by the buying owner from the seller owner.  Information tracked include <br></br>
         price, date of Sale, and apartment number</p>
-        <PhList pH={phList} filterResults={filterResults}/>
+        <PhList pH={phList}/>
         <MdAdd text = "Add New Apartment Purchase" onClick={onAddClick}>Add New Apartment Purchase</MdAdd>
         
         

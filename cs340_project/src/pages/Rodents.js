@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel} from "react-icons/md";
+import {MdAdd, MdCancel, MdEdit, MdDelete} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
-import * as db from "../ServerConstant";
+import {AddressInUse} from "../ServerConstant.js";
 
 function Rodents() {
     useEffect(() => {
@@ -16,7 +16,7 @@ function Rodents() {
     const [addField, setAddField] = useState([]);
 
     const loadRodents = async () => {
-        const response = await fetch(db.AddressInUse + '/GET/rodents');
+        const response = await fetch(`${AddressInUse}/GET/rodents`);
         const rodentList = await response.json();
         setRodentList(rodentList);
     }
@@ -24,7 +24,7 @@ function Rodents() {
     const addRodents = async() => {
         let rodentName = document.getElementById("rodentNameInp").value;
         const newRodent = {rodentName}
-        const response = await fetch(db.AddressInUse + '/POST/rodents', {
+        const response = await fetch(`${AddressInUse}/POST/rodents`, {
             method: 'POST',
             body: JSON.stringify(newRodent),
             headers: {
@@ -37,6 +37,19 @@ function Rodents() {
             removeAddClick();
         } else {
             alert(`Failed to add record, status code = ${response.status}`);
+        }
+    }
+
+    const delRodents = async(rodentID) => {
+        console.log(`Starting process with ${rodentID}`)
+        const response = await fetch(`${AddressInUse}/DELETE/rodents/${rodentID}`, {
+            method: 'DELETE'
+        });
+        if(response.status >= 200 && response.status < 400){
+            alert("Successfully deleted the record!");
+            document.getElementById(`${rodentID}`).remove();
+        } else {
+            alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
 
@@ -79,11 +92,11 @@ function Rodents() {
 
     function Rodent({ rodent}) {
         return (
-            <tr>
+            <tr id={rodent.rodentID}>
                 <td>{rodent.rodentID}</td>
                 <td>{rodent.rodentName}</td>
-                <td><EditButton/></td>
-                <td><DeleteButton/></td>
+                <td><MdEdit/></td>
+                <td><MdDelete onClick={() => delRodents(rodent.rodentID)}/></td>
             </tr>
         );
     }
@@ -95,7 +108,7 @@ function Rodents() {
         <h1 class = "DatabaseTitle">Rodents</h1>
         <p class = "DatabaseText">Rodent table tracks all information related to rodents in the building. Rodents do not get removed from database <br></br>
         after extermination or leaving the building and the only info tracked is the name</p>
-        <RodentList rodents = {rodentList} filterResults={filterResults}/>
+        <RodentList rodents = {rodentList}/>
         <MdAdd onClick={onAddClick}/>      
         </>
     )
