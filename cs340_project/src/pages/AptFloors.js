@@ -6,6 +6,7 @@ import DeleteButton from "../components/DeleteButton";
 import {MdAdd, MdCancel} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
 import App from "../App";
+import * as db from "../ServerConstant";
 
 function AptFloors() {
     useEffect(() => {
@@ -35,7 +36,6 @@ function AptFloors() {
         let floorNum = document.getElementById("floorNumInp").value;
         let fireExits = document.getElementById("fireExitInp").value;
         const newAptFloor = {floorNum, fireExits}
-        console.log(JSON.stringify(newAptFloor));
         //console.log(JSON.stringify(newAptFloor));
         const response = await fetch('http://flip2.engr.oregonstate.edu:6363/POST/aptFloors', {
             method: 'POST',
@@ -50,6 +50,23 @@ function AptFloors() {
             removeAddClick();
         } else {
             alert(`Failed to add record, status code = ${response.status}`);
+        }
+    }
+
+    const delAptFloors = async() => {
+        //IN PROGRESS
+        const response = await fetch(db.AddressInUse + '/DELETE/aptFloors', {
+            method: 'POST',
+            body: JSON.stringify(newAptFloor),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if(response.status === 201){
+            alert("Successfully deleted the record!");
+            loadAptFloors();
+        } else {
+            alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
 
@@ -108,13 +125,11 @@ function AptFloors() {
         <SideBar/>
         <h1>Apartment Floors</h1>
         <p>Apartment Floor table tracks floor specific information of each apartment including fire exits.</p>
-        <AptFloorList aptFloors={aptFloorList}  filterResults={filterResults}/>
+        <AptFloorList aptFloors={aptFloorList} filterResults={filterResults}/>
         <MdAdd onClick={onAddClick}/>
         </>
     )
 }
-
-
 
 
 export default AptFloors;
