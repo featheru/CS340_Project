@@ -54,15 +54,13 @@ function AptFloors() {
     }
 
     const delAptFloors = async(flrNum) => {
-        console.log(`Starting process with ${flrNum}`)
         const response = await fetch(`${AddressInUse}/DELETE/aptFloors/${flrNum}`, {
             method: 'DELETE'
         });
-        console.log(`Fetched ${flrNum}`)
-        console.log(response.status)
         if(response.status >= 200 && response.status < 400){
             alert("Successfully deleted the record!");
-            document.getElementById(`${flrNum}`).remove();
+            //document.getElementById(`${flrNum}`).remove();
+            loadAptFloors();
         } else {
             alert(`Failed to delete record, status code = ${response.status}`);
         }

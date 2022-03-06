@@ -26,7 +26,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-//APT FLOORS
 app.get('/GET/aptFloors', function(req, res)
 {
     connection.query("SELECT * FROM `AptFloors`",  {timeout: 40000} , function(error, results, fields){
@@ -35,6 +34,7 @@ app.get('/GET/aptFloors', function(req, res)
             res.end();
         }
         res.json(results);
+        res.end();
     });                                                 
 });
 
@@ -45,8 +45,8 @@ app.get('/GET/aptFloors/:id', function(req, res)
             res.write(JSON.stringify(error));
             res.end();
         }
-        console.log('Success!')
         res.json(results);
+        res.end();
     });
 });
 
@@ -58,6 +58,7 @@ app.get('/GET/aptOwners', function(req, res)
             res.end();
         }
         res.json(results);
+        res.end();
     });                                                 
 });
 
@@ -69,6 +70,7 @@ app.get('/GET/apts', function(req, res)
             res.end();
         }
         res.json(results);
+        res.end();
     });                                                 
 });
 
@@ -80,6 +82,7 @@ app.get('/GET/priceHistory', function(req, res)
             res.end();
         }
         res.json(results);
+        res.end();
     });                                                 
 });
 
@@ -91,6 +94,7 @@ app.get('/GET/rodents', function(req, res)
             res.end();
         }
         res.json(results);
+        res.end();
     });                                                 
 });
 
@@ -102,6 +106,7 @@ app.get('/GET/rodentsToFloors', function(req, res)
             res.end();
         }
         res.json(results);
+        res.end();
     });                                                 
 });
 
@@ -129,7 +134,6 @@ app.post('/POST/aptOwners', function(req, res)
     connection.query(sql,inserts,function(error, results, fields){
         if(error){
             res.status(400);
-            console.log(JSON.stringify(error))
             res.write(JSON.stringify(error));
             res.end();
         }else{
@@ -193,7 +197,7 @@ app.post('/POST/rodents', function(req, res)
 
 app.post('/POST/rodentsToFloors', function(req, res)
 {
-    var sql = "INSERT INTO RodentsToFloors (rodentID,floorNum) VALUES (?)";
+    var sql = "INSERT INTO RodentsToFloors (rodentID,floorNum) VALUES (?,?)";
     var inserts = [req.body.rodentID, req.body.floorNum];
     connection.query(sql,inserts,function(error, results, fields){
         if(error){
@@ -218,27 +222,83 @@ app.delete('/DELETE/aptFloors/:floorNum', function(req, res)
             res.write(JSON.stringify(error));
             res.end();
         }
-        console.log('Success!')
         res.json(results);
+        res.end();
     });
 });
 
-//TODO: Finish Backend routes for Delete
-app.delete('/DELETE/aptOwners/:floorNum', function(req, res)
+app.delete('/DELETE/aptOwners/:ownerID', function(req, res)
+{
+    var sql = `DELETE FROM AptOwners WHERE ownerID = ?`;
+    //var del = [req.params.floorNum];
+    connection.query(sql,[req.params.ownerID],function(error, results){
+        if(error){
+            res.status(450);
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        res.json(results);
+        res.end();
+    });
+});
+
+app.delete('/DELETE/rodents/:rodentID', function(req, res)
 {
 
-    var sql = `DELETE FROM AptFloors WHERE floorNum = ?`;
+    var sql = `DELETE FROM Rodents WHERE rodentID = ?`;
     //var del = [req.params.floorNum];
-    connection.query(sql,[req.params.floorNum],function(error, results){
+    connection.query(sql,[req.params.rodentID],function(error, results){
         if(error){
             res.write(JSON.stringify(error));
             res.end();
         }
-        console.log('Success!')
         res.json(results);
+        res.end();
     });
 });
 
+app.delete('/DELETE/apts/:aptNum', function(req, res)
+{
+
+    var sql = `DELETE FROM Apts WHERE aptNum = ?`;
+    //var del = [req.params.floorNum];
+    connection.query(sql,[req.params.aptNum],function(error, results){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        res.json(results);
+        res.end();
+    });
+});
+
+app.delete('/DELETE/priceHistory/:invoiceNum', function(req, res)
+{
+
+    var sql = `DELETE FROM PriceHistory WHERE invoiceNum = ?`;
+    connection.query(sql,[req.params.invoiceNum],function(error, results){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        res.json(results);
+        res.end();
+    });
+});
+
+app.delete('/DELETE/rodentsToFloors/:rodentID/:floorNum', function(req, res)
+{
+    console.log("AT THE SERVER WITH ")
+    var sql = `DELETE FROM RodentsToFloors WHERE rodentID = ? AND floorNum = ?`;
+    connection.query(sql,[req.params.rodentID, req.params.floorNum],function(error, results){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        res.json(results);
+        res.end();
+    });
+});
 
 app.listen(PORT, () => {
     console.log("Express started on http://localhost:"+PORT+"; press Ctrl-C to terminate.");

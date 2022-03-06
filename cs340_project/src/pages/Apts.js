@@ -50,7 +50,8 @@ function Apts() {
         });
         if(response.status >= 200 && response.status < 400){
             alert("Successfully deleted the record!");
-            document.getElementById(`${aptNum}`).remove();
+            //document.getElementById(`${aptNum}`).remove();
+            loadApts();
         } else {
             alert(`Failed to delete record, status code = ${response.status}`);
         }

@@ -47,7 +47,8 @@ function Rodents() {
         });
         if(response.status >= 200 && response.status < 400){
             alert("Successfully deleted the record!");
-            document.getElementById(`${rodentID}`).remove();
+            //document.getElementById(`${rodentID}`).remove();
+            loadRodents();
         } else {
             alert(`Failed to delete record, status code = ${response.status}`);
         }
@@ -63,7 +64,7 @@ function Rodents() {
     };
 
     const onAddClick = event => {
-        setRodentList(<RodentInput />);
+        setAddField(<RodentInput />);
     };
 
     const removeAddClick = event => {

@@ -28,7 +28,7 @@ function PriceHistory() {
         let dateSale = document.getElementById("dateSaleInp").value;
         let price = document.getElementById("priceInp").value;
         const newPH = {sellerID, buyerID, aptNum, dateSale, price}
-        //console.log(JSON.stringify(newAptOwner));
+        console.log(JSON.stringify(newPH));
         const response = await fetch(`${AddressInUse}/POST/priceHistory`, {
             method: 'POST',
             body: JSON.stringify(newPH),
@@ -52,7 +52,8 @@ function PriceHistory() {
         });
         if(response.status >= 200 && response.status < 400){
             alert("Successfully deleted the record!");
-            document.getElementById(`${invoiceNum}`).remove();
+            //document.getElementById(`${invoiceNum}`).remove();
+            loadPriceHistory();
         } else {
             alert(`Failed to delete record, status code = ${response.status}`);
         }
@@ -71,7 +72,7 @@ function PriceHistory() {
                 </tr>
     };
     const onAddClick = event => {
-        setPHList(<PHInput/>);
+        setAddField(<PHInput/>);
     };
 
     const removeAddClick = event => {
@@ -79,7 +80,7 @@ function PriceHistory() {
     };
 
     // Row of AptFloor data
-    function PhList({ pH, filterResults}) {
+    function PhList({ PHmap, filterResults}) {
         return (
             <table>
                 <thead>
@@ -96,7 +97,7 @@ function PriceHistory() {
                 </thead>
                 <tbody>
                 {addField}
-                {pH.map((ph, idx) => <PH ph={ph} key={idx} />)}
+                {PHmap.map((ph, idx) => <PH ph={ph} key={idx} />)}
                 </tbody>
             </table>
         );
@@ -109,6 +110,7 @@ function PriceHistory() {
                 <td>{ph.buyerID}</td>
                 <td>{ph.aptNum}</td>
                 <td>{ph.dateSale}</td>
+                <td>{ph.price}</td>
                 <td><MdEdit/></td>
                 <td><MdDelete onClick={() => delPH(ph.invoiceNum)}/></td>
             </tr>
@@ -119,11 +121,11 @@ function PriceHistory() {
         <>
         <Header/>
         <SideBar />
-        <h1 class = "DatabaseTitle">Price History</h1>
-        <p class = "DatabaseText">Price History table tracks information related to a purchase of an apartment by the buying owner from the seller owner.  Information tracked include <br></br>
+        <h1>Price History</h1>
+        <p>Price History table tracks information related to a purchase of an apartment by the buying owner from the seller owner.  Information tracked include <br></br>
         price, date of Sale, and apartment number</p>
-        <PhList pH={phList}/>
-        <MdAdd text = "Add New Apartment Purchase" onClick={onAddClick}>Add New Apartment Purchase</MdAdd>
+        <PhList PHmap={phList}/>
+        <MdAdd onClick={onAddClick}></MdAdd>
         
         
         </>

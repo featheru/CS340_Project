@@ -48,9 +48,11 @@ function AptOwners() {
         const response = await fetch(`${AddressInUse}/DELETE/aptOwners/${ownerID}`, {
             method: 'DELETE'
         });
+        console.log(response);
         if(response.status >= 200 && response.status < 400){
             alert("Successfully deleted the record!");
-            document.getElementById(`${ownerID}`).remove();
+            //document.getElementById(`${ownerID}`).remove();
+            loadAptOwners();
         } else {
             alert(`Failed to delete record, status code = ${response.status}`);
         }

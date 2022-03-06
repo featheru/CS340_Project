@@ -44,12 +44,13 @@ function RodentsToFloors() {
 
     const delRodentsToFloors = async(rodentID, floorNum) => {
         console.log(`Starting process with ${rodentID}+${floorNum}`)
-        const response = await fetch(`${AddressInUse}/DELETE/priceHistory/${rodentID}/${floorNum}`, {
+        const response = await fetch(`${AddressInUse}/DELETE/rodentsToFloors/${rodentID}/${floorNum}`, {
             method: 'DELETE'
         });
         if(response.status >= 200 && response.status < 400){
             alert("Successfully deleted the record!");
-            document.getElementById(`${rodentID}-${floorNum}`).remove();
+            //document.getElementById(`${rodentID}-${floorNum}`).remove();
+            loadRodentsToFloors();
         } else {
             alert(`Failed to delete record, status code = ${response.status}`);
         }
@@ -65,7 +66,7 @@ function RodentsToFloors() {
     };
     
     const onAddClick = event => {
-        setRodentToFloorList(<RodentToFloorInput/>);
+        setAddField(<RodentToFloorInput/>);
     };
 
     const removeAddClick = event => {
