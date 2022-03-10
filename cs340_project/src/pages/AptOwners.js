@@ -18,15 +18,37 @@ function AptOwners() {
     const loadAptOwners = async () => {
         const response = await fetch(`${AddressInUse}/GET/aptOwners`);
         const aptOwnersList = await response.json();
+        console.log(aptOwnersList);
+        aptOwnersList.forEach((item) => item.ssn = ComposeSSN(item.ssn));
         setAptOwnersList(aptOwnersList);
+    }
+
+    const ComposeSSN = (ssn) => {
+        return ssn.slice(0,3) + "-" + ssn.slice(3,5) + "-" + ssn.slice(5,9);
+    } 
+
+    const DeComposeSSN = (ssn) => {
+        return ssn.slice(0,3) + ssn.slice(4,6) + ssn.slice(7,11);
     }
 
     const addAptOwners = async() => {
         let firstName = document.getElementById("firstNameInp").value;
         let lastName = document.getElementById("lastNameInp").value;
-        let ssn = document.getElementById("ssnInp").value;
+        let ssn = DeComposeSSN(document.getElementById("ssnInp").value);
+
+        //validate input
+        if (firstName.length < 1) {
+            alert("Invalid First Name");
+            return;
+        } else if (lastName.length < 1) {
+            alert("Invalid Last Name");
+            return;
+        } else if (ssn.length !== 9) {
+            alert("Insufficient length of ssn");
+            return;
+        }
+
         const newAptOwner = {firstName, lastName, ssn}
-        //console.log(JSON.stringify(newAptOwner));
         const response = await fetch(`${AddressInUse}/POST/aptOwners`, {
             method: 'POST',
             body: JSON.stringify(newAptOwner),
@@ -48,22 +70,42 @@ function AptOwners() {
         const response = await fetch(`${AddressInUse}/DELETE/aptOwners/${ownerID}`, {
             method: 'DELETE'
         });
-        console.log(response);
         if(response.status >= 200 && response.status < 400){
             alert("Successfully deleted the record!");
-            //document.getElementById(`${ownerID}`).remove();
             loadAptOwners();
         } else {
             alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
 
+    const SSNInputFormat = event => {
+        var tag = document.getElementById("ssnInp");
+        let val = tag.value.replace(/\D/g, '');
+        val = val.replace(/^(\d{3})/, '$1-');
+        val = val.replace(/-(\d{2})/, '-$1-');
+        val = val.replace(/(\d)-(\d{4}).*/, '$1-$2');
+        tag.value = val;
+    };
+
+    const FirstNameFormat = event => {
+        var tag = document.getElementById("firstNameInp");
+        let val = tag.value.replace(/[^a-zA-Z]/g, '');
+        tag.value = val;
+    };
+
+    const LastNameFormat = event => {
+        var tag = document.getElementById("lastNameInp");
+        let val = tag.value.replace(/[^a-zA-Z]/g, '');
+        tag.value = val;
+    };
+                        
+
     const AptOwnerInput = () => {
         return <tr>
                     <td></td>
-                    <td><input id="firstNameInp" placeholder="First Name"/></td>
-                    <td><input id="lastNameInp" placeholder="Last Name"/></td>
-                    <td><input id="ssnInp" placeholder="SSN"/></td>
+                    <td><input id="firstNameInp" placeholder="First Name" onKeyUp={FirstNameFormat}/></td>
+                    <td><input id="lastNameInp" placeholder="Last Name" onKeyUp={LastNameFormat}/></td>
+                    <td><input id="ssnInp" placeholder="SSN" onKeyUp={SSNInputFormat}/></td>
                     <td><MdAdd onClick = {addAptOwners}/></td>
                     <td><MdCancel onClick = {removeAddClick}/></td>
                 </tr>
