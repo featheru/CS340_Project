@@ -309,9 +309,10 @@ app.put('/PUT/aptFloors/:floorNum', function(req, res)
     connection.query(sql,[newFloorNum, fireExits, floorNum], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
+            res.status(400);
             res.end();
         }
-        res.json(results);
+        res.status(201);
         res.end();
     });
 });

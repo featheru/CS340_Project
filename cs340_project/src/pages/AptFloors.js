@@ -34,6 +34,9 @@ function AptFloors() {
     }
 
     const filterResults = async (id) => {
+        if(id == null){
+            id = '';
+        }
         const response = await fetch(`${AddressInUse}/GET/aptFloors/${id}`)
         const aptFloorList = await response.json();
         setAptFloorList(aptFloorList);
@@ -80,9 +83,10 @@ function AptFloors() {
                 'Content-Type': 'application/json',
             }
         });
-        if(response.status === 201){
+        if(response.status >= 200 && response.status < 400 ){
             alert("Successfully updated the record!");
             await loadAptFloors();
+            window.location.reload();
             }
         else {
             alert(`Failed to update record, status code = ${response.status}`)

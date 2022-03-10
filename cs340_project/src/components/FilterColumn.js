@@ -6,23 +6,24 @@ function FilterColumn(props){
         setShowField(!showField);
     }
     const [searchValue, setSearchValue] = useState();
-    const SearchField = () =><form>
-        <input placeholder={`Enter ${props.fieldToSearch} to search`} value = {searchValue} onChange={e => setSearchValue(e.target.value)}/>
-        <button onClick={handleChange}>Search</button>
-    </form>
 
     function handleChange() {
-        props.filter(searchValue);
+        filter(searchValue);
     }
     const [showField, setShowField] = useState();
-
-
+    const fieldToSearch = props.fieldToSearch;
+    const filter = props.filter;
 
     return(
         <div className={"filter-column"}>
             <MdFilterAlt onClick={() => {toggleField()
             }}/>
-            {showField ? <SearchField /> : <text>Filter</text>}
+            {showField ? <div>
+                <div>
+                    <input type={"text"} value={searchValue} onChange={e => setSearchValue(e.target.value)}/>
+                    <button onClick={e => handleChange()}>Search</button>
+                </div>
+            </div> : <text>Filter</text>}
 
         </div>
     );
