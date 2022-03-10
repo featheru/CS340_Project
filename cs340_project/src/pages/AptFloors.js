@@ -3,20 +3,26 @@ import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel, MdDelete, MdEdit} from "react-icons/md";
+import {MdAdd, MdCancel, MdDelete, MdEdit, MdUpdate} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
 import App from "../App";
 import {AddressInUse} from "../ServerConstant.js";
-
+import ReactDOM from "react-dom";
 function AptFloors() {
     useEffect(() => {
         loadAptFloors();
     }, []);
 
     const [aptFloorList, setAptFloorList] = useState([]);
-    const [addField, setAddField] = useState([])
-    //const dbAddress = 'http://flip2.engr.oregonstate.edu:6363/GET/aptFloors';
-    //const dbAddressLocal = 'http://localhost:6363/GET/aptFloors/'
+    const [addField, setAddField] = useState([]);
+    const [aptFloorForUpdate, setAptFloorForUpdate] = useState([])
+    const [isShowing, setIsShowing] = useState(false);
+    const [floorNum, setFloorNum] = useState([]);
+    const [fireExits, setFireExits] = useState([]);
+
+    const toggle = (isShowing) => {
+      setIsShowing(!isShowing);
+    }
 
     const loadAptFloors = async () => {
         console.log("MakingRequest")
@@ -28,7 +34,7 @@ function AptFloors() {
     }
 
     const filterResults = async (id) => {
-        const response = await fetch(`${AddressInUse}/GET/aptFloors${id}`)
+        const response = await fetch(`${AddressInUse}/GET/aptFloors/${id}`)
         const aptFloorList = await response.json();
         setAptFloorList(aptFloorList);
     }
@@ -46,7 +52,7 @@ function AptFloors() {
         });
         if(response.status === 201){
             alert("Successfully added the record!");
-            loadAptFloors();
+            await loadAptFloors();
             removeAddClick();
         } else {
             alert(`Failed to add record, status code = ${response.status}`);
@@ -64,6 +70,29 @@ function AptFloors() {
         } else {
             alert(`Failed to delete record, status code = ${response.status}`);
         }
+    }
+
+    const updateAptFloors = async(aptFloorForUpdate, floorNum, fireExits) => {
+        const response = await fetch(`${AddressInUse}/PUT/aptFloors/${aptFloorForUpdate.floorNum}`, {
+            method: 'PUT',
+            body: JSON.stringify({floorNum:floorNum, fireExits:fireExits}),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if(response.status === 201){
+            alert("Successfully updated the record!");
+            await loadAptFloors();
+            }
+        else {
+            alert(`Failed to update record, status code = ${response.status}`)
+        }
+
+    }
+
+    const openUpdateForm = async(aptFloor) => {
+        setAptFloorForUpdate(aptFloor)
+        toggle(isShowing);
     }
 
     const AptFloorInput = () => {
@@ -89,7 +118,7 @@ function AptFloors() {
             <table id="aptFloors">
                 <thead>
                 <tr>
-                    <th>floorNum <FilterColumn fieldToSearch={"floorNum"} onChange={filterResults}/></th>
+                    <th>floorNum <FilterColumn fieldToSearch={"floorNum"} filter={filterResults}/></th>
                     <th>fireExits</th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -97,7 +126,7 @@ function AptFloors() {
                 </thead>
                 <tbody>
                 {addField}
-                {aptFloors.map((aptFloor, idx) => <AptFloor aptFloor={aptFloor} key={idx} />)}
+                {aptFloors.map((aptFloor, idx) => <AptFloor aptFloor={aptFloor} key={idx}/>)}
                 </tbody>
             </table>
         );
@@ -108,8 +137,9 @@ function AptFloors() {
             <tr id={aptFloor.floorNum}>
                 <td>{aptFloor.floorNum}</td>
                 <td>{aptFloor.fireExits}</td>
-                <td><MdEdit/></td>
+                <td><MdEdit onClick={() => openUpdateForm (aptFloor)}/></td>
                 <td><MdDelete onClick={() => delAptFloors(aptFloor.floorNum)}/></td>
+
             </tr>
         );
     }
@@ -121,10 +151,34 @@ function AptFloors() {
         <h1>Apartment Floors</h1>
         <p>Apartment Floor table tracks floor specific information of each apartment including fire exits.</p>
         <AptFloorList aptFloors={aptFloorList} filterResults={filterResults}/>
+        <Modal isShowing={isShowing} hide={toggle} aptFloorForUpdate={aptFloorForUpdate} setFloorNum={setFloorNum} setFireExits={setFireExits} updateAptFloors={updateAptFloors} floorNum={floorNum} fireExits={fireExits}/>
         <MdAdd onClick={onAddClick}/>
         </>
+
     )
 }
+
+const Modal = ({ isShowing, hide ,aptFloorForUpdate, setFloorNum, setFireExits, updateAptFloors, floorNum, fireExits}) => isShowing ? ReactDOM.createPortal(
+    <React.Fragment>
+        <div className="modal-overlay"/>
+        <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
+            <div className="modal">
+                <div className="modal-header">
+                    <button type="button" className="modal-close-button" data-dismiss="modal" aria-label="Close" onClick={hide}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form>
+                    <p>Floor Number</p>
+                    <input placeholder={aptFloorForUpdate.floorNum} type={"text"} onChange={e => setFloorNum(e.target.value)}/>
+                    <p>Fire Exits</p>
+                    <input placeholder={aptFloorForUpdate.fireExits} type={"text"} onChange={e => setFireExits(e.target.value)}/>
+                    <MdUpdate onClick={e => updateAptFloors(aptFloorForUpdate, floorNum, fireExits)}/>
+                </form>
+            </div>
+        </div>
+    </React.Fragment>, document.body
+) : null;
 
 
 export default AptFloors;

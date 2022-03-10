@@ -1,21 +1,22 @@
 import {MdFilterAlt} from "react-icons/md";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 
 function FilterColumn(props){
     const toggleField = () => {
         setShowField(!showField);
-        localStorage.setItem('showField', 'false')
     }
-    const SearchField = () => <input placeholder={`Enter ${props.fieldToSearch} to search`} onChange={handleChange}/>
+    const [searchValue, setSearchValue] = useState();
+    const SearchField = () =><form>
+        <input placeholder={`Enter ${props.fieldToSearch} to search`} value = {searchValue} onChange={e => setSearchValue(e.target.value)}/>
+        <button onClick={handleChange}>Search</button>
+    </form>
 
-    function handleChange(event) {
-        props.onChange(event.target.value);
+    function handleChange() {
+        props.filter(searchValue);
     }
     const [showField, setShowField] = useState();
 
-    // useEffect(() => {
-    //     setShowField(localStorage.getItem('showField' === 'true'));
-    // });
+
 
     return(
         <div className={"filter-column"}>

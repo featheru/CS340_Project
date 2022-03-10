@@ -300,6 +300,23 @@ app.delete('/DELETE/rodentsToFloors/:rodentID/:floorNum', function(req, res)
     });
 });
 
+app.put('/PUT/aptFloors/:floorNum', function(req, res)
+{
+    let newFloorNum = req.body.floorNum;
+    let floorNum = req.params.floorNum;
+    let fireExits = req.body.fireExits;
+    let sql = "UPDATE AptFloors SET floorNum = ?, fireExits = ? WHERE floorNum = ?";
+    connection.query(sql,[newFloorNum, fireExits, floorNum], function(error, results) {
+        if(error){
+            res.write(JSON.stringify(error,results));
+            res.end();
+        }
+        res.json(results);
+        res.end();
+    });
+});
+
+
 app.listen(PORT, () => {
     console.log("Express started on http://localhost:"+PORT+"; press Ctrl-C to terminate.");
 });
