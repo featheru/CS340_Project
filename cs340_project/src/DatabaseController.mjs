@@ -316,6 +316,94 @@ app.put('/PUT/aptFloors/:floorNum', function(req, res)
         res.end();
     });
 });
+app.put('/PUT/aptOwners/:ownerID', function(req, res)
+{
+    let firstName = req.body.firstName;
+    let ownerID = req.params.ownerID;
+    let lastName = req.body.lastName;
+    let ssn = req.body.ssn;
+    let sql = "UPDATE AptOwners SET firstName = ?, lastName = ?, ssn = ? WHERE ownerID = ?";
+    connection.query(sql,[firstName, lastName, ssn, ownerID], function(error, results) {
+        if(error){
+            res.write(JSON.stringify(error,results));
+            res.status(400);
+            res.end();
+        }
+        res.status(201);
+        res.end();
+    });
+});
+
+app.put('/PUT/apts/:aptNum', function(req, res)
+{
+    let sqFeet = req.body.sqFeet;
+    let aptNum = req.params.aptNum;
+    let ownerID = req.body.ownerID;
+    let sql = "UPDATE Apts SET sqFeet = ?, ownerID = ? WHERE aptNum = ?";
+    connection.query(sql,[sqFeet, ownerID, aptNum], function(error, results) {
+        if(error){
+            res.write(JSON.stringify(error,results));
+            res.status(400);
+            res.end();
+        }
+        res.status(201);
+        res.end();
+    });
+});
+
+app.put('/PUT/rodents/:rodentID', function(req, res)
+{
+    let rodentName = req.body.rodentName;
+    let rodentID = req.params.rodentID;
+    let sql = "UPDATE AptFloors SET rodentName = ? WHERE rodentID = ?";
+    connection.query(sql,[rodentName, rodentID], function(error, results) {
+        if(error){
+            res.write(JSON.stringify(error,results));
+            res.status(400);
+            res.end();
+        }
+        res.status(201);
+        res.end();
+    });
+});
+
+app.put('/PUT/priceHistory/:invoiceNum', function(req, res)
+{
+    let invoiceNum = req.params.invoiceNum;
+    let sellerID = req.body.sellerID;
+    let buyerID = req.body.buyerID;
+    let aptNum = req.body.aptNum;
+    let dateSale =req.body.dateSale;
+    let price = req.body.price;
+    let sql = "UPDATE AptFloors SET sellerID = ?, buyerID = ?, aptNum = ?, dateSale = ?, price = ? WHERE invoiceNum = ?";
+    connection.query(sql,[sellerID, buyerID, aptNum, dateSale, price, invoiceNum], function(error, results) {
+        if(error){
+            res.write(JSON.stringify(error,results));
+            res.status(400);
+            res.end();
+        }
+        res.status(201);
+        res.end();
+    });
+});
+
+
+app.put('/PUT/rodentsToFloors/:rodentID/:floorNum', function(req, res)
+{
+    let floorNum = req.params.floorNum;
+    let rodentID = req.params.rodentID;
+    let sql = "UPDATE AptFloors SET rodentID = ?, floorNum = ? WHERE rodentID = ? AND floorNum = ?";
+    connection.query(sql,[rodentID, floorNum, rodentID, floorNum], function(error, results) {
+        if(error){
+            res.write(JSON.stringify(error,results));
+            res.status(400);
+            res.end();
+        }
+        res.status(201);
+        res.end();
+    });
+});
+
 
 
 app.listen(PORT, () => {
