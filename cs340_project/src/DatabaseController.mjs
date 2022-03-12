@@ -16,7 +16,6 @@ connection.connect(function(err) {
         console.error('error connecting: ' + err.stack);
         return;
     }
-
     console.log('connected as id ' + connection.threadId);
 });
 
@@ -100,7 +99,8 @@ app.get('/GET/rodents', function(req, res)
 
 app.get('/GET/rodentsToFloors', function(req, res)
 {
-    connection.query("SELECT * FROM `RodentsToFloors`",  {timeout: 40000} , function(error, results, fields){
+    connection.query("SELECT Rodents.rodentID,Rodents.rodentName,RodentsToFloors.floorNum FROM Rodents JOIN RodentsToFloors ON Rodents.rodentID = RodentsToFloors.rodentID;",  
+    {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.end();

@@ -6,6 +6,7 @@ import DeleteButton from "../components/DeleteButton";
 import {MdAdd, MdCancel, MdEdit, MdDelete} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
 import {AddressInUse} from "../ServerConstant.js";
+import {Dropdown} from 'semantic-ui-react';
 
 function RodentsToFloors() {
     useEffect(() => {
@@ -14,18 +15,34 @@ function RodentsToFloors() {
 
     const [rodentToFloorList, setRodentToFloorList] = useState([]);
     const [addField, setAddField] = useState([]);
+    const [rodentOptionList, setRodentOptionList] = useState([]);
+    const [floorOptionList, setFloorOptionList] = useState([]);
 
     const loadRodentsToFloors = async () => {
         const response = await fetch(`${AddressInUse}/GET/rodentsToFloors`);
         const rodentToFloorList = await response.json();
         setRodentToFloorList(rodentToFloorList);
+        rodentOptions();
+        floorOptions();
+    }
+
+    const rodentOptions = async () => {
+        const response = await fetch(`${AddressInUse}/GET/rodents`);
+        const rodentOptionList = await response.json();
+        setRodentOptionList(rodentOptionList);
+    }
+
+    const floorOptions = async () => {
+        const response = await fetch(`${AddressInUse}/GET/aptFloors`);
+        const floorOptionList = await response.json();
+        setFloorOptionList(floorOptionList);
     }
 
     const addRTF = async() => {
-        let rodentID = document.getElementById("rodentIDInp").value;
+        let rodentID = document.getElementById("rodentNameInp").value;
         let floorNum = document.getElementById("floorNumInp").value;
         const newRTF = {rodentID, floorNum}
-        //console.log(JSON.stringify(newAptOwner));
+        console.log(JSON.stringify(newRTF));
         const response = await fetch(`${AddressInUse}/POST/rodentsToFloors`, {
             method: 'POST',
             body: JSON.stringify(newRTF),
@@ -56,16 +73,37 @@ function RodentsToFloors() {
         }
     }
 
-    const RodentToFloorInput = () => {
+    function RodentToFloorInput () {
         return <tr>
-                    <td><input id="rodentIDInp" placeholder="Rodent ID"/></td>
-                    <td><input id="floorNumInp" placeholder="Floor Number"/></td>
+                    <td>
+                        <select id = "rodentNameInp">
+                            {rodentOptionList.map((item,idx) => <RodentMap item={item} idx = {idx}/>)}
+                        </select>
+                    </td>
+                    <td>
+                        <select id = "floorNumInp">
+                            {floorOptionList.map((item,idx) => <FloorMap item={item} idx = {idx}/>)}
+                        </select>
+                    </td>
                     <td><MdAdd onClick={addRTF}/></td>
                     <td><MdCancel onClick={removeAddClick}/></td>
                 </tr>
     };
+
+    function RodentMap ({item}) {
+        return (
+            <option id = {item.rodentID} key={item.rodentID} value={item.rodentID}>{item.rodentName}</option>
+        );
+    }
+
+    function FloorMap ({item}) {
+        return (
+            <option id = {item.floorNum} key={item.floorNum} value={item.floorNum}>{item.floorNum}</option>
+        );
+    }
     
-    const onAddClick = event => {
+    const onAddClick = Event => {
+        
         setAddField(<RodentToFloorInput/>);
     };
 
@@ -73,47 +111,47 @@ function RodentsToFloors() {
         setAddField();
     };
 
-        // Row of AptFloor data
-        function RTFList({ rtfList, filterResults}) {
-            return (
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Rodent ID [int]<FilterColumn fieldToSearch={"rodentID"}/></th>
-                        <th>Floor Number [int]<FilterColumn fieldToSearch={"floorNum"}/></th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+    // Row of AptFloor data
+    function RTFList({ rtfList, filterResults}) {
+        return (
+            <table>
+                <thead>
+                <tr>
+                    <th>Rodent ID [int]<FilterColumn fieldToSearch={"rodentName"}/></th>
+                    <th>Floor Number [int]<FilterColumn fieldToSearch={"floorNum"}/></th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
                     {addField}
                     {rtfList.map((rtf, idx) => <RTFmap rtf={rtf} key={idx} />)}
-                    </tbody>
-                </table>
-            );
-        }
-        function RTFmap({rtf}) {
-            return (
-                <tr id={`${rtf.rodentID}-${rtf.floorNum}`}>
-                    <td>{rtf.rodentID}</td>
-                    <td>{rtf.floorNum}</td>
-                    <td><MdEdit/></td>
-                    <td><MdDelete onClick={() => delRodentsToFloors(rtf.rodentID,rtf.floorNum)}/></td>
-                </tr>
-            );
-        }
-    
-        return(
-            <>
-            <Header/>
-            <SideBar />
-            <h1>Rodents To Apartment Floors</h1>
-            <p>Rodents to Apartment Floors table tracks the possibly multiple floors that rodents are currently on at a given period of time</p>
-            <RTFList rtfList={rodentToFloorList}/>
-            <MdAdd onClick={onAddClick}></MdAdd>
-            </>
-            
-        )
+                </tbody>
+            </table>
+        );
+    }
+    function RTFmap({rtf}) {
+        return (
+            <tr id={`${rtf.rodentID}-${rtf.floorNum}`}>
+                <td>{rtf.rodentName}</td>
+                <td>{rtf.floorNum}</td>
+                <td><MdEdit/></td>
+                <td><MdDelete onClick={() => delRodentsToFloors(rtf.rodentID,rtf.floorNum)}/></td>
+            </tr>
+        );
+    }
+
+    return(
+        <>
+        <Header/>
+        <SideBar />
+        <h1>Rodents To Apartment Floors</h1>
+        <p>Rodents to Apartment Floors table tracks the possibly multiple floors that rodents are currently on at a given period of time</p>
+        <RTFList rtfList={rodentToFloorList}/>
+        <MdAdd onClick={onAddClick}></MdAdd>
+        </>
+        
+    )
 }
 
 export default RodentsToFloors;
