@@ -21,15 +21,6 @@ function Apts() {
         setAptList(aptList);
     }
 
-    const filterResults = async (id) => {
-        if(id == null){
-            id = '';
-        }
-        const response = await fetch(`${AddressInUse}/GET/apts/${id}`)
-        const aptList = await response.json();
-        setAptList(aptList);
-    }
-
     const addApts = async() => {
         let aptNum = document.getElementById("aptNumInp").value;
         let sqFeet = document.getElementById("sqFeetInp").value;
@@ -90,7 +81,7 @@ function Apts() {
             <table>
                 <thead>
                 <tr>
-                    <th>Apartment Number [int]<FilterColumn fieldToSearch="aptNum" filter={filterResults}/></th>
+                    <th>Apartment Number [int]<FilterColumn fieldToSearch="aptNum"/></th>
                     <th>Square Footage (ft^2) [int]<FilterColumn fieldToSearch={"sqFeet"}/></th>
                     <th>Floor Number<FilterColumn fieldToSearch={"floorNum"}/></th>
                     <th>Edit</th>
@@ -123,7 +114,7 @@ function Apts() {
         <SideBar />
         <h1 class = "DatabaseTitle">Apartments</h1>
         <p class = "DatabaseText">Apartments database table tracks specific information regarding an apartment including the floor number, and apartment number.</p>
-        <AptList apts={aptList} filterResults={filterResults}/>
+        <AptList apts={aptList}/>
         <MdAdd onClick={onAddClick}/>        
         </>
     )

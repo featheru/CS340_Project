@@ -23,17 +23,6 @@ function AptOwners() {
         setAptOwnersList(aptOwnersList);
     }
 
-    const filterResults = async (id) => {
-        if(id == null){
-            id = '';
-        }
-        const response = await fetch(`${AddressInUse}/GET/aptOwners/${id}`)
-        const aptOwners = await response.json();
-        setAptOwnersList(aptOwners);
-    }
-
-
-
     const ComposeSSN = (ssn) => {
         return ssn.slice(0,3) + "-" + ssn.slice(3,5) + "-" + ssn.slice(5,9);
     } 
@@ -135,7 +124,7 @@ function AptOwners() {
             <table>
                 <thead>
                 <tr>
-                    <th>Owner ID [int] <FilterColumn fieldToSearch={"ownerID"} filter={filterResults} /></th>
+                    <th>Owner ID [int]</th>
                     <th>First Name [varchar]</th>
                     <th>Last Name [varchar]</th>
                     <th>SSN [varchar]</th>
@@ -172,7 +161,7 @@ function AptOwners() {
         <h1>Apartment Owners Table</h1>
         <p>Apartment Owners database table tracks current and past apartment owners at Beaver Development by giving each owner a <br></br>
         unique ID, and storing each owners first and last name as well as SSN.</p>
-        <AptOwnerList aptOwners={aptOwnerList} filterResults={filterResults}/>
+        <AptOwnerList aptOwners={aptOwnerList}/>
         <MdAdd onClick={onAddClick}/>
         </>
     )

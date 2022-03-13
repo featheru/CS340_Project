@@ -42,6 +42,8 @@ function AptFloors() {
         setAptFloorList(aptFloorList);
     }
 
+    
+
     const addAptFloors = async() => {        
         let floorNum = document.getElementById("floorNumInp").value;
         let fireExits = document.getElementById("fireExitInp").value;
@@ -105,10 +107,19 @@ function AptFloors() {
         toggle(isShowing);
     }
 
+    function numFormat(event) {
+        var tag = document.getElementById(event.target.id);
+        let val = tag.value.replace(/\D/g, '');
+        if (val.length > 0 && val[0] == "0"){
+            val = '';
+        }
+        tag.value = val;
+    }
+
     const AptFloorInput = () => {
         return<tr>
-                    <td><input id="floorNumInp" placeholder="Enter Floor Number Here" /></td>
-                    <td><input id="fireExitInp" placeholder="Enter Fire Exits Here"/></td>
+                    <td><input id="floorNumInp" placeholder="Floor Number e.g. 11, 22" onKeyUp={(id) => numFormat(id)}/></td>
+                    <td><input id="fireExitInp" placeholder="Fire Exits e.g. 1, 2" onKeyUp={(id) => numFormat(id)}/></td>
                     <td><MdAdd onClick = {addAptFloors}/></td>
                     <td><MdCancel onClick = {removeAddClick}/></td>
                 </tr>
@@ -128,8 +139,8 @@ function AptFloors() {
             <table id="aptFloors">
                 <thead>
                 <tr>
-                    <th>floorNum <FilterColumn fieldToSearch={"floorNum"} filter={filterResults}/></th>
-                    <th>fireExits</th>
+                    <th>Floor #<FilterColumn fieldToSearch={"floorNum"} filter={filterResults}/></th>
+                    <th>FireExits</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -158,11 +169,11 @@ function AptFloors() {
         <>
         <Header/>
         <SideBar/>
-        <h1>Apartment Floors</h1>
-        <p>Apartment Floor table tracks floor specific information of each apartment including fire exits.</p>
+        <h1>Apartment Floors Table</h1>
+        <p>Tracks apartment floors, and number of fire exits on each floor.</p>
+        <MdAdd onClick={onAddClick}/>
         <AptFloorList aptFloors={aptFloorList} filterResults={filterResults}/>
         <Modal isShowing={isShowing} hide={toggle} aptFloorForUpdate={aptFloorForUpdate} setFloorNum={setFloorNum} setFireExits={setFireExits} updateAptFloors={updateAptFloors} floorNum={floorNum} fireExits={fireExits}/>
-        <MdAdd onClick={onAddClick}/>
         </>
 
     )
