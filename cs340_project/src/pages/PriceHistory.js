@@ -14,12 +14,41 @@ function PriceHistory() {
 
     const [phList, setPHList] = useState([]);
     const [addField, setAddField] = useState([]);
+    const [ownerOptionList, setOwnerOptionList] = useState([]);
+    const [aptOptionList, setAptOptionList] = useState([]);
 
     const loadPriceHistory = async () => {
         const response = await fetch(`${AddressInUse}/GET/priceHistory`);
         const phList = await response.json();
+        phList.forEach(formatDisplay);
+        //phList.forEach((item) => item.sellerName = item.sellerFirstName + " " + item.sellerLastName);
+        //phList.forEach((item) => item.buyerName = item.buyerFirstName + " " + item.buyerLastName);
         setPHList(phList);
+        ownerOptions();
+        aptOptions();
     }
+
+    function formatDisplay(item) {
+        item.sellerName = item.sellerFirstName + " " + item.sellerLastName;
+        item.buyerName = item.buyerFirstName + " " + item.buyerLastName;
+        item.price = "$" + item.price;
+        let indexVal = item.dateSale.indexOf("T");
+        item.dateSale = item.dateSale.slice(0,indexVal); 
+    }
+
+    const aptOptions = async () => {
+        const response = await fetch(`${AddressInUse}/GET/apts`);
+        const aptOptionList = await response.json();
+        setAptOptionList(aptOptionList);
+    }
+
+    const ownerOptions = async () => {
+        const response = await fetch(`${AddressInUse}/GET/aptOwners`);
+        const ownerOptionList = await response.json();
+        ownerOptionList.forEach((item) => item.ownerName = item.firstName + " " + item.lastName);
+        setOwnerOptionList(ownerOptionList);
+    }
+
     const filterResults = async (id) => {
         if(id == null){
             id = '';
@@ -29,6 +58,14 @@ function PriceHistory() {
         setPHList(phList);
     }
 
+    function numFormat(event) {
+        var tag = document.getElementById(event.target.id);
+        let val = tag.value.replace(/\D/g, '');
+        if (val.length > 0 && val[0] == "0"){
+            val = '';
+        }
+        tag.value = val;
+    }
 
     const addPH = async() => {
         let sellerID = document.getElementById("sellerIDInp").value;
@@ -36,6 +73,15 @@ function PriceHistory() {
         let aptNum = document.getElementById("aptNumInp").value;
         let dateSale = document.getElementById("dateSaleInp").value;
         let price = document.getElementById("priceInp").value;
+        console.log(dateSale);
+        console.log(sellerID);
+        if (dateSale.length < 1){
+            alert("Please Input Date of Sale");
+            return; 
+        } else if (price.length < 1){
+            alert("Please Input Price");
+            return;
+        }
         const newPH = {sellerID, buyerID, aptNum, dateSale, price}
         console.log(JSON.stringify(newPH));
         const response = await fetch(`${AddressInUse}/POST/priceHistory`, {
@@ -71,11 +117,23 @@ function PriceHistory() {
     const PHInput = () => {
         return <tr>
                     <td></td>
-                    <td><input id="sellerIDInp" placeholder="Seller ID"/></td>
-                    <td><input id="buyerIDInp" placeholder="Buyer ID"/></td>
-                    <td><input id="aptNumInp" placeholder="Apartment Number"/></td>
-                    <td><input id="dateSaleInp" placeholder="Date of Sale"/></td>
-                    <td><input id="priceInp" placeholder="Price($)"/></td>
+                    <td>
+                        <select id = "sellerIDInp">
+                            {ownerOptionList.map((item,idx) => <OwnerMap item={item} idx = {idx}/>)}
+                        </select>
+                    </td>
+                    <td>
+                        <select id = "buyerIDInp">
+                            {ownerOptionList.map((item,idx) => <OwnerMap item={item} idx = {idx}/>)}
+                        </select>
+                    </td>
+                    <td>
+                        <select id = "aptNumInp">
+                            {aptOptionList.map((item,idx) => <AptMap item={item} idx = {idx}/>)}
+                        </select>
+                    </td>
+                    <td><input id="dateSaleInp" type = "date" placeholder="Date of Sale e.g. 10/12/2022"/></td>
+                    <td><input id="priceInp" placeholder="Price($) e.g. 660,660" onKeyUp={(id) => numFormat(id)}/></td>
                     <td><MdAdd onClick={addPH}/></td>
                     <td><MdCancel onClick={removeAddClick}/></td>
                 </tr>
@@ -88,18 +146,30 @@ function PriceHistory() {
         setAddField();
     };
 
+    function AptMap ({item}) {
+        return (
+            <option id = {item.aptNum} key={item.aptNum} value={item.aptNum}>{item.aptNum}</option>
+        );
+    }
+
+    function OwnerMap ({item}) {
+        return (
+            <option id = {item.ownerID} key={item.ownerID} value={item.ownerID}>{item.ownerName}</option>
+        );
+    }
+
     // Row of AptFloor data
     function PhList({ PHmap, filterResults}) {
         return (
             <table>
                 <thead>
                 <tr>
-                    <th>Invoice Number [varchar]<FilterColumn fieldToSearch="invoiceNum" filter = {filterResults}/></th>
-                    <th>Seller ID [int]<FilterColumn fieldToSearch={"sellerID"}/></th>
-                    <th>Buyer ID [int]<FilterColumn fieldToSearch={"buyerID"}/></th>
-                    <th>Apartment Number [int]<FilterColumn fieldToSearch={"aptNum"}/></th>
-                    <th>Date of Sale [dateTime]<FilterColumn fieldToSearch={"dateSale"}/></th>
-                    <th>Price($) [int]<FilterColumn fieldToSearch={"price"}/></th>
+                    <th>Invoice Number<FilterColumn fieldToSearch="invoiceNum" filter = {filterResults}/></th>
+                    <th>Seller Name<FilterColumn fieldToSearch={"sellerID"}/></th>
+                    <th>Buyer Name<FilterColumn fieldToSearch={"buyerID"}/></th>
+                    <th>Apartment Number<FilterColumn fieldToSearch={"aptNum"}/></th>
+                    <th>Date of Sale<FilterColumn fieldToSearch={"dateSale"}/></th>
+                    <th>Price($)<FilterColumn fieldToSearch={"price"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -115,8 +185,8 @@ function PriceHistory() {
         return (
             <tr id={ph.invoiceNum}>
                 <td>{ph.invoiceNum}</td>
-                <td>{ph.sellerID}</td>
-                <td>{ph.buyerID}</td>
+                <td>{ph.sellerName}</td>
+                <td>{ph.buyerName}</td>
                 <td>{ph.aptNum}</td>
                 <td>{ph.dateSale}</td>
                 <td>{ph.price}</td>
@@ -129,14 +199,11 @@ function PriceHistory() {
     return(
         <>
         <Header/>
-        <SideBar />
-        <h1>Price History</h1>
-        <p>Price History table tracks information related to a purchase of an apartment by the buying owner from the seller owner.  Information tracked include <br></br>
-        price, date of Sale, and apartment number</p>
-        <PhList PHmap={phList} filterResults={filterResults}/>
+        <SideBar/>
+        <h1>Price History Table</h1>
+        <p>Tracks purchase history of apartments in building by storing buyer, seller, date of Sale, and price</p>
         <MdAdd onClick={onAddClick}></MdAdd>
-        
-        
+        <PhList PHmap={phList} filterResults={filterResults}/>
         </>
         
     )

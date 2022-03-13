@@ -14,6 +14,7 @@ function Apts() {
 
     const [aptList, setAptList] = useState([]);
     const [addField, setAddField] = useState([]);
+    const [floorOptionList, setFloorOptionList] = useState([]);
 
     const loadApts = async () => {
         const response = await fetch(`${AddressInUse}/GET/apts`);
@@ -21,10 +22,22 @@ function Apts() {
         setAptList(aptList);
     }
 
+    const floorOptions = async () => {
+        const response = await fetch(`${AddressInUse}/GET/aptFloors`);
+        const floorOptionList = await response.json();
+        setFloorOptionList(floorOptionList);
+    }
+
     const addApts = async() => {
         let aptNum = document.getElementById("aptNumInp").value;
         let sqFeet = document.getElementById("sqFeetInp").value;
         let floorNum = document.getElementById("floorNumInp").value;
+
+        if (aptNum.length === 0){
+            alert("Please Insert Apartment Number");
+            return;
+        }
+
         const newApt = {aptNum, sqFeet, floorNum}
         //console.log(JSON.stringify(newAptOwner));
         const response = await fetch(`${AddressInUse}/POST/apts`, {
@@ -57,15 +70,34 @@ function Apts() {
         }
     }
 
+    function numFormat(event) {
+        var tag = document.getElementById(event.target.id);
+        let val = tag.value.replace(/\D/g, '');
+        if (val.length > 0 && val[0] == "0"){
+            val = '';
+        }
+        tag.value = val;
+    }
+
     const AptInput = () => {
         return <tr>
-                    <td><input id="aptNumInp" placeholder="Apartment Number"/></td>
-                    <td><input id="sqFeetInp" placeholder="Square Footage"/></td>
-                    <td><input id="floorNumInp" placeholder="Floor Number"/></td>
+                    <td><input id="aptNumInp" placeholder="Apartment Number" onKeyUp={(id) => numFormat(id)}/></td>
+                    <td><input id="sqFeetInp" placeholder="Square Footage" onKeyUp={(id) => numFormat(id)}/></td>
+                    <td>
+                        <select id = "floorNumInp">
+                            {floorOptionList.map((item,idx) => <FloorMap item={item} idx = {idx}/>)}
+                        </select>
+                    </td>
                     <td><MdAdd onClick={addApts}/></td>
                     <td><MdCancel onClick={removeAddClick}/></td>
                 </tr>
     };
+
+    function FloorMap ({item}) {
+        return (
+            <option id = {item.floorNum} key={item.floorNum} value={item.floorNum}>{item.floorNum}</option>
+        );
+    }
 
     const onAddClick = event => {
         setAddField(<AptInput/>);

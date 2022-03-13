@@ -23,6 +23,13 @@ function Rodents() {
 
     const addRodents = async() => {
         let rodentName = document.getElementById("rodentNameInp").value;
+
+        //validate input
+        if (rodentName.length < 1) {
+            alert("Please Enter a Name");
+            return;  
+        } 
+
         const newRodent = {rodentName}
         const response = await fetch(`${AddressInUse}/POST/rodents`, {
             method: 'POST',
@@ -54,10 +61,16 @@ function Rodents() {
         }
     }
 
+    const RodentNameFormat = event => {
+        var tag = document.getElementById("rodentNameInp");
+        let val = tag.value.replace(/[^a-zA-Z]/g, '');
+        tag.value = val;
+    };
+
     const RodentInput = () => {
         return <tr>
                     <td></td>
-                    <td><input id="rodentNameInp" placeholder="Rodent Name"/></td>
+                    <td><input id="rodentNameInp" placeholder="Rodent Name e.g. PizzaRat" onKeyUp={RodentNameFormat}/></td>
                     <td><MdAdd onClick={addRodents}/></td>
                     <td><MdCancel onClick={removeAddClick}/></td>
                 </tr>
@@ -77,8 +90,8 @@ function Rodents() {
             <table>
                 <thead>
                 <tr>
-                    <th>Rodent ID [int]<FilterColumn fieldToSearch="rodentID"/></th>
-                    <th>Rodent Name [varchar] <FilterColumn fieldToSearch={"rodentName"}/></th>
+                    <th>Rodent ID #<FilterColumn fieldToSearch="rodentID"/></th>
+                    <th>Rodent Name<FilterColumn fieldToSearch={"rodentName"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -107,10 +120,9 @@ function Rodents() {
         <Header/>
         <SideBar />
         <h1 class = "DatabaseTitle">Rodents</h1>
-        <p class = "DatabaseText">Rodent table tracks all information related to rodents in the building. Rodents do not get removed from database <br></br>
-        after extermination or leaving the building and the only info tracked is the name</p>
-        <RodentList rodents = {rodentList}/>
-        <MdAdd onClick={onAddClick}/>      
+        <p class = "DatabaseText">Tracks past and present rodents by name and ID</p>
+        <MdAdd onClick={onAddClick}/> 
+        <RodentList rodents = {rodentList}/>  
         </>
     )
 }

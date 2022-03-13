@@ -24,7 +24,7 @@ function AptOwners() {
     }
 
     const ComposeSSN = (ssn) => {
-        return ssn.slice(0,3) + "-" + ssn.slice(3,5) + "-" + ssn.slice(5,9);
+        return "xxx-xx-" + ssn.slice(5,9);
     } 
 
     const DeComposeSSN = (ssn) => {
@@ -43,9 +43,13 @@ function AptOwners() {
         } else if (lastName.length < 1) {
             alert("Invalid Last Name");
             return;
-        } else if (ssn.length !== 9) {
+        } else if (ssn.length !== 0 || ssn.length !== 9) {
             alert("Insufficient length of ssn");
             return;
+        }
+
+        if (ssn.length === 0){
+            ssn = '';
         }
 
         const newAptOwner = {firstName, lastName, ssn}
@@ -103,9 +107,9 @@ function AptOwners() {
     const AptOwnerInput = () => {
         return <tr>
                     <td></td>
-                    <td><input id="firstNameInp" placeholder="First Name" onKeyUp={FirstNameFormat}/></td>
-                    <td><input id="lastNameInp" placeholder="Last Name" onKeyUp={LastNameFormat}/></td>
-                    <td><input id="ssnInp" placeholder="SSN" onKeyUp={SSNInputFormat}/></td>
+                    <td><input id="firstNameInp" placeholder="First Name e.g. Dan" onKeyUp={FirstNameFormat}/></td>
+                    <td><input id="lastNameInp" placeholder="Last Name e.g. Smith" onKeyUp={LastNameFormat}/></td>
+                    <td><input id="ssnInp" placeholder="SSN e.g. 111-22-3333" onKeyUp={SSNInputFormat}/></td>
                     <td><MdAdd onClick = {addAptOwners}/></td>
                     <td><MdCancel onClick = {removeAddClick}/></td>
                 </tr>
@@ -124,10 +128,10 @@ function AptOwners() {
             <table>
                 <thead>
                 <tr>
-                    <th>Owner ID [int]</th>
-                    <th>First Name [varchar]</th>
-                    <th>Last Name [varchar]</th>
-                    <th>SSN [varchar]</th>
+                    <th>Owner ID #</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Social Security #</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -159,8 +163,7 @@ function AptOwners() {
         <Header/>
         <SideBar />
         <h1>Apartment Owners Table</h1>
-        <p>Apartment Owners database table tracks current and past apartment owners at Beaver Development by giving each owner a <br></br>
-        unique ID, and storing each owners first and last name as well as SSN.</p>
+        <p>Tracks current and past apartment owners at Beaver Development by first name, last name, and SSN</p>
         <AptOwnerList aptOwners={aptOwnerList}/>
         <MdAdd onClick={onAddClick}/>
         </>

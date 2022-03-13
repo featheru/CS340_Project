@@ -99,8 +99,8 @@ app.get('/GET/apts/:id', function(req, res)
 
 app.get('/GET/priceHistory', function(req, res)
 {
-    let qString = 'SELECT PH.invoiceNum, AO1.firstName AS "Seller First Name", AO1.lastName AS "Seller Last Name", ' +
-    'AO2.firstName AS "Buyer First Name", AO2.lastName AS "Buyer Last Name", ' +
+    let qString = 'SELECT PH.invoiceNum, AO1.firstName AS "sellerFirstName", AO1.lastName AS "sellerLastName", ' +
+    'AO2.firstName AS "buyerFirstName", AO2.lastName AS "buyerLastName", ' +
     'PH.aptNum, PH.dateSale, PH.price FROM PriceHistory AS PH ' +
     'JOIN AptOwners AS AO1 ON PH.sellerID = AO1.ownerID ' + 
     'JOIN AptOwners AS AO2 ON PH.buyerID = AO2.ownerID ' +
