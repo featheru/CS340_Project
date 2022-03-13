@@ -117,8 +117,8 @@ function RodentsToFloors() {
             <table>
                 <thead>
                 <tr>
-                    <th>Rodent ID [int]<FilterColumn fieldToSearch={"rodentName"}/></th>
-                    <th>Floor Number [int]<FilterColumn fieldToSearch={"floorNum"}/></th>
+                    <th>Rodent Name<FilterColumn fieldToSearch={"rodentName"}/></th>
+                    <th>Floor Number<FilterColumn fieldToSearch={"floorNum"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -146,9 +146,9 @@ function RodentsToFloors() {
         <Header/>
         <SideBar />
         <h1>Rodents To Apartment Floors</h1>
-        <p>Rodents to Apartment Floors table tracks the possibly multiple floors that rodents are currently on at a given period of time</p>
-        <RTFList rtfList={rodentToFloorList}/>
+        <p>Tracks floors that a rodent currently occupies(which could be many!)</p>
         <MdAdd onClick={onAddClick}></MdAdd>
+        <RTFList rtfList={rodentToFloorList}/>
         </>
         
     )
