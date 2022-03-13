@@ -75,7 +75,14 @@ app.get('/GET/apts', function(req, res)
 
 app.get('/GET/priceHistory', function(req, res)
 {
-    connection.query("SELECT * FROM `PriceHistory`",  {timeout: 40000} , function(error, results, fields){
+    let qString = 'SELECT PH.invoiceNum, AO1.firstName AS "Seller First Name", AO1.lastName AS "Seller Last Name", ' +
+    'AO2.firstName AS "Buyer First Name", AO2.lastName AS "Buyer Last Name", ' +
+    'PH.aptNum, PH.dateSale, PH.price FROM PriceHistory AS PH ' +
+    'JOIN AptOwners AS AO1 ON PH.sellerID = AO1.ownerID ' + 
+    'JOIN AptOwners AS AO2 ON PH.buyerID = AO2.ownerID ' +
+    'JOIN Apts ON Apts.aptNum = PH.aptNum;'
+    console.log(qString);
+    connection.query(qString, {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.end();
