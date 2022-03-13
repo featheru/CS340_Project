@@ -61,6 +61,18 @@ app.get('/GET/aptOwners', function(req, res)
     });                                                 
 });
 
+app.get('/GET/aptOwners/:id', function(req, res)
+{
+    connection.query(`SELECT * FROM AptOwners WHERE ownerID = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        res.json(results);
+        res.end();
+    });
+});
+
 app.get('/GET/apts', function(req, res)
 {
     connection.query("SELECT * FROM `Apts`",  {timeout: 40000} , function(error, results, fields){
@@ -71,6 +83,18 @@ app.get('/GET/apts', function(req, res)
         res.json(results);
         res.end();
     });                                                 
+});
+
+app.get('/GET/apts/:id', function(req, res)
+{
+    connection.query(`SELECT * FROM Apts WHERE aptNum = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        res.json(results);
+        res.end();
+    });
 });
 
 app.get('/GET/priceHistory', function(req, res)
@@ -85,6 +109,18 @@ app.get('/GET/priceHistory', function(req, res)
     });                                                 
 });
 
+app.get('/GET/priceHistory/:id', function(req, res)
+{
+    connection.query(`SELECT * FROM PriceHistory WHERE invoiceNum = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        res.json(results);
+        res.end();
+    });
+});
+
 app.get('/GET/rodents', function(req, res)
 {
     connection.query("SELECT * FROM `Rodents`",  {timeout: 40000} , function(error, results, fields){
@@ -95,6 +131,18 @@ app.get('/GET/rodents', function(req, res)
         res.json(results);
         res.end();
     });                                                 
+});
+
+app.get('/GET/rodents/:id', function(req, res)
+{
+    connection.query(`SELECT * FROM Rodents WHERE rodentID = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        res.json(results);
+        res.end();
+    });
 });
 
 app.get('/GET/rodentsToFloors', function(req, res)
@@ -108,6 +156,30 @@ app.get('/GET/rodentsToFloors', function(req, res)
         res.json(results);
         res.end();
     });                                                 
+});
+
+app.get('/GET/rodentsToFloors/rodent/:rodentID', function(req, res)
+{
+    connection.query(`SELECT * FROM RodentsToFloors WHERE rodentID = ${req.params.rodentID}`,  {timeout: 40000} , function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        res.json(results);
+        res.end();
+    });
+});
+
+app.get('/GET/rodentsToFloors/floor/:floorNum', function(req, res)
+{
+    connection.query(`SELECT * FROM RodentsToFloors WHERE floorNum = ${req.params.floorNum}`,  {timeout: 40000} , function(error, results, fields){
+        if(error){
+            res.write(JSON.stringify(error));
+            res.end();
+        }
+        res.json(results);
+        res.end();
+    });
 });
 
 app.post('/POST/aptFloors', function(req, res)

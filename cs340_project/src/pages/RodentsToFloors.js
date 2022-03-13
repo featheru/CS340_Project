@@ -26,6 +26,27 @@ function RodentsToFloors() {
         floorOptions();
     }
 
+    const filterResultsRodent = async (id) => {
+        if(id == null){
+            id = '';
+        }
+        const response = await fetch(`${AddressInUse}/GET/rodentsToFloors/rodent/${id}`)
+        const rodentToFloorList = await response.json();
+        setRodentToFloorList(rodentToFloorList);
+        rodentOptions();
+        floorOptions();
+    }
+    const filterResultsFloor = async (id) => {
+        if(id == null){
+            id = '';
+        }
+        const response = await fetch(`${AddressInUse}/GET/rodentsToFloors/floor/${id}`)
+        const rodentToFloors = await response.json();
+        setRodentToFloorList(rodentToFloors);
+        rodentOptions();
+        floorOptions();
+    }
+
     const rodentOptions = async () => {
         const response = await fetch(`${AddressInUse}/GET/rodents`);
         const rodentOptionList = await response.json();
@@ -112,12 +133,12 @@ function RodentsToFloors() {
     };
 
     // Row of AptFloor data
-    function RTFList({ rtfList, filterResults}) {
+    function RTFList({ rtfList, filterResultsRodent, filterResultsFloor}) {
         return (
             <table>
                 <thead>
                 <tr>
-                    <th>Rodent ID [int]<FilterColumn fieldToSearch={"rodentName"}/></th>
+                    <th>Rodent ID [int]<FilterColumn fieldToSearch={"rodentID"}/></th>
                     <th>Floor Number [int]<FilterColumn fieldToSearch={"floorNum"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -147,7 +168,7 @@ function RodentsToFloors() {
         <SideBar />
         <h1>Rodents To Apartment Floors</h1>
         <p>Rodents to Apartment Floors table tracks the possibly multiple floors that rodents are currently on at a given period of time</p>
-        <RTFList rtfList={rodentToFloorList}/>
+        <RTFList rtfList={rodentToFloorList} filterResultsRodent={filterResultsRodent} filterResultsFloor={filterResultsFloor}/>
         <MdAdd onClick={onAddClick}></MdAdd>
         </>
         

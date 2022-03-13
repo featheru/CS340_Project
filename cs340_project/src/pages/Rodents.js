@@ -20,6 +20,14 @@ function Rodents() {
         const rodentList = await response.json();
         setRodentList(rodentList);
     }
+    const filterResults = async (id) => {
+        if(id == null){
+            id = '';
+        }
+        const response = await fetch(`${AddressInUse}/GET/rodents/${id}`)
+        const rodentList = await response.json();
+        setRodentList(rodentList);
+    }
 
     const addRodents = async() => {
         let rodentName = document.getElementById("rodentNameInp").value;
@@ -77,7 +85,7 @@ function Rodents() {
             <table>
                 <thead>
                 <tr>
-                    <th>Rodent ID [int]<FilterColumn fieldToSearch="rodentID"/></th>
+                    <th>Rodent ID [int]<FilterColumn fieldToSearch="rodentID" filter={filterResults}/></th>
                     <th>Rodent Name [varchar] <FilterColumn fieldToSearch={"rodentName"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -109,7 +117,7 @@ function Rodents() {
         <h1 class = "DatabaseTitle">Rodents</h1>
         <p class = "DatabaseText">Rodent table tracks all information related to rodents in the building. Rodents do not get removed from database <br></br>
         after extermination or leaving the building and the only info tracked is the name</p>
-        <RodentList rodents = {rodentList}/>
+        <RodentList rodents = {rodentList} filterResults={filterResults}/>
         <MdAdd onClick={onAddClick}/>      
         </>
     )
