@@ -18,12 +18,13 @@ function AptOwners() {
     const loadAptOwners = async () => {
         const response = await fetch(`${AddressInUse}/GET/aptOwners`);
         const aptOwnersList = await response.json();
+        console.log(aptOwnersList);
         aptOwnersList.forEach((item) => item.ssn = ComposeSSN(item.ssn));
         setAptOwnersList(aptOwnersList);
     }
 
     const ComposeSSN = (ssn) => {
-        return "xxx-xx-" + ssn.slice(5,9);
+        return ssn.slice(0,3) + "-" + ssn.slice(3,5) + "-" + ssn.slice(5,9);
     } 
 
     const DeComposeSSN = (ssn) => {
@@ -102,9 +103,9 @@ function AptOwners() {
     const AptOwnerInput = () => {
         return <tr>
                     <td></td>
-                    <td><input id="firstNameInp" placeholder="First Name e.g. Dan" onKeyUp={FirstNameFormat}/></td>
-                    <td><input id="lastNameInp" placeholder="Last Name e.g. Smith" onKeyUp={LastNameFormat}/></td>
-                    <td><input id="ssnInp" placeholder="SSN e.g. 1111-11-1111" onKeyUp={SSNInputFormat}/></td>
+                    <td><input id="firstNameInp" placeholder="First Name" onKeyUp={FirstNameFormat}/></td>
+                    <td><input id="lastNameInp" placeholder="Last Name" onKeyUp={LastNameFormat}/></td>
+                    <td><input id="ssnInp" placeholder="SSN" onKeyUp={SSNInputFormat}/></td>
                     <td><MdAdd onClick = {addAptOwners}/></td>
                     <td><MdCancel onClick = {removeAddClick}/></td>
                 </tr>
@@ -123,10 +124,10 @@ function AptOwners() {
             <table>
                 <thead>
                 <tr>
-                    <th>Owner ID #</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Social Security Number</th>
+                    <th>Owner ID [int]</th>
+                    <th>First Name [varchar]</th>
+                    <th>Last Name [varchar]</th>
+                    <th>SSN [varchar]</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -158,9 +159,10 @@ function AptOwners() {
         <Header/>
         <SideBar />
         <h1>Apartment Owners Table</h1>
-        <p>Tracks current and past apartment owners at Beaver Development by ID, name, and SSN</p>
-        <MdAdd onClick={onAddClick}/>
+        <p>Apartment Owners database table tracks current and past apartment owners at Beaver Development by giving each owner a <br></br>
+        unique ID, and storing each owners first and last name as well as SSN.</p>
         <AptOwnerList aptOwners={aptOwnerList}/>
+        <MdAdd onClick={onAddClick}/>
         </>
     )
 }

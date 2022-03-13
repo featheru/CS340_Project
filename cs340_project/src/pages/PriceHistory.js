@@ -20,6 +20,15 @@ function PriceHistory() {
         const phList = await response.json();
         setPHList(phList);
     }
+    const filterResults = async (id) => {
+        if(id == null){
+            id = '';
+        }
+        const response = await fetch(`${AddressInUse}/GET/priceHistory/${id}`)
+        const phList = await response.json();
+        setPHList(phList);
+    }
+
 
     const addPH = async() => {
         let sellerID = document.getElementById("sellerIDInp").value;
@@ -85,7 +94,7 @@ function PriceHistory() {
             <table>
                 <thead>
                 <tr>
-                    <th>Invoice Number [varchar]<FilterColumn fieldToSearch="invoiceNum"/></th>
+                    <th>Invoice Number [varchar]<FilterColumn fieldToSearch="invoiceNum" filter = {filterResults}/></th>
                     <th>Seller ID [int]<FilterColumn fieldToSearch={"sellerID"}/></th>
                     <th>Buyer ID [int]<FilterColumn fieldToSearch={"buyerID"}/></th>
                     <th>Apartment Number [int]<FilterColumn fieldToSearch={"aptNum"}/></th>
@@ -124,7 +133,7 @@ function PriceHistory() {
         <h1>Price History</h1>
         <p>Price History table tracks information related to a purchase of an apartment by the buying owner from the seller owner.  Information tracked include <br></br>
         price, date of Sale, and apartment number</p>
-        <PhList PHmap={phList}/>
+        <PhList PHmap={phList} filterResults={filterResults}/>
         <MdAdd onClick={onAddClick}></MdAdd>
         
         

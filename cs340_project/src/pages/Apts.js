@@ -14,38 +14,17 @@ function Apts() {
 
     const [aptList, setAptList] = useState([]);
     const [addField, setAddField] = useState([]);
-    const [floorOptionList, setFloorOptionList] = useState([]);
 
     const loadApts = async () => {
         const response = await fetch(`${AddressInUse}/GET/apts`);
         const aptList = await response.json();
         setAptList(aptList);
-        floorOptions();
-    }
-
-    const floorOptions = async () => {
-        const response = await fetch(`${AddressInUse}/GET/aptFloors`);
-        const floorOptionList = await response.json();
-        setFloorOptionList(floorOptionList);
     }
 
     const addApts = async() => {
         let aptNum = document.getElementById("aptNumInp").value;
         let sqFeet = document.getElementById("sqFeetInp").value;
         let floorNum = document.getElementById("floorNumInp").value;
-
-        //validate data
-        if (aptNum.length < 1) {
-            alert("Please Enter AptNumber");
-            return;
-        } else if (sqFeet.length < 1) {
-            alert("Please Enter Square Footage")
-            return;
-        } else if (floorNum.length < 1) {
-            alert("Please Enter floorNum");
-            return;
-        }
-
         const newApt = {aptNum, sqFeet, floorNum}
         //console.log(JSON.stringify(newAptOwner));
         const response = await fetch(`${AddressInUse}/POST/apts`, {
@@ -78,32 +57,15 @@ function Apts() {
         }
     }
 
-    function numFormat(event) {
-        var tag = document.getElementById(event.target.id);
-        let val = tag.value.replace(/\D/g, '');
-        if (val.length > 0 && val[0] == "0"){
-            val = '';
-        }
-        tag.value = val;
-    }
-
     const AptInput = () => {
         return <tr>
-                    <td><input id="aptNumInp" placeholder="Apt Num e.g. 11, 22" onKeyUp= {(id) => numFormat(id)}/></td>
-                    <td><input id="sqFeetInp" placeholder="Sq Feet e.g. 666, 999" onKeyUp= {(id) => numFormat(id)}/></td>
-                    <td><select id = "floorNumInp">
-                            {floorOptionList.map((item,idx) => <FloorMap item={item} idx = {idx}/>)}
-                    </select></td>
+                    <td><input id="aptNumInp" placeholder="Apartment Number"/></td>
+                    <td><input id="sqFeetInp" placeholder="Square Footage"/></td>
+                    <td><input id="floorNumInp" placeholder="Floor Number"/></td>
                     <td><MdAdd onClick={addApts}/></td>
                     <td><MdCancel onClick={removeAddClick}/></td>
                 </tr>
     };
-
-    function FloorMap ({item}) {
-        return (
-            <option id = {item.floorNum} key={item.floorNum} value={item.floorNum}>{item.floorNum}</option>
-        );
-    }
 
     const onAddClick = event => {
         setAddField(<AptInput/>);
@@ -119,8 +81,8 @@ function Apts() {
             <table>
                 <thead>
                 <tr>
-                    <th>Apartment Number<FilterColumn fieldToSearch="aptNum"/></th>
-                    <th>Square Footage (ft^2)<FilterColumn fieldToSearch={"sqFeet"}/></th>
+                    <th>Apartment Number [int]<FilterColumn fieldToSearch="aptNum"/></th>
+                    <th>Square Footage (ft^2) [int]<FilterColumn fieldToSearch={"sqFeet"}/></th>
                     <th>Floor Number<FilterColumn fieldToSearch={"floorNum"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -150,10 +112,10 @@ function Apts() {
         <>
         <Header/>
         <SideBar />
-        <h1 class = "DatabaseTitle">Apartments Table</h1>
-        <p class = "DatabaseText">Tracks apartments by floor number, square footage, and apartment number.</p>
-        <MdAdd onClick={onAddClick}/> 
-        <AptList apts={aptList}/>    
+        <h1 class = "DatabaseTitle">Apartments</h1>
+        <p class = "DatabaseText">Apartments database table tracks specific information regarding an apartment including the floor number, and apartment number.</p>
+        <AptList apts={aptList}/>
+        <MdAdd onClick={onAddClick}/>        
         </>
     )
 }
