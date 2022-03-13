@@ -105,7 +105,6 @@ app.get('/GET/priceHistory', function(req, res)
     'JOIN AptOwners AS AO1 ON PH.sellerID = AO1.ownerID ' + 
     'JOIN AptOwners AS AO2 ON PH.buyerID = AO2.ownerID ' +
     'JOIN Apts ON Apts.aptNum = PH.aptNum;'
-    console.log(qString);
     connection.query(qString, {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));

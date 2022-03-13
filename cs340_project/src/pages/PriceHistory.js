@@ -21,8 +21,6 @@ function PriceHistory() {
         const response = await fetch(`${AddressInUse}/GET/priceHistory`);
         const phList = await response.json();
         phList.forEach(formatDisplay);
-        //phList.forEach((item) => item.sellerName = item.sellerFirstName + " " + item.sellerLastName);
-        //phList.forEach((item) => item.buyerName = item.buyerFirstName + " " + item.buyerLastName);
         setPHList(phList);
         ownerOptions();
         aptOptions();
@@ -164,10 +162,10 @@ function PriceHistory() {
             <table>
                 <thead>
                 <tr>
-                    <th>Invoice Number<FilterColumn fieldToSearch="invoiceNum" filter = {filterResults}/></th>
+                    <th>Invoice #<FilterColumn fieldToSearch="invoiceNum" filter = {filterResults}/></th>
                     <th>Seller Name<FilterColumn fieldToSearch={"sellerID"}/></th>
                     <th>Buyer Name<FilterColumn fieldToSearch={"buyerID"}/></th>
-                    <th>Apartment Number<FilterColumn fieldToSearch={"aptNum"}/></th>
+                    <th>Apartment #<FilterColumn fieldToSearch={"aptNum"}/></th>
                     <th>Date of Sale<FilterColumn fieldToSearch={"dateSale"}/></th>
                     <th>Price($)<FilterColumn fieldToSearch={"price"}/></th>
                     <th>Edit</th>

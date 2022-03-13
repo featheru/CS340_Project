@@ -20,6 +20,7 @@ function Apts() {
         const response = await fetch(`${AddressInUse}/GET/apts`);
         const aptList = await response.json();
         setAptList(aptList);
+        floorOptions();
     }
 
     const floorOptions = async () => {
@@ -81,8 +82,8 @@ function Apts() {
 
     const AptInput = () => {
         return <tr>
-                    <td><input id="aptNumInp" placeholder="Apartment Number" onKeyUp={(id) => numFormat(id)}/></td>
-                    <td><input id="sqFeetInp" placeholder="Square Footage" onKeyUp={(id) => numFormat(id)}/></td>
+                    <td><input id="aptNumInp" placeholder="Apt Num e.g. 11, 22" onKeyUp={(id) => numFormat(id)}/></td>
+                    <td><input id="sqFeetInp" placeholder="Sq Feet e.g. 666, 999" onKeyUp={(id) => numFormat(id)}/></td>
                     <td>
                         <select id = "floorNumInp">
                             {floorOptionList.map((item,idx) => <FloorMap item={item} idx = {idx}/>)}
@@ -113,9 +114,9 @@ function Apts() {
             <table>
                 <thead>
                 <tr>
-                    <th>Apartment Number [int]<FilterColumn fieldToSearch="aptNum"/></th>
-                    <th>Square Footage (ft^2) [int]<FilterColumn fieldToSearch={"sqFeet"}/></th>
-                    <th>Floor Number<FilterColumn fieldToSearch={"floorNum"}/></th>
+                    <th>Apartment #<FilterColumn fieldToSearch="aptNum"/></th>
+                    <th>Square Footage (ft^2)<FilterColumn fieldToSearch={"sqFeet"}/></th>
+                    <th>Floor #<FilterColumn fieldToSearch={"floorNum"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -146,8 +147,8 @@ function Apts() {
         <SideBar />
         <h1 class = "DatabaseTitle">Apartments</h1>
         <p class = "DatabaseText">Apartments database table tracks specific information regarding an apartment including the floor number, and apartment number.</p>
-        <AptList apts={aptList}/>
-        <MdAdd onClick={onAddClick}/>        
+        <MdAdd onClick={onAddClick}/> 
+        <AptList apts={aptList}/>   
         </>
     )
 }
