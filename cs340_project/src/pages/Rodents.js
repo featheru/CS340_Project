@@ -60,6 +60,15 @@ function Rodents() {
             alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
+    const filterResults = async (id) => {
+        if(id == null){
+            id = '';
+        }
+        const response = await fetch(`${AddressInUse}/GET/rodents/${id}`)
+        const rodentList = await response.json();
+        setRodentList(rodentList);
+    }
+
 
     const RodentNameFormat = event => {
         var tag = document.getElementById("rodentNameInp");
@@ -90,7 +99,7 @@ function Rodents() {
             <table>
                 <thead>
                 <tr>
-                    <th>Rodent ID #<FilterColumn fieldToSearch="rodentID"/></th>
+                    <th>Rodent ID #<FilterColumn fieldToSearch="rodentID" filter={filterResults}/></th>
                     <th>Rodent Name<FilterColumn fieldToSearch={"rodentName"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -122,7 +131,7 @@ function Rodents() {
         <h1 class = "DatabaseTitle">Rodents</h1>
         <p class = "DatabaseText">Tracks past and present rodents by name and ID</p>
         <MdAdd onClick={onAddClick}/> 
-        <RodentList rodents = {rodentList}/>  
+        <RodentList rodents = {rodentList} filterResults={filterResults}/>
         </>
     )
 }

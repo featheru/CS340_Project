@@ -81,6 +81,14 @@ function AptOwners() {
             alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
+    const filterResults = async (id) => {
+        if(id == null){
+            id = '';
+        }
+        const response = await fetch(`${AddressInUse}/GET/aptOwners/${id}`)
+        const aptOwnerList = await response.json();
+        setAptOwnersList(aptOwnerList);
+    }
 
     const SSNInputFormat = event => {
         var tag = document.getElementById("ssnInp");
@@ -128,7 +136,7 @@ function AptOwners() {
             <table>
                 <thead>
                 <tr>
-                    <th>Owner ID #</th>
+                    <th>Owner ID # <FilterColumn fieldToSearch={'ownerId'} filter={filterResults}/></th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Social Security #</th>
@@ -164,7 +172,7 @@ function AptOwners() {
         <SideBar />
         <h1>Apartment Owners Table</h1>
         <p>Tracks current and past apartment owners at Beaver Development by first name, last name, and SSN</p>
-        <AptOwnerList aptOwners={aptOwnerList}/>
+        <AptOwnerList aptOwners={aptOwnerList} filterResults={filterResults}/>
         <MdAdd onClick={onAddClick}/>
         </>
     )

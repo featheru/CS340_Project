@@ -90,6 +90,14 @@ function Apts() {
             alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
+    const filterResults = async (id) => {
+        if(id == null){
+            id = '';
+        }
+        const response = await fetch(`${AddressInUse}/GET/apts/${id}`)
+        const aptList = await response.json();
+        setAptList(aptList);
+    }
 
     function numFormat(event) {
         var tag = document.getElementById(event.target.id);
@@ -146,7 +154,7 @@ function Apts() {
             <table>
                 <thead>
                 <tr>
-                    <th>Apartment #<FilterColumn fieldToSearch="aptNum"/></th>
+                    <th>Apartment #<FilterColumn fieldToSearch="aptNum" filter={filterResults}/></th>
                     <th>Square Footage (ft^2)<FilterColumn fieldToSearch={"sqFeet"}/></th>
                     <th>Floor #<FilterColumn fieldToSearch={"floorNum"}/></th>
                     <th>Owner Name<FilterColumn fieldToSearch={"floorNum"}/></th>
@@ -182,7 +190,7 @@ function Apts() {
         <h1 class = "DatabaseTitle">Apartments</h1>
         <p class = "DatabaseText">Apartments database table tracks specific information regarding an apartment including the floor number, and apartment number.</p>
         <MdAdd onClick={onAddClick}/> 
-        <AptList apts={aptList}/>   
+        <AptList apts={aptList} filterResults={filterResults}/>
         </>
     )
 }
