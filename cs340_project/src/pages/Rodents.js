@@ -3,9 +3,10 @@ import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel, MdEdit, MdDelete} from "react-icons/md";
+import {MdAdd, MdCancel, MdEdit, MdDelete, MdUpdate} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
 import {AddressInUse} from "../ServerConstant.js";
+import ReactDOM from "react-dom";
 
 function Rodents() {
     useEffect(() => {
@@ -14,6 +15,13 @@ function Rodents() {
 
     const [rodentList, setRodentList] = useState([]);
     const [addField, setAddField] = useState([]);
+    const [isShowing, setIsShowing] = useState(false);
+    const [rodentForUpdate, setRodentForUpdate] = useState([])
+    const [rodentName, setRodentName] = useState([]);
+
+    const toggle = (isShowing) => {
+        setIsShowing(!isShowing);
+    }
 
     const loadRodents = async () => {
         const response = await fetch(`${AddressInUse}/GET/rodents`);
@@ -69,6 +77,33 @@ function Rodents() {
         setRodentList(rodentList);
     }
 
+    const updateRodents = async(rodentForUpdate, rodentName) => {
+        if(typeof rodentName === "object"){
+            rodentName = rodentForUpdate.rodentName;
+        }
+        const response = await fetch(`${AddressInUse}/PUT/rodents/${rodentForUpdate.rodentID}`, {
+            method: 'PUT',
+            body: JSON.stringify({rodentName:rodentName}),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if(response.status >= 200 && response.status < 400 ){
+            alert("Successfully updated the record!");
+            await loadRodents();
+            window.location.reload();
+        }
+        else {
+            alert(`Failed to update record, status code = ${response.status}`)
+        }
+
+    }
+
+    const openUpdateForm = async(rodent) => {
+        setRodentForUpdate(rodent)
+        toggle(isShowing);
+    }
+
 
     const RodentNameFormat = event => {
         var tag = document.getElementById("rodentNameInp");
@@ -118,7 +153,7 @@ function Rodents() {
             <tr id={rodent.rodentID}>
                 <td>{rodent.rodentID}</td>
                 <td>{rodent.rodentName}</td>
-                <td><MdEdit/></td>
+                <td><MdEdit onClick={() => openUpdateForm (rodent)}/></td>
                 <td><MdDelete onClick={() => delRodents(rodent.rodentID)}/></td>
             </tr>
         );
@@ -132,8 +167,31 @@ function Rodents() {
         <p class = "DatabaseText">Tracks past and present rodents by name and ID</p>
         <MdAdd onClick={onAddClick}/> 
         <RodentList rodents = {rodentList} filterResults={filterResults}/>
+        <Modal isShowing={isShowing} hide={toggle} rodentForUpdate={rodentForUpdate} setRodentName={setRodentName} updateRodent={updateRodents} rodentName={rodentName}/>
         </>
     )
 }
+
+const Modal = ({ isShowing, hide ,rodentForUpdate, setRodentName, updateRodent, rodentName}) => isShowing ? ReactDOM.createPortal(
+    <React.Fragment>
+        <div className="modal-overlay"/>
+        <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
+            <div className="modal">
+                <div className="modal-header">
+                    <button type="button" className="modal-close-button" data-dismiss="modal" aria-label="Close" onClick={hide}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form>
+                    <p>Rodent ID</p>
+                    <text>{rodentForUpdate.rodentID}</text>
+                    <p>Rodent Name</p>
+                    <input placeholder={rodentForUpdate.rodentName} type={"text"} onChange={e => setRodentName(e.target.value)}/>
+                    <MdUpdate onClick={e => updateRodent(rodentForUpdate, rodentName)}/>
+                </form>
+            </div>
+        </div>
+    </React.Fragment>, document.body
+) : null;
 
 export default Rodents;

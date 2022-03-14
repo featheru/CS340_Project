@@ -441,7 +441,7 @@ app.put('/PUT/rodents/:rodentID', function(req, res)
 {
     let rodentName = req.body.rodentName;
     let rodentID = req.params.rodentID;
-    let sql = "UPDATE AptFloors SET rodentName = ? WHERE rodentID = ?";
+    let sql = "UPDATE Rodents SET rodentName = ? WHERE rodentID = ?";
     connection.query(sql,[rodentName, rodentID], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
