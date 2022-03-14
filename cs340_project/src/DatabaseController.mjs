@@ -227,8 +227,12 @@ app.post('/POST/apts', function(req, res)
     var inserts = [req.body.aptNum, req.body.sqFeet, req.body.floorNum];
     connection.query(sql,inserts,function(error, results, fields){
         if(error){
-            res.status(400);
-            console.log(JSON.stringify(error))
+            if (error.code === "ER_DUP_ENTRY") {
+                res.status(410);
+            } else {
+                res.status(400);
+            }
+            console.log(JSON.stringify(error));
             res.write(JSON.stringify(error));
             res.end();
         }else{
@@ -245,7 +249,6 @@ app.post('/POST/priceHistory', function(req, res)
     connection.query(sql,inserts,function(error, results, fields){
         if(error){
             res.status(400);
-            console.log(JSON.stringify(error))
             res.write(JSON.stringify(error));
             res.end();
         }else{
