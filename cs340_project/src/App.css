@@ -69,7 +69,10 @@ body {
 
 #page-wrap {
   text-align: center;
-  overflow: auto;
+}
+
+#Menu {
+  overflow: hidden;
 }
 
 .bm-item {
@@ -99,6 +102,7 @@ body {
 
 .bm-burger-bars {
   background: #373a47;
+  overflow: hidden;
 }
 
 .bm-menu {
@@ -106,11 +110,13 @@ body {
   padding: 2.5em 1.5em 0;
   font-size: 1.15em;
   text-align: left;
+  overflow: hidden;
 }
 
 
 .bm-item-list {
   color: #b8b7ad;
+  overflow-y: hidden;
 }
 
 .bm-overlay {
@@ -130,6 +136,7 @@ body {
   height: 100vh;
   background-color: #000;
   opacity: .5;
+  overflow: hidden;
 }
 
 .modal-wrapper {
@@ -140,8 +147,9 @@ body {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   outline: 0;
+  overflow: hidden;
 }
 
 .modal {
@@ -152,6 +160,7 @@ body {
   border-radius: 3px;
   max-width: 500px;
   padding: 2rem;
+  overflow: hidden;
 }
 
 .modal-header {
