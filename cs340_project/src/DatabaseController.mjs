@@ -75,7 +75,9 @@ app.get('/GET/aptOwners/:id', function(req, res)
 
 app.get('/GET/apts', function(req, res)
 {
-    connection.query("SELECT * FROM `Apts`",  {timeout: 40000} , function(error, results, fields){
+    let qString = 'SELECT AptOwners.ownerID, AptOwners.firstName, AptOwners.lastName, Apts.aptNum, Apts.sqFeet, Apts.floorNum ' +
+    'FROM Apts LEFT JOIN AptOwners ON Apts.ownerID = AptOwners.ownerID;';
+    connection.query(qString,  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.end();
@@ -223,8 +225,9 @@ app.post('/POST/aptOwners', function(req, res)
 
 app.post('/POST/apts', function(req, res)
 {
-    var sql = "INSERT INTO Apts (aptNum, sqFeet, floorNum) VALUES (?,?,?)";
-    var inserts = [req.body.aptNum, req.body.sqFeet, req.body.floorNum];
+    req.body.ownerID = req.body.ownerID !== "NULL" ? req.body.ownerID : null;
+    var sql = "INSERT INTO Apts (aptNum, sqFeet, floorNum, ownerID) VALUES (?,?,?,?)";
+    var inserts = [req.body.aptNum, req.body.sqFeet, req.body.floorNum, req.body.ownerID];
     connection.query(sql,inserts,function(error, results, fields){
         if(error){
             if (error.code === "ER_DUP_ENTRY") {

@@ -15,12 +15,20 @@ function Apts() {
     const [aptList, setAptList] = useState([]);
     const [addField, setAddField] = useState([]);
     const [floorOptionList, setFloorOptionList] = useState([]);
+    const [ownerOptionList, setOwnerOptionList] = useState([]);
 
     const loadApts = async () => {
         const response = await fetch(`${AddressInUse}/GET/apts`);
         const aptList = await response.json();
         setAptList(aptList);
+        console.log(aptList);
+        aptList.forEach(formatDisplay);
         floorOptions();
+        ownerOptions();
+    }
+
+    function formatDisplay(item) {
+        item.ownerName = item.ownerID !== null ? item.firstName + " " + item.lastName : "";
     }
 
     const floorOptions = async () => {
@@ -29,18 +37,25 @@ function Apts() {
         setFloorOptionList(floorOptionList);
     }
 
+    const ownerOptions = async () => {
+        const response = await fetch(`${AddressInUse}/GET/aptOwners`);
+        const ownerOptionList = await response.json();
+        ownerOptionList.forEach((item) => item.ownerName = item.firstName + " " + item.lastName);
+        setOwnerOptionList(ownerOptionList);
+    }
+
     const addApts = async() => {
         let aptNum = document.getElementById("aptNumInp").value;
         let sqFeet = document.getElementById("sqFeetInp").value;
         let floorNum = document.getElementById("floorNumInp").value;
+        let ownerID = document.getElementById("ownerIDInp").value;
 
         if (aptNum.length === 0){
             alert("Please Insert Apartment Number");
             return;
         }
-
-        const newApt = {aptNum, sqFeet, floorNum}
-        //console.log(JSON.stringify(newAptOwner));
+        const newApt = {aptNum, sqFeet, floorNum, ownerID}
+        console.log(JSON.stringify(newApt));
         const response = await fetch(`${AddressInUse}/POST/apts`, {
             method: 'POST',
             body: JSON.stringify(newApt),
@@ -88,10 +103,16 @@ function Apts() {
     const AptInput = () => {
         return <tr>
                     <td><input id="aptNumInp" placeholder="Apt Num e.g. 11, 22" onKeyUp={(id) => numFormat(id)}/></td>
-                    <td><input id="sqFeetInp" placeholder="Sq Feet e.g. 666, 999" onKeyUp={(id) => numFormat(id)}/></td>
+                    <td><input id="sqFeetInp" placeholder="[Optional] Sq Feet e.g. 666, 999" onKeyUp={(id) => numFormat(id)}/></td>
                     <td>
                         <select id = "floorNumInp">
                             {floorOptionList.map((item,idx) => <FloorMap item={item} idx = {idx}/>)}
+                        </select>
+                    </td>
+                    <td>
+                        <select id = "ownerIDInp">
+                            <option id = "None" key="None" value= "NULL"></option>
+                            {ownerOptionList.map((item,idx) => <OwnerMap item={item} idx = {idx}/>)}
                         </select>
                     </td>
                     <td><MdAdd onClick={addApts}/></td>
@@ -102,6 +123,12 @@ function Apts() {
     function FloorMap ({item}) {
         return (
             <option id = {item.floorNum} key={item.floorNum} value={item.floorNum}>{item.floorNum}</option>
+        );
+    }
+
+    function OwnerMap ({item}) {
+        return (
+            <option id = {item.ownerID} key={item.ownerID} value={item.ownerID}>{item.ownerName}</option>
         );
     }
 
@@ -122,6 +149,7 @@ function Apts() {
                     <th>Apartment #<FilterColumn fieldToSearch="aptNum"/></th>
                     <th>Square Footage (ft^2)<FilterColumn fieldToSearch={"sqFeet"}/></th>
                     <th>Floor #<FilterColumn fieldToSearch={"floorNum"}/></th>
+                    <th>Owner Name<FilterColumn fieldToSearch={"floorNum"}/></th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -140,6 +168,7 @@ function Apts() {
                 <td>{apt.aptNum}</td>
                 <td>{apt.sqFeet}</td>
                 <td>{apt.floorNum}</td>
+                <td>{apt.ownerName}</td>
                 <td><MdEdit/></td>
                 <td><MdDelete onClick={() => delApts(apt.aptNum)}/></td>
             </tr>
