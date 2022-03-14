@@ -20,6 +20,7 @@ function PriceHistory() {
     const loadPriceHistory = async () => {
         const response = await fetch(`${AddressInUse}/GET/priceHistory`);
         const phList = await response.json();
+        console.log(phList);
         phList.forEach(formatDisplay);
         setPHList(phList);
         ownerOptions();
@@ -27,8 +28,9 @@ function PriceHistory() {
     }
 
     function formatDisplay(item) {
-        item.sellerName = item.sellerFirstName + " " + item.sellerLastName;
-        item.buyerName = item.buyerFirstName + " " + item.buyerLastName;
+        console.log(item.sellerID);
+        item.sellerName = item.sellerID !== null ? item.sellerFirstName + " " + item.sellerLastName : "";
+        item.buyerName = item.buyerID !== null ? item.buyerFirstName + " " + item.buyerLastName : "";        
         item.price = "$" + item.price;
         let indexVal = item.dateSale.indexOf("T");
         item.dateSale = item.dateSale.slice(0,indexVal); 
@@ -71,7 +73,6 @@ function PriceHistory() {
         let aptNum = document.getElementById("aptNumInp").value;
         let dateSale = document.getElementById("dateSaleInp").value;
         let price = document.getElementById("priceInp").value;
-        console.log(dateSale);
         console.log(sellerID);
         if (dateSale.length < 1){
             alert("Please Input Date of Sale");
@@ -117,11 +118,13 @@ function PriceHistory() {
                     <td></td>
                     <td>
                         <select id = "sellerIDInp">
+                            <option id = "None" key="None" value= "NULL"></option>
                             {ownerOptionList.map((item,idx) => <OwnerMap item={item} idx = {idx}/>)}
                         </select>
                     </td>
                     <td>
                         <select id = "buyerIDInp">
+                            <option id = "None" key="None" value= "NULL"></option>
                             {ownerOptionList.map((item,idx) => <OwnerMap item={item} idx = {idx}/>)}
                         </select>
                     </td>

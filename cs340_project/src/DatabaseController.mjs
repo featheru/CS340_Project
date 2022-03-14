@@ -99,12 +99,12 @@ app.get('/GET/apts/:id', function(req, res)
 
 app.get('/GET/priceHistory', function(req, res)
 {
-    let qString = 'SELECT PH.invoiceNum, AO1.firstName AS "sellerFirstName", AO1.lastName AS "sellerLastName", ' +
-    'AO2.firstName AS "buyerFirstName", AO2.lastName AS "buyerLastName", ' +
+    let qString = 'SELECT PH.invoiceNum, AO1.ownerID AS "sellerID", AO1.firstName AS "sellerFirstName", AO1.lastName AS "sellerLastName", ' +
+    'AO2.ownerID AS "buyerID", AO2.firstName AS "buyerFirstName", AO2.lastName AS "buyerLastName", ' +
     'PH.aptNum, PH.dateSale, PH.price FROM PriceHistory AS PH ' +
-    'JOIN AptOwners AS AO1 ON PH.sellerID = AO1.ownerID ' + 
-    'JOIN AptOwners AS AO2 ON PH.buyerID = AO2.ownerID ' +
-    'JOIN Apts ON Apts.aptNum = PH.aptNum;'
+    'LEFT JOIN AptOwners AS AO1 ON PH.sellerID = AO1.ownerID ' + 
+    'LEFT JOIN AptOwners AS AO2 ON PH.buyerID = AO2.ownerID ' +
+    'LEFT JOIN Apts ON Apts.aptNum = PH.aptNum;'
     connection.query(qString, {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
@@ -244,6 +244,8 @@ app.post('/POST/apts', function(req, res)
 
 app.post('/POST/priceHistory', function(req, res)
 {
+    req.body.sellerID = req.body.sellerID !== "NULL" ? req.body.sellerID : null;
+    req.body.buyerID = req.body.buyerID !== "NULL" ? req.body.buyerID : null;
     var sql = "INSERT INTO PriceHistory (sellerID, buyerID, aptNum, dateSale, price) VALUES (?,?,?,?,?)";
     var inserts = [req.body.sellerID, req.body.buyerID, req.body.aptNum, req.body.dateSale, req.body.price];
     connection.query(sql,inserts,function(error, results, fields){
