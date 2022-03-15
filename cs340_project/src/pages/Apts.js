@@ -29,6 +29,7 @@ function Apts() {
 
     function formatDisplay(item) {
         item.ownerName = item.ownerID !== null ? item.firstName + " " + item.lastName : "";
+        item.sqFeet = item.sqFeet !== null ? item.sqFeet: "";
     }
 
     const floorOptions = async () => {
@@ -49,13 +50,17 @@ function Apts() {
         let sqFeet = document.getElementById("sqFeetInp").value;
         let floorNum = document.getElementById("floorNumInp").value;
         let ownerID = document.getElementById("ownerIDInp").value;
+        console.log("Square Feet is :" + sqFeet)
+        if (sqFeet === ""){
+            sqFeet = "NULL"; 
+        }
 
         if (aptNum.length === 0){
             alert("Please Insert Apartment Number");
             return;
         }
         const newApt = {aptNum, sqFeet, floorNum, ownerID}
-        console.log(JSON.stringify(newApt));
+        console.log("Sending to DB: " + JSON.stringify(newApt));
         const response = await fetch(`${AddressInUse}/POST/apts`, {
             method: 'POST',
             body: JSON.stringify(newApt),
