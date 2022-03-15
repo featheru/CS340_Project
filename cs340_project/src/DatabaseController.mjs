@@ -234,6 +234,7 @@ app.post('/POST/aptOwners', function(req, res)
 app.post('/POST/apts', function(req, res)
 {
     req.body.ownerID = req.body.ownerID !== "NULL" ? req.body.ownerID : null;
+    req.body.sqFeet = req.body.sqFeet !== "NULL" ? req.body.sqFeet : null;
     var sql = "INSERT INTO Apts (aptNum, sqFeet, floorNum, ownerID) VALUES (?,?,?,?)";
     var inserts = [req.body.aptNum, req.body.sqFeet, req.body.floorNum, req.body.ownerID];
     connection.query(sql,inserts,function(error, results, fields){
