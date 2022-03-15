@@ -3,9 +3,10 @@ import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel, MdDelete, MdEdit} from "react-icons/md";
+import {MdAdd, MdCancel, MdDelete, MdEdit, MdUpdate} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
 import {AddressInUse} from "../ServerConstant.js";
+import ReactDOM from "react-dom";
 
 function AptOwners() {
     useEffect(() => {
@@ -14,6 +15,11 @@ function AptOwners() {
 
     const [aptOwnerList, setAptOwnersList] = useState([]);
     const [addField, setAddField] = useState([])
+    const [aptOwnerForUpdate, setAptOwnerForUpdate] = useState([])
+    const [isShowing, setIsShowing] = useState(false);
+    const [firstName, setFirstName] = useState([]);
+    const [lastName, setLastName] = useState([]);
+    const [ssn, setSsn] = useState([]);
 
     const loadAptOwners = async () => {
         const response = await fetch(`${AddressInUse}/GET/aptOwners`);
@@ -21,6 +27,9 @@ function AptOwners() {
         console.log(aptOwnersList);
         aptOwnersList.forEach((item) => item.ssn = ComposeSSN(item.ssn));
         setAptOwnersList(aptOwnersList);
+    }
+    const toggle = (isShowing) => {
+        setIsShowing(!isShowing);
     }
 
     const ComposeSSN = (ssn) => {
@@ -84,6 +93,38 @@ function AptOwners() {
         } else {
             alert(`Failed to delete record, status code = ${response.status}`);
         }
+    }
+    const updateAptOwners = async(aptOwnerForUpdate, firstName, lastName, ssn) => {
+        if(typeof firstName === "object"){
+            firstName = aptOwnerForUpdate.firstName;
+        }
+        if(typeof lastName === "object"){
+            lastName = aptOwnerForUpdate.lastName;
+        }
+        if(typeof ssn === "object"){
+            ssn = aptOwnerForUpdate.ssn;
+        }
+        const response = await fetch(`${AddressInUse}/PUT/aptOwners/${aptOwnerForUpdate.ownerID}`, {
+            method: 'PUT',
+            body: JSON.stringify({firstName:firstName, lastName:lastName, ssn:ssn}),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if(response.status >= 200 && response.status < 400 ){
+            alert("Successfully updated the record!");
+            await loadAptOwners();
+            window.location.reload();
+        }
+        else {
+            alert(`Failed to update record, status code = ${response.status}`)
+        }
+
+    }
+
+    const openUpdateForm = async(aptOwner) => {
+        setAptOwnerForUpdate(aptOwner)
+        toggle(isShowing);
     }
     const filterResults = async (id) => {
         if(id == null){
@@ -163,7 +204,7 @@ function AptOwners() {
                 <td>{aptOwner.firstName}</td>
                 <td>{aptOwner.lastName}</td>
                 <td>{aptOwner.ssn}</td>
-                <td><MdEdit/></td>
+                <td><MdEdit onClick={() => openUpdateForm (aptOwner)}/></td>
                 <td><MdDelete onClick={() => delAptOwners(aptOwner.ownerID)}/></td>
             </tr>
         );
@@ -178,9 +219,36 @@ function AptOwners() {
         <p>Tracks current and past apartment owners at Beaver Development by first name, last name, and SSN</p>
         <AptOwnerList aptOwners={aptOwnerList} filterResults={filterResults}/>
         <MdAdd onClick={onAddClick}/>
+        <Modal isShowing={isShowing} hide={toggle} aptOwnerForUpdate={aptOwnerForUpdate} setFirstname={setFirstName} setLastName={setLastName} setSsn={setSsn} updateAptOwners={updateAptOwners} firstName={firstName} lastName={lastName} ssn={ssn}/>
         </>
     )
 }
+
+const Modal = ({ isShowing, hide ,aptOwnerForUpdate, setFirstname, setLastName, setSsn, updateAptOwners, firstName, lastName,ssn}) => isShowing ? ReactDOM.createPortal(
+    <React.Fragment>
+        <div className="modal-overlay"/>
+        <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
+            <div className="modal">
+                <div className="modal-header">
+                    <button type="button" className="modal-close-button" data-dismiss="modal" aria-label="Close" onClick={hide}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form>
+                    <p>Owner ID</p>
+                    <text>{aptOwnerForUpdate.ownerID}</text>
+                    <p>First Name</p>
+                    <input placeholder={aptOwnerForUpdate.firstName} type={"text"} onChange={e => setFirstname(e.target.value)}/>
+                    <p>Last Name</p>
+                    <input placeholder={aptOwnerForUpdate.lastName} type={"text"} onChange={e => setLastName(e.target.value)}/>
+                    <p>SSN</p>
+                    <input placeholder={aptOwnerForUpdate.ssn} maxLength={8} minLength={8}  type={"text"} onChange={e => setSsn(e.target.value)}/>
+                    <MdUpdate onClick={e => updateAptOwners(aptOwnerForUpdate, firstName, lastName, ssn)}/>
+                </form>
+            </div>
+        </div>
+    </React.Fragment> , document.body
+) : null;
 
 
 export default AptOwners;
