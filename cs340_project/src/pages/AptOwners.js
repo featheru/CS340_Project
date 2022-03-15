@@ -65,7 +65,11 @@ function AptOwners() {
             loadAptOwners();
             removeAddClick();
         } else {
-            alert(`Failed to add record, status code = ${response.status}`);
+            if (response.status === 410) {
+                alert(`Failed to add record due to Duplicate Entry in DB, Server code = ${response.status}`)
+            } else {
+                alert(`Failed to add record due to DB Error Code: ${response.status}, Server code = ${response.status}`);
+            }
         }
     }
 

@@ -196,7 +196,11 @@ app.post('/POST/aptFloors', function(req, res)
     var inserts = [req.body.floorNum, req.body.fireExits];
     connection.query(sql,inserts,function(error, results, fields){
         if(error){
-            res.status(400);
+            if (error.code === "ER_DUP_ENTRY") {
+                res.status(410);
+            } else {
+                res.status(400);
+            }
             console.log(JSON.stringify(error))
             res.write(JSON.stringify(error));
             res.end();
@@ -213,7 +217,11 @@ app.post('/POST/aptOwners', function(req, res)
     var inserts = [req.body.firstName, req.body.lastName, req.body.ssn];
     connection.query(sql,inserts,function(error, results, fields){
         if(error){
-            res.status(400);
+            if (error.code === "ER_DUP_ENTRY") {
+                res.status(410);
+            } else {
+                res.status(400);
+            }
             res.write(JSON.stringify(error));
             res.end();
         }else{
@@ -238,7 +246,8 @@ app.post('/POST/apts', function(req, res)
             console.log(JSON.stringify(error));
             res.write(JSON.stringify(error));
             res.end();
-        }else{
+        }else {
+            console.log(results);
             res.status(201);
             res.end();
         }
@@ -253,7 +262,11 @@ app.post('/POST/priceHistory', function(req, res)
     var inserts = [req.body.sellerID, req.body.buyerID, req.body.aptNum, req.body.dateSale, req.body.price];
     connection.query(sql,inserts,function(error, results, fields){
         if(error){
-            res.status(400);
+            if (error.code === "ER_DUP_ENTRY") {
+                res.status(410);
+            } else {
+                res.status(400);
+            }
             res.write(JSON.stringify(error));
             res.end();
         }else{
@@ -270,7 +283,11 @@ app.post('/POST/rodents', function(req, res)
     var inserts = [req.body.rodentName];
     connection.query(sql,inserts,function(error, results, fields){
         if(error){
-            res.status(400);
+            if (error.code === "ER_DUP_ENTRY") {
+                res.status(410);
+            } else {
+                res.status(400);
+            }
             console.log(JSON.stringify(error))
             res.write(JSON.stringify(error));
             res.end();
@@ -287,7 +304,11 @@ app.post('/POST/rodentsToFloors', function(req, res)
     var inserts = [req.body.rodentID, req.body.floorNum];
     connection.query(sql,inserts,function(error, results, fields){
         if(error){
-            res.status(400);
+            if (error.code === "ER_DUP_ENTRY") {
+                res.status(410);
+            } else {
+                res.status(400);
+            }
             console.log(JSON.stringify(error))
             res.write(JSON.stringify(error));
             res.end();
@@ -461,7 +482,7 @@ app.put('/PUT/priceHistory/:invoiceNum', function(req, res)
     let aptNum = req.body.aptNum;
     let dateSale =req.body.dateSale;
     let price = req.body.price;
-    let sql = "UPDATE AptFloors SET sellerID = ?, buyerID = ?, aptNum = ?, dateSale = ?, price = ? WHERE invoiceNum = ?";
+    let sql = "UPDATE PriceHistory SET sellerID = ?, buyerID = ?, aptNum = ?, dateSale = ?, price = ? WHERE invoiceNum = ?";
     connection.query(sql,[sellerID, buyerID, aptNum, dateSale, price, invoiceNum], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
@@ -478,7 +499,7 @@ app.put('/PUT/rodentsToFloors/:rodentID/:floorNum', function(req, res)
 {
     let floorNum = req.params.floorNum;
     let rodentID = req.params.rodentID;
-    let sql = "UPDATE AptFloors SET rodentID = ?, floorNum = ? WHERE rodentID = ? AND floorNum = ?";
+    let sql = "UPDATE RodentsToFloors SET rodentID = ?, floorNum = ? WHERE rodentID = ? AND floorNum = ?";
     connection.query(sql,[rodentID, floorNum, rodentID, floorNum], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
