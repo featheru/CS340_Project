@@ -201,10 +201,10 @@ app.post('/POST/aptFloors', function(req, res)
             } else {
                 res.status(400);
             }
-            console.log(JSON.stringify(error))
             res.write(JSON.stringify(error));
             res.end();
         }else{
+            console.log(results);
             res.status(201);
             res.end();
         }
@@ -328,10 +328,12 @@ app.delete('/DELETE/aptFloors/:floorNum', function(req, res)
     connection.query(sql,[req.params.floorNum],function(error, results){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
 
@@ -341,12 +343,13 @@ app.delete('/DELETE/aptOwners/:ownerID', function(req, res)
     //var del = [req.params.floorNum];
     connection.query(sql,[req.params.ownerID],function(error, results){
         if(error){
-            res.status(450);
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
 
@@ -358,10 +361,12 @@ app.delete('/DELETE/rodents/:rodentID', function(req, res)
     connection.query(sql,[req.params.rodentID],function(error, results){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
 
@@ -373,10 +378,12 @@ app.delete('/DELETE/apts/:aptNum', function(req, res)
     connection.query(sql,[req.params.aptNum],function(error, results){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
 
@@ -387,10 +394,12 @@ app.delete('/DELETE/priceHistory/:invoiceNum', function(req, res)
     connection.query(sql,[req.params.invoiceNum],function(error, results){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
 
@@ -401,10 +410,12 @@ app.delete('/DELETE/rodentsToFloors/:rodentID/:floorNum', function(req, res)
     connection.query(sql,[req.params.rodentID, req.params.floorNum],function(error, results){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
 
@@ -420,7 +431,11 @@ app.put('/PUT/aptFloors/:floorNum', function(req, res)
             res.status(400);
             res.end();
         }
-        res.status(201);
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        } 
         res.end();
     });
 });
@@ -437,7 +452,11 @@ app.put('/PUT/aptOwners/:ownerID', function(req, res)
             res.status(400);
             res.end();
         }
-        res.status(201);
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        } 
         res.end();
     });
 });
@@ -454,7 +473,11 @@ app.put('/PUT/apts/:aptNum', function(req, res)
             res.status(400);
             res.end();
         }
-        res.status(201);
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        } 
         res.end();
     });
 });
@@ -470,7 +493,11 @@ app.put('/PUT/rodents/:rodentID', function(req, res)
             res.status(400);
             res.end();
         }
-        res.status(201);
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        } 
         res.end();
     });
 });
@@ -490,7 +517,11 @@ app.put('/PUT/priceHistory/:invoiceNum', function(req, res)
             res.status(400);
             res.end();
         }
-        res.status(201);
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        } 
         res.end();
     });
 });
@@ -507,7 +538,11 @@ app.put('/PUT/rodentsToFloors/:rodentID/:floorNum', function(req, res)
             res.status(400);
             res.end();
         }
-        res.status(201);
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        } 
         res.end();
     });
 });

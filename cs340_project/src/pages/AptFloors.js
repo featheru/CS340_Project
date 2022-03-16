@@ -101,7 +101,12 @@ function AptFloors() {
             window.location.reload();
             }
         else {
-            alert(`Failed to update record, status code = ${response.status}`)
+            if (response.status === 425) {
+                alert("No Changes Made. Update did not change original entry.")
+
+            } else {
+                alert(`Failed to update record, status code = ${response.status}`);
+            }
         }
 
     }
