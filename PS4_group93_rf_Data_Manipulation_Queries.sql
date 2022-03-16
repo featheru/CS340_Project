@@ -43,7 +43,13 @@ DELETE FROM AptFloors WHERE floorNum = :floorNumInp;
 
 -- Price History --
 
-SELECT * FROM PriceHistory;
+SELECT PH.invoiceNum, AO1.firstName AS "Seller First Name", AO1.lastName AS "Seller Last Name", 
+AO2.firstName AS "Buyer First Name", AO2.lastName AS "Buyer Last Name", 
+PH.aptNum, PH.dateSale, PH.price FROM PriceHistory AS PH 
+JOIN AptOwners AS AO1 ON PH.sellerID = AO1.ownerID 
+JOIN AptOwners AS AO2 ON PH.buyerID = AO2.ownerID
+JOIN Apts ON Apts.aptNum = PH.aptNum; -- Updated after PS6 to show buyer and seller names
+
 SELECT * FROM PriceHistory WHERE invoiceNum = :invoiceNumInp;
 SELECT * FROM PriceHistory WHERE sellerID = :sellerIDInp;
 SELECT * FROM PriceHistory WHERE buyerID = :buyerIDInp;
@@ -67,7 +73,9 @@ DELETE FROM AptFloors WHERE floorNum = :floorNumInp;
 
 -- Rodents --
 
-SELECT * FROM Rodents;
+SELECT Rodents.rodentID, Rodents.rodentName,RodentsToFloors.floorNum FROM `Rodents`
+JOIN `RodentsToFloors` ON Rodents.rodentID = RodentsToFloors.rodentID; -- Updated after PS6 to show rodent names
+
 SELECT * FROM Rodents WHERE rodentID = :rodentIDInp;
 SELECT * FROM Rodents WHERE rodentName LIKE '%rodentNameInp%';
 

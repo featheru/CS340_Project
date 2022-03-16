@@ -101,7 +101,10 @@ function Rodents() {
             if (response.status === 425) {
                 alert("No Changes Made. Update did not change original entry.")
 
-            } else {
+            } else if (response.status === 410) {
+                alert("No Changes Made. Duplicate Entry")
+            }
+            else {
                 alert(`Failed to update record, status code = ${response.status}`);
             }
         }
