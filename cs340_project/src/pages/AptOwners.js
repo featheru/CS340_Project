@@ -224,7 +224,7 @@ function AptOwners() {
         <SideBar />
         <h1>Apartment Owners Table</h1>
         <p>Tracks current and past apartment owners at Beaver Development by first name, last name, and SSN</p>
-        <button ><MdAdd onClick={onAddClick}/> Add New Item</button>
+        <button onClick={onAddClick}>+ Add New Item</button>
         <AptOwnerList aptOwners={aptOwnerList} filterResults={filterResults}/>
         <Modal isShowing={isShowing} hide={toggle} aptOwnerForUpdate={aptOwnerForUpdate} setFirstname={setFirstName} setLastName={setLastName} setSsn={setSsn} updateAptOwners={updateAptOwners} firstName={firstName} lastName={lastName} ssn={ssn}/>
         </>

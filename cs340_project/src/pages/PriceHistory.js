@@ -210,7 +210,7 @@ function PriceHistory() {
         <SideBar/>
         <h1>Price History Table</h1>
         <p>Tracks purchase history of apartments in building by storing buyer, seller, date of Sale, and price</p>
-        <button ><MdAdd onClick={onAddClick}/> Add New Item</button>
+        <button onClick={onAddClick}>+ Add New Item</button>
         <PhList PHmap={phList} filterResults={filterResults}/>
         </>
         

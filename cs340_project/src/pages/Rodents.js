@@ -176,7 +176,7 @@ function Rodents() {
         <SideBar />
         <h1 class = "DatabaseTitle">Rodents</h1>
         <p class = "DatabaseText">Tracks past and present rodents by name and ID</p>
-        <button ><MdAdd onClick={onAddClick}/> Add New Item</button>
+        <button onClick={onAddClick}>+ Add New Item</button>
         <RodentList rodents = {rodentList} filterResults={filterResults}/>
         <Modal isShowing={isShowing} hide={toggle} rodentForUpdate={rodentForUpdate} setRodentName={setRodentName} updateRodent={updateRodents} rodentName={rodentName}/>
         </>
