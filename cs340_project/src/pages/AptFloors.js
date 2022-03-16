@@ -183,7 +183,7 @@ function AptFloors() {
         <SideBar/>
         <h1>Apartment Floors Table</h1>
         <p>Tracks apartment floors, and number of fire exits on each floor.</p>
-        <MdAdd onClick={onAddClick}/>
+        <button ><MdAdd onClick={onAddClick}/> Add New Item</button>
         <AptFloorList aptFloors={aptFloorList} filterResults={filterResults}/>
         <Modal isShowing={isShowing} hide={toggle} aptFloorForUpdate={aptFloorForUpdate} setFloorNum={setFloorNum} setFireExits={setFireExits} updateAptFloors={updateAptFloors} floorNum={floorNum} fireExits={fireExits}/>
         </>
