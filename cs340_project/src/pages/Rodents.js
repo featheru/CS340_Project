@@ -146,7 +146,7 @@ function Rodents() {
                 <thead>
                 <tr>
                     <th>Rodent ID #<FilterColumn fieldToSearch="rodentID" filter={filterResults}/></th>
-                    <th>Rodent Name<FilterColumn fieldToSearch={"rodentName"}/></th>
+                    <th>Rodent Name</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>

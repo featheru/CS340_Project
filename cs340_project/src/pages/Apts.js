@@ -160,9 +160,9 @@ function Apts() {
                 <thead>
                 <tr>
                     <th>Apartment #<FilterColumn fieldToSearch="aptNum" filter={filterResults}/></th>
-                    <th>Square Footage (ft^2)<FilterColumn fieldToSearch={"sqFeet"}/></th>
-                    <th>Floor #<FilterColumn fieldToSearch={"floorNum"}/></th>
-                    <th>Owner Name<FilterColumn fieldToSearch={"floorNum"}/></th>
+                    <th>Square Footage (ft^2)</th>
+                    <th>Floor #</th>
+                    <th>Owner Name</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>

@@ -554,7 +554,7 @@ app.put('/PUT/priceHistory/:invoiceNum', function(req, res)
         if(error){
             res.write(JSON.stringify(error,results));
         }
-        if (results.changedRows === 1){
+        else if (results.changedRows === 1){
             res.status(201);
         } else {
             res.status(425);
@@ -579,7 +579,7 @@ app.put('/PUT/rodentsToFloors/:rodentID/:floorNum', function(req, res)
             }
             res.end();
         }
-        if (results.changedRows === 1){
+        else if (results.changedRows === 1){
             res.status(201);
         } else {
             res.status(425);

@@ -162,8 +162,12 @@ function PriceHistory() {
             alert("Successfully updated the record!");
             window.location.reload();
         }
+        else if(response.status === 425){
+            alert("No changes. Row not updated.")
+            window.location.reload();
+        }
         else {
-            alert(`Failed to update record`)
+            alert(`Failed to update record, status code = ${response.status}`)
             await loadPriceHistory();
             window.location.reload();
         }
@@ -228,11 +232,11 @@ function PriceHistory() {
                 <thead>
                 <tr>
                     <th>Invoice #<FilterColumn fieldToSearch="invoiceNum" filter = {filterResults}/></th>
-                    <th>Seller Name<FilterColumn fieldToSearch={"sellerID"}/></th>
-                    <th>Buyer Name<FilterColumn fieldToSearch={"buyerID"}/></th>
-                    <th>Apartment #<FilterColumn fieldToSearch={"aptNum"}/></th>
-                    <th>Date of Sale<FilterColumn fieldToSearch={"dateSale"}/></th>
-                    <th>Price($)<FilterColumn fieldToSearch={"price"}/></th>
+                    <th>Seller Name</th>
+                    <th>Buyer Name</th>
+                    <th>Apartment #</th>
+                    <th>Date of Sale</th>
+                    <th>Price($)</th>
                     <th>Edit </th>
                     <th>Delete</th>
                 </tr>
