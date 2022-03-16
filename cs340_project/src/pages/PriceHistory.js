@@ -3,9 +3,10 @@ import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel, MdDelete, MdEdit} from "react-icons/md";
+import {MdAdd, MdCancel, MdDelete, MdEdit, MdUpdate} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
 import {AddressInUse} from "../ServerConstant.js";
+import ReactDOM from "react-dom";
 
 function PriceHistory() {
     useEffect(() => {
@@ -16,6 +17,13 @@ function PriceHistory() {
     const [addField, setAddField] = useState([]);
     const [ownerOptionList, setOwnerOptionList] = useState([]);
     const [aptOptionList, setAptOptionList] = useState([]);
+    const [isShowing, setIsShowing] = useState(false);
+    const [phForUpdate, setPhForUpdate] = useState([]);
+    const [sellerId, setSellerID] = useState([]);
+    const [buyerID, setBuyerID] = useState([]);
+    const [price, setPrice] = useState([]);
+    const [dateSale, setDateSale] = useState([]);
+    const [aptNum, setAptNum] = useState([]);
 
     const loadPriceHistory = async () => {
         const response = await fetch(`${AddressInUse}/GET/priceHistory`);
@@ -25,6 +33,10 @@ function PriceHistory() {
         setPHList(phList);
         ownerOptions();
         aptOptions();
+    }
+
+    const toggle = (isShowing) => {
+        setIsShowing(!isShowing);
     }
 
     function formatDisplay(item) {
@@ -117,6 +129,49 @@ function PriceHistory() {
         }
     }
 
+    const updatePh = async(phForUpdate, sellerId, buyerID, price, aptNum, dateSale) => {
+        if(typeof sellerId === "object"){
+            sellerId = phForUpdate.sellerID;
+        }
+        if(typeof buyerID === "object"){
+            buyerID = phForUpdate.buyerID;
+        }
+        if(typeof price === "object"){
+            price = phForUpdate.price;
+            price = price.slice(1);
+            price = parseFloat(price);
+        }
+        if(typeof dateSale ==="object"){
+            dateSale = phForUpdate.dateSale;
+        }
+        if(typeof aptNum ==="object"){
+            aptNum = phForUpdate.aptNum;
+        }
+
+        const response = await fetch(`${AddressInUse}/PUT/priceHistory/${phForUpdate.invoiceNum}`, {
+            method: 'PUT',
+            body: JSON.stringify({sellerID:sellerId, buyerID:buyerID, price:price, aptNum:aptNum, dateSale:dateSale}),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        if(response.status === 201){
+            alert("Successfully updated the record!");
+            window.location.reload();
+        }
+        else {
+            alert(`Failed to update record`)
+            await loadPriceHistory();
+            window.location.reload();
+        }
+
+    }
+
+    const openUpdateForm = async(ph) => {
+        setPhForUpdate(ph)
+        toggle(isShowing);
+    }
+
     const PHInput = () => {
         return <tr>
                     <td></td>
@@ -175,7 +230,7 @@ function PriceHistory() {
                     <th>Apartment #<FilterColumn fieldToSearch={"aptNum"}/></th>
                     <th>Date of Sale<FilterColumn fieldToSearch={"dateSale"}/></th>
                     <th>Price($)<FilterColumn fieldToSearch={"price"}/></th>
-                    <th>Edit</th>
+                    <th>Edit </th>
                     <th>Delete</th>
                 </tr>
                 </thead>
@@ -195,7 +250,7 @@ function PriceHistory() {
                 <td>{ph.aptNum}</td>
                 <td>{ph.dateSale}</td>
                 <td>{ph.price}</td>
-                <td><MdEdit/></td>
+                <td><MdEdit onClick={() => openUpdateForm (ph)}/></td>
                 <td><MdDelete onClick={() => delPH(ph.invoiceNum)}/></td>
             </tr>
         );
@@ -209,9 +264,40 @@ function PriceHistory() {
         <p>Tracks purchase history of apartments in building by storing buyer, seller, date of Sale, and price</p>
         <MdAdd onClick={onAddClick}></MdAdd>
         <PhList PHmap={phList} filterResults={filterResults}/>
+        <Modal isShowing={isShowing} hide={toggle} phForUpdate={phForUpdate} setSellerID={setSellerID} setBuyerID={setBuyerID} setPrice={setPrice} setDateSale={setDateSale} setAptNum={setAptNum} updatePh={updatePh} sellerID={sellerId} buyerID={buyerID} price={price} dateSale={dateSale} aptNum={aptNum}/>
         </>
         
     )
 }
+
+const Modal = ({ isShowing, hide ,phForUpdate, setSellerID, setBuyerID, setPrice, setDateSale, setAptNum, updatePh, sellerID, buyerID, price, dateSale, aptNum}) => isShowing ? ReactDOM.createPortal(
+    <React.Fragment>
+        <div className="modal-overlay"/>
+        <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
+            <div className="modal">
+                <div className="modal-header">
+                    <button type="button" className="modal-close-button" data-dismiss="modal" aria-label="Close" onClick={hide}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form>
+                    <p>Invoice Num</p>
+                    <text>{phForUpdate.invoiceNum}</text>
+                    <p>Seller ID</p>
+                    <input placeholder={phForUpdate.sellerID} type={"number"} onChange={e => setSellerID(e.target.value)}/>
+                    <p>Buyer ID</p>
+                    <input placeholder={phForUpdate.buyerID} type={"number"} onChange={e => setBuyerID(e.target.value)}/>
+                    <p>Price</p>
+                    <input placeholder={phForUpdate.price} type={"number"} step={"0.2"} onChange={e => setPrice(e.target.value)}/>
+                    <p>Apt #</p>
+                    <input placeholder={phForUpdate.aptNum} type={"number"} onChange={e => setAptNum(e.target.value)}/>
+                    <p>Date of Sale</p>
+                    <input placeholder={phForUpdate.dateSale} type={"date"} onChange={e => setDateSale(e.target.value)}/>
+                    <MdUpdate onClick={e => updatePh(phForUpdate, sellerID, buyerID, price, aptNum, dateSale)}/>
+                </form>
+            </div>
+        </div>
+    </React.Fragment> , document.body
+) : null;
 
 export default PriceHistory;
