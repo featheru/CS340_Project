@@ -3,10 +3,11 @@ import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel, MdEdit, MdDelete} from "react-icons/md";
+import {MdAdd, MdCancel, MdEdit, MdDelete, MdUpdate} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
 import {AddressInUse} from "../ServerConstant.js";
 import {Dropdown} from 'semantic-ui-react';
+import ReactDOM from "react-dom";
 
 function RodentsToFloors() {
     useEffect(() => {
@@ -17,6 +18,14 @@ function RodentsToFloors() {
     const [addField, setAddField] = useState([]);
     const [rodentOptionList, setRodentOptionList] = useState([]);
     const [floorOptionList, setFloorOptionList] = useState([]);
+    const [isShowing, setIsShowing] = useState(false);
+    const [rtfForUpdate, setRtfForUpdate] = useState([]);
+    const [rodentID, setRodentID] = useState([]);
+    const [floorNum, setFloorNum] = useState([]);
+
+    const toggle = (isShowing) => {
+        setIsShowing(!isShowing);
+    }
 
     const loadRodentsToFloors = async () => {
         const response = await fetch(`${AddressInUse}/GET/rodentsToFloors`);
@@ -76,6 +85,39 @@ function RodentsToFloors() {
             alert(`Failed to delete record, status code = ${response.status}`);
         }
     }
+    const updateRtf = async(rtfForUpdate, rodentID, floorNum) => {
+        if (typeof rodentID === "object") {
+            rodentID = rtfForUpdate.rodentID;
+        }
+        if (typeof floorNum === "object") {
+            floorNum = rtfForUpdate.floorNum;
+        }
+        const response = await fetch(`${AddressInUse}/PUT/rodentsToFloors/${rtfForUpdate.rodentID}/${rtfForUpdate.floorNum}`, {
+            method: 'PUT',
+            body: JSON.stringify({rodentID: rodentID, floorNum: floorNum}),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if (response.status >= 200 && response.status < 400) {
+            alert("Successfully updated the record!");
+            window.location.reload();
+        } else {
+            if (response.status === 425) {
+                alert("No Changes Made. Update did not change original entry.")
+
+            } else if (response.status === 410) {
+                alert("No Changes Made. Duplicate Entry")
+            } else {
+                alert(`Failed to update record, status code = ${response.status}`);
+            }
+        }
+    }
+
+        const openUpdateForm = async(rtf) => {
+            setRtfForUpdate(rtf)
+            toggle(isShowing);
+        }
 
     function RodentToFloorInput () {
         return <tr>
@@ -139,7 +181,7 @@ function RodentsToFloors() {
             <tr id={`${rtf.rodentID}-${rtf.floorNum}`}>
                 <td>{rtf.rodentName}</td>
                 <td>{rtf.floorNum}</td>
-                <td><MdEdit/></td>
+                <td><MdEdit onClick={() => openUpdateForm(rtf)}/></td>
                 <td><MdDelete onClick={() => delRodentsToFloors(rtf.rodentID,rtf.floorNum)}/></td>
             </tr>
         );
@@ -153,9 +195,31 @@ function RodentsToFloors() {
         <p>Tracks floors that a rodent currently occupies(which could be many!)</p>
         <button onClick={onAddClick}>+ Add New Item</button>
         <RTFList rtfList={rodentToFloorList}/>
+        <Modal isShowing={isShowing} hide={toggle} rtfForUpdate={rtfForUpdate} setRodentID={setRodentID} setFloorNum={setFloorNum} updateRtf={updateRtf} rodentID={rodentID} floorNum={floorNum}/>
         </>
         
     )
 }
+const Modal = ({ isShowing, hide ,rtfForUpdate, setRodentID, setFloorNum, updateRtf, floorNum, rodentID}) => isShowing ? ReactDOM.createPortal(
+    <React.Fragment>
+        <div className="modal-overlay"/>
+        <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
+            <div className="modal">
+                <div className="modal-header">
+                    <button type="button" className="modal-close-button" data-dismiss="modal" aria-label="Close" onClick={hide}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form>
+                    <p>Rodent ID</p>
+                    <input placeholder={rtfForUpdate.rodentID} type={"number"} onChange={e => setRodentID(e.target.value)}/>
+                    <p>Floor Number</p>
+                    <input placeholder={rtfForUpdate.floorNum} type={"number"} onChange={e => setFloorNum(e.target.value)}/>
+                    <MdUpdate onClick={e => updateRtf(rtfForUpdate, rodentID, floorNum)}/>
+                </form>
+            </div>
+        </div>
+    </React.Fragment>, document.body
+) : null;
 
 export default RodentsToFloors;
