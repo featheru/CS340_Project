@@ -531,12 +531,6 @@ app.put('/PUT/rodents/:rodentID', function(req, res)
     connection.query(sql,[rodentName, rodentID], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
-            if (error.code === "ER_DUP_ENTRY") {
-                res.status(410);
-            } else {
-                res.status(406);
-            }
-            res.end();
         }
         if (results.changedRows === 1){
             res.status(201);
@@ -558,19 +552,6 @@ app.put('/PUT/priceHistory/:invoiceNum', function(req, res)
     let sql = "UPDATE PriceHistory SET sellerID = ?, buyerID = ?, aptNum = ?, dateSale = ?, price = ? WHERE invoiceNum = ?";
     connection.query(sql,[sellerID, buyerID, aptNum, dateSale, price, invoiceNum], function(error, results) {
         if(error){
-            res.write(JSON.stringify(error,results));
-            if (error.code === "ER_DUP_ENTRY") {
-                res.status(410);
-            } else {
-                res.status(406);
-            }
-            res.end();
-        }
-        if (results.changedRows === 1){
-            res.status(201);
-        } else {
-            res.status(425);
-        } 
         res.end();
     });
 });
