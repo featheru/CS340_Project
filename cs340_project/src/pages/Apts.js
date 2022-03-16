@@ -194,7 +194,7 @@ function Apts() {
         <SideBar />
         <h1 class = "DatabaseTitle">Apartments</h1>
         <p class = "DatabaseText">Apartments database table tracks specific information regarding an apartment including the floor number, and apartment number.</p>
-        <MdAdd onClick={onAddClick}/> 
+        <button onClick={onAddClick}>+ Add New Item</button>
         <AptList apts={aptList} filterResults={filterResults}/>
         </>
     )

@@ -117,9 +117,16 @@ function AptOwners() {
             window.location.reload();
         }
         else {
-            alert(`Failed to update record, status code = ${response.status}`)
-        }
+            if (response.status === 425) {
+                alert("No Changes Made. Update did not change original entry.")
 
+            } else if (response.status === 410) {
+                alert("No Changes Made. Duplicate Entry")
+            }
+            else {
+                alert(`Failed to update record, status code = ${response.status}`);
+            }
+        }
     }
 
     const openUpdateForm = async(aptOwner) => {
@@ -217,8 +224,8 @@ function AptOwners() {
         <SideBar />
         <h1>Apartment Owners Table</h1>
         <p>Tracks current and past apartment owners at Beaver Development by first name, last name, and SSN</p>
+        <button onClick={onAddClick}>+ Add New Item</button>
         <AptOwnerList aptOwners={aptOwnerList} filterResults={filterResults}/>
-        <MdAdd onClick={onAddClick}/>
         <Modal isShowing={isShowing} hide={toggle} aptOwnerForUpdate={aptOwnerForUpdate} setFirstname={setFirstName} setLastName={setLastName} setSsn={setSsn} updateAptOwners={updateAptOwners} firstName={firstName} lastName={lastName} ssn={ssn}/>
         </>
     )

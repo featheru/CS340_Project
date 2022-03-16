@@ -151,7 +151,7 @@ function RodentsToFloors() {
         <SideBar />
         <h1>Rodents To Apartment Floors</h1>
         <p>Tracks floors that a rodent currently occupies(which could be many!)</p>
-        <MdAdd onClick={onAddClick}></MdAdd>
+        <button onClick={onAddClick}>+ Add New Item</button>
         <RTFList rtfList={rodentToFloorList}/>
         </>
         

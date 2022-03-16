@@ -98,9 +98,16 @@ function Rodents() {
             window.location.reload();
         }
         else {
-            alert(`Failed to update record, status code = ${response.status}`)
-        }
+            if (response.status === 425) {
+                alert("No Changes Made. Update did not change original entry.")
 
+            } else if (response.status === 410) {
+                alert("No Changes Made. Duplicate Entry")
+            }
+            else {
+                alert(`Failed to update record, status code = ${response.status}`);
+            }
+        }
     }
 
     const openUpdateForm = async(rodent) => {
@@ -169,7 +176,7 @@ function Rodents() {
         <SideBar />
         <h1 class = "DatabaseTitle">Rodents</h1>
         <p class = "DatabaseText">Tracks past and present rodents by name and ID</p>
-        <MdAdd onClick={onAddClick}/> 
+        <button onClick={onAddClick}>+ Add New Item</button>
         <RodentList rodents = {rodentList} filterResults={filterResults}/>
         <Modal isShowing={isShowing} hide={toggle} rodentForUpdate={rodentForUpdate} setRodentName={setRodentName} updateRodent={updateRodents} rodentName={rodentName}/>
         </>

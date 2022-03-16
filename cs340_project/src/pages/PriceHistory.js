@@ -72,10 +72,7 @@ function PriceHistory() {
 
     function numFormat(event) {
         var tag = document.getElementById(event.target.id);
-        let val = tag.value.replace(/\D/g, '');
-        if (val.length > 0 && val[0] == "0"){
-            val = '';
-        }
+        let val = tag.value.replace(/[^0-9.]/g,'')
         tag.value = val;
     }
 
@@ -85,7 +82,6 @@ function PriceHistory() {
         let aptNum = document.getElementById("aptNumInp").value;
         let dateSale = document.getElementById("dateSaleInp").value;
         let price = document.getElementById("priceInp").value;
-        console.log(sellerID);
         if (dateSale.length < 1){
             alert("Please Input Date of Sale");
             return; 
@@ -93,6 +89,13 @@ function PriceHistory() {
             alert("Please Input Price");
             return;
         }
+
+        let decIdx = price.indexOf(".");
+        if (decIdx !== -1 && price.length - 3 !== decIdx) {
+            alert("Invalid Price Input, Either xxxx or xxxx.xx format");
+            return;
+        }
+
         const newPH = {sellerID, buyerID, aptNum, dateSale, price}
         console.log(JSON.stringify(newPH));
         const response = await fetch(`${AddressInUse}/POST/priceHistory`, {
@@ -262,7 +265,7 @@ function PriceHistory() {
         <SideBar/>
         <h1>Price History Table</h1>
         <p>Tracks purchase history of apartments in building by storing buyer, seller, date of Sale, and price</p>
-        <MdAdd onClick={onAddClick}></MdAdd>
+        <button onClick={onAddClick}>+ Add New Item</button>
         <PhList PHmap={phList} filterResults={filterResults}/>
         <Modal isShowing={isShowing} hide={toggle} phForUpdate={phForUpdate} setSellerID={setSellerID} setBuyerID={setBuyerID} setPrice={setPrice} setDateSale={setDateSale} setAptNum={setAptNum} updatePh={updatePh} sellerID={sellerId} buyerID={buyerID} price={price} dateSale={dateSale} aptNum={aptNum}/>
         </>

@@ -4,6 +4,14 @@ import mysql from 'mysql';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
+//ERROR CODES
+//404 -- PAGE NOT FOUND -- DB NOT WORKING DURING SELECTION
+//405 -- ERROR DURING DELETION
+//406 -- ERROR DURING PUT
+//407 -- ERROR DURING INSERT
+//410 -- INSERT/ PUT -- DUPLICATE ENTRY
+//425 -- PUT ERROR -- NO update has been made
+
 var connection = mysql.createConnection({
     host: 'classmysql.engr.oregonstate.edu',
     user: 'cs340_sheajon',
@@ -25,11 +33,14 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+//GET/ DISPLAY TABLES & FILTER DB Statements
+
 app.get('/GET/aptFloors', function(req, res)
 {
     connection.query("SELECT * FROM `AptFloors`",  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -42,6 +53,7 @@ app.get('/GET/aptFloors/:id', function(req, res)
     connection.query(`SELECT * FROM AptFloors WHERE floorNum = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -54,6 +66,7 @@ app.get('/GET/aptOwners', function(req, res)
     connection.query("SELECT * FROM `AptOwners`",  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -66,6 +79,7 @@ app.get('/GET/aptOwners/:id', function(req, res)
     connection.query(`SELECT * FROM AptOwners WHERE ownerID = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -80,6 +94,7 @@ app.get('/GET/apts', function(req, res)
     connection.query(qString,  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -92,6 +107,7 @@ app.get('/GET/apts/:id', function(req, res)
     connection.query(`SELECT * FROM Apts WHERE aptNum = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -110,6 +126,7 @@ app.get('/GET/priceHistory', function(req, res)
     connection.query(qString, {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -122,6 +139,7 @@ app.get('/GET/priceHistory/:id', function(req, res)
     connection.query(`SELECT * FROM PriceHistory WHERE invoiceNum = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -134,6 +152,7 @@ app.get('/GET/rodents', function(req, res)
     connection.query("SELECT * FROM `Rodents`",  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -146,6 +165,7 @@ app.get('/GET/rodents/:id', function(req, res)
     connection.query(`SELECT * FROM Rodents WHERE rodentID = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -159,6 +179,7 @@ app.get('/GET/rodentsToFloors', function(req, res)
     {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -171,6 +192,7 @@ app.get('/GET/rodentsToFloors/rodent/:rodentID', function(req, res)
     connection.query(`SELECT * FROM RodentsToFloors WHERE rodentID = ${req.params.rodentID}`,  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
@@ -183,12 +205,15 @@ app.get('/GET/rodentsToFloors/floor/:floorNum', function(req, res)
     connection.query(`SELECT * FROM RodentsToFloors WHERE floorNum = ${req.params.floorNum}`,  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(404);
             res.end();
         }
         res.json(results);
         res.end();
     });
 });
+
+//POST/ INSERT INTO DB STatements
 
 app.post('/POST/aptFloors', function(req, res)
 {
@@ -199,12 +224,12 @@ app.post('/POST/aptFloors', function(req, res)
             if (error.code === "ER_DUP_ENTRY") {
                 res.status(410);
             } else {
-                res.status(400);
+                res.status(407);
             }
-            console.log(JSON.stringify(error))
             res.write(JSON.stringify(error));
             res.end();
         }else{
+            console.log(results);
             res.status(201);
             res.end();
         }
@@ -220,7 +245,7 @@ app.post('/POST/aptOwners', function(req, res)
             if (error.code === "ER_DUP_ENTRY") {
                 res.status(410);
             } else {
-                res.status(400);
+                res.status(407);
             }
             res.write(JSON.stringify(error));
             res.end();
@@ -242,7 +267,7 @@ app.post('/POST/apts', function(req, res)
             if (error.code === "ER_DUP_ENTRY") {
                 res.status(410);
             } else {
-                res.status(400);
+                res.status(407);
             }
             console.log(JSON.stringify(error));
             res.write(JSON.stringify(error));
@@ -266,7 +291,7 @@ app.post('/POST/priceHistory', function(req, res)
             if (error.code === "ER_DUP_ENTRY") {
                 res.status(410);
             } else {
-                res.status(400);
+                res.status(407);
             }
             res.write(JSON.stringify(error));
             res.end();
@@ -287,7 +312,7 @@ app.post('/POST/rodents', function(req, res)
             if (error.code === "ER_DUP_ENTRY") {
                 res.status(410);
             } else {
-                res.status(400);
+                res.status(407);
             }
             console.log(JSON.stringify(error))
             res.write(JSON.stringify(error));
@@ -308,7 +333,7 @@ app.post('/POST/rodentsToFloors', function(req, res)
             if (error.code === "ER_DUP_ENTRY") {
                 res.status(410);
             } else {
-                res.status(400);
+                res.status(407);
             }
             console.log(JSON.stringify(error))
             res.write(JSON.stringify(error));
@@ -320,6 +345,8 @@ app.post('/POST/rodentsToFloors', function(req, res)
     });
 });
 
+//DELETE DB STatements
+
 app.delete('/DELETE/aptFloors/:floorNum', function(req, res)
 {
 
@@ -328,10 +355,12 @@ app.delete('/DELETE/aptFloors/:floorNum', function(req, res)
     connection.query(sql,[req.params.floorNum],function(error, results){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
 
@@ -341,12 +370,13 @@ app.delete('/DELETE/aptOwners/:ownerID', function(req, res)
     //var del = [req.params.floorNum];
     connection.query(sql,[req.params.ownerID],function(error, results){
         if(error){
-            res.status(450);
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
 
@@ -358,10 +388,12 @@ app.delete('/DELETE/rodents/:rodentID', function(req, res)
     connection.query(sql,[req.params.rodentID],function(error, results){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
 
@@ -373,10 +405,12 @@ app.delete('/DELETE/apts/:aptNum', function(req, res)
     connection.query(sql,[req.params.aptNum],function(error, results){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
 
@@ -387,10 +421,12 @@ app.delete('/DELETE/priceHistory/:invoiceNum', function(req, res)
     connection.query(sql,[req.params.invoiceNum],function(error, results){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
 
@@ -401,12 +437,16 @@ app.delete('/DELETE/rodentsToFloors/:rodentID/:floorNum', function(req, res)
     connection.query(sql,[req.params.rodentID, req.params.floorNum],function(error, results){
         if(error){
             res.write(JSON.stringify(error));
+            res.status(405);
+            res.end();
+        } else {
+            res.json(results);
             res.end();
         }
-        res.json(results);
-        res.end();
     });
 });
+
+//PUT/ UPDATE DB Statements
 
 app.put('/PUT/aptFloors/:floorNum', function(req, res)
 {
@@ -417,10 +457,18 @@ app.put('/PUT/aptFloors/:floorNum', function(req, res)
     connection.query(sql,[newFloorNum, fireExits, floorNum], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
-            res.status(400);
+            if (error.code === "ER_DUP_ENTRY") {
+                res.status(410);
+            } else {
+                res.status(406);
+            }
             res.end();
         }
-        res.status(201);
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        } 
         res.end();
     });
 });
@@ -434,10 +482,18 @@ app.put('/PUT/aptOwners/:ownerID', function(req, res)
     connection.query(sql,[firstName, lastName, ssn, ownerID], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
-            res.status(400);
+            if (error.code === "ER_DUP_ENTRY") {
+                res.status(410);
+            } else {
+                res.status(406);
+            }
             res.end();
         }
-        res.status(201);
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        } 
         res.end();
     });
 });
@@ -451,10 +507,18 @@ app.put('/PUT/apts/:aptNum', function(req, res)
     connection.query(sql,[sqFeet, ownerID, aptNum], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
-            res.status(400);
+            if (error.code === "ER_DUP_ENTRY") {
+                res.status(410);
+            } else {
+                res.status(406);
+            }
             res.end();
         }
-        res.status(201);
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        } 
         res.end();
     });
 });
@@ -467,9 +531,12 @@ app.put('/PUT/rodents/:rodentID', function(req, res)
     connection.query(sql,[rodentName, rodentID], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
-            res.status(400);
         }
-        res.status(201);
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        } 
         res.end();
     });
 });
@@ -485,11 +552,6 @@ app.put('/PUT/priceHistory/:invoiceNum', function(req, res)
     let sql = "UPDATE PriceHistory SET sellerID = ?, buyerID = ?, aptNum = ?, dateSale = ?, price = ? WHERE invoiceNum = ?";
     connection.query(sql,[sellerID, buyerID, aptNum, dateSale, price, invoiceNum], function(error, results) {
         if(error){
-            res.status(401);
-        }
-        else {
-            res.status(201);
-        }
         res.end();
     });
 });
@@ -503,10 +565,18 @@ app.put('/PUT/rodentsToFloors/:rodentID/:floorNum', function(req, res)
     connection.query(sql,[rodentID, floorNum, rodentID, floorNum], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
-            res.status(400);
+            if (error.code === "ER_DUP_ENTRY") {
+                res.status(410);
+            } else {
+                res.status(406);
+            }
             res.end();
         }
-        res.status(201);
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        } 
         res.end();
     });
 });
