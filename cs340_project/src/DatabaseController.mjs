@@ -536,7 +536,7 @@ app.put('/PUT/rodents/:rodentID', function(req, res)
             res.status(201);
         } else {
             res.status(425);
-        } 
+        }
         res.end();
     });
 });
@@ -552,6 +552,13 @@ app.put('/PUT/priceHistory/:invoiceNum', function(req, res)
     let sql = "UPDATE PriceHistory SET sellerID = ?, buyerID = ?, aptNum = ?, dateSale = ?, price = ? WHERE invoiceNum = ?";
     connection.query(sql,[sellerID, buyerID, aptNum, dateSale, price, invoiceNum], function(error, results) {
         if(error){
+            res.write(JSON.stringify(error,results));
+        }
+        if (results.changedRows === 1){
+            res.status(201);
+        } else {
+            res.status(425);
+        }
         res.end();
     });
 });
