@@ -20,8 +20,6 @@ function RodentsToFloors() {
     const [floorOptionList, setFloorOptionList] = useState([]);
     const [isShowing, setIsShowing] = useState(false);
     const [rtfForUpdate, setRtfForUpdate] = useState([]);
-    const [rodentID, setRodentID] = useState([]);
-    const [floorNum, setFloorNum] = useState([]);
 
     const toggle = (isShowing) => {
         setIsShowing(!isShowing);
