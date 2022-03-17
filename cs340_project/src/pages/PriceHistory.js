@@ -10,7 +10,7 @@ import ReactDOM from "react-dom";
 
 function PriceHistory() {
     useEffect(() => {
-        loadPriceHistory();
+        loadPriceHistory('');
     }, []);
 
     const [phList, setPHList] = useState([]);
@@ -25,8 +25,8 @@ function PriceHistory() {
     const [dateSale, setDateSale] = useState([]);
     const [aptNum, setAptNum] = useState([]);
 
-    const loadPriceHistory = async () => {
-        const response = await fetch(`${AddressInUse}/GET/priceHistory`);
+    const loadPriceHistory = async (address) => {
+        const response = await fetch(`${AddressInUse}/GET/priceHistory/${address}`);
         const phList = await response.json();
         console.log(phList);
         phList.forEach(formatDisplay);
@@ -65,9 +65,7 @@ function PriceHistory() {
         if(id == null){
             id = '';
         }
-        const response = await fetch(`${AddressInUse}/GET/priceHistory/${id}`)
-        const phList = await response.json();
-        setPHList(phList);
+        await loadPriceHistory(id);
     }
 
     function numFormat(event) {

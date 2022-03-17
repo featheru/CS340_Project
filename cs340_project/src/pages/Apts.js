@@ -3,22 +3,33 @@ import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import EditButton from "../components/EditButton";
 import DeleteButton from "../components/DeleteButton";
-import {MdAdd, MdCancel, MdDelete, MdEdit} from "react-icons/md";
+import {MdAdd, MdCancel, MdDelete, MdEdit, MdUpdate} from "react-icons/md";
 import FilterColumn from "../components/FilterColumn";
 import {AddressInUse} from "../ServerConstant.js";
+import ReactDOM from "react-dom";
 
 function Apts() {
     useEffect(() => {
-        loadApts();
+        loadApts('');
     }, []);
 
     const [aptList, setAptList] = useState([]);
     const [addField, setAddField] = useState([]);
     const [floorOptionList, setFloorOptionList] = useState([]);
     const [ownerOptionList, setOwnerOptionList] = useState([]);
+    const [isShowing, setIsShowing] = useState(false);
+    const [floorNum, setFloorNum] = useState([]);
+    const [aptNum, setAptNum] = useState([]);
+    const [sqFeet, setSqFeet] = useState([]);
+    const [ownerID, setOwnerID] = useState([]);
+    const [aptForUpdate, setAptForUpdate] = useState([]);
 
-    const loadApts = async () => {
-        const response = await fetch(`${AddressInUse}/GET/apts`);
+    const toggle = (isShowing) => {
+        setIsShowing(!isShowing);
+    }
+
+    const loadApts = async (address) => {
+        const response = await fetch(`${AddressInUse}/GET/apts/${address}`);
         const aptList = await response.json();
         setAptList(aptList);
         console.log(aptList);
@@ -99,10 +110,49 @@ function Apts() {
         if(id == null){
             id = '';
         }
-        const response = await fetch(`${AddressInUse}/GET/apts/${id}`)
-        const aptList = await response.json();
-        setAptList(aptList);
+        await loadApts(id)
     }
+
+    const updateApts = async(aptForUpdate, floorNum, aptNum, ownerID, sqFeet) => {
+        if(typeof floorNum === "object"){
+            floorNum = aptForUpdate.floorNum;
+        }
+        if(typeof aptNum === "object"){
+            aptNum = aptForUpdate.aptNum;
+        }
+        if(typeof ownerID === "object" || !ownerID){
+            ownerID = aptForUpdate.ownerID;
+        }
+        if(typeof sqFeet === "object"){
+            sqFeet = aptForUpdate.sqFeet;
+        }
+        const response = await fetch(`${AddressInUse}/PUT/apts/${aptForUpdate.aptNum}`, {
+            method: 'PUT',
+            body: JSON.stringify({floorNum:floorNum, aptNum:aptNum, ownerID:ownerID, sqFeet:sqFeet}),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if(response.status === 201){
+            alert("Successfully updated the record!");
+            window.location.reload();
+        }
+        else if(response.status === 425){
+            alert("No changes. Row not updated.")
+            window.location.reload();
+        }
+        else {
+            alert(`Failed to update record, status code = ${response.status}`)
+            window.location.reload();
+        }
+
+    }
+
+    const openUpdateForm = async(aptFloor) => {
+        setAptForUpdate(aptFloor)
+        toggle(isShowing);
+    }
+
 
     function numFormat(event) {
         var tag = document.getElementById(event.target.id);
@@ -182,7 +232,7 @@ function Apts() {
                 <td>{apt.sqFeet}</td>
                 <td>{apt.floorNum}</td>
                 <td>{apt.ownerName}</td>
-                <td><MdEdit/></td>
+                <td><MdEdit onClick={() => openUpdateForm(apt)}/></td>
                 <td><MdDelete onClick={() => delApts(apt.aptNum)}/></td>
             </tr>
         );
@@ -196,8 +246,33 @@ function Apts() {
         <p class = "DatabaseText">Apartments database table tracks specific information regarding an apartment including the floor number, and apartment number.</p>
         <button onClick={onAddClick}>+ Add New Item</button>
         <AptList apts={aptList} filterResults={filterResults}/>
+        <Modal isShowing={isShowing} hide={toggle} aptForUpdate={aptForUpdate} setAptNum={setAptNum} setFloorNum={setFloorNum} setOwnerID={setOwnerID} setSqFeet={setSqFeet} updateApts={updateApts} floorNum={floorNum} aptNum={aptNum} sqFeet={sqFeet} ownerID={ownerID}/>
         </>
     )
 }
-
+const Modal = ({ isShowing, hide ,aptForUpdate, setFloorNum, setAptNum, setOwnerID, setSqFeet, updateApts, floorNum, aptNum, ownerID, sqFeet}) => isShowing ? ReactDOM.createPortal(
+    <React.Fragment>
+        <div className="modal-overlay"/>
+        <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
+            <div className="modal">
+                <div className="modal-header">
+                    <button type="button" className="modal-close-button" data-dismiss="modal" aria-label="Close" onClick={hide}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form>
+                    <p>Apt Number</p>
+                    <input placeholder={aptForUpdate.aptNum} type={"number"} onChange={e => setAptNum(e.target.value)}/>
+                    <p>Floor Number</p>
+                    <input placeholder={aptForUpdate.floorNum} type={"number"} onChange={e => setFloorNum(e.target.value)}/>
+                    <p>Owner ID</p>
+                    <input placeholder={aptForUpdate.ownerID} type={"number"} onChange={e => setOwnerID(e.target.value)}/>
+                    <p>Sq Feet</p>
+                    <input placeholder={aptForUpdate.sqFeet} type={"number"} onChange={e => setSqFeet(e.target.value)}/>
+                    <MdUpdate onClick={e => updateApts(aptForUpdate, floorNum, aptNum, ownerID, sqFeet)}/>
+                </form>
+            </div>
+        </div>
+    </React.Fragment>, document.body
+) : null;
 export default Apts;

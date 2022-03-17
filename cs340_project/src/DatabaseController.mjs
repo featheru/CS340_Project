@@ -503,8 +503,11 @@ app.put('/PUT/apts/:aptNum', function(req, res)
     let sqFeet = req.body.sqFeet;
     let aptNum = req.params.aptNum;
     let ownerID = req.body.ownerID;
-    let sql = "UPDATE Apts SET sqFeet = ?, ownerID = ? WHERE aptNum = ?";
-    connection.query(sql,[sqFeet, ownerID, aptNum], function(error, results) {
+    let newAptNum = req.body.aptNum
+    let floorNum = req.body.floorNum;
+    let sql = "UPDATE Apts SET aptNum = ?, sqFeet = ?, ownerID = ?, floorNum = ? WHERE aptNum = ?";
+    console.log(sql,[newAptNum, sqFeet, ownerID, floorNum, aptNum])
+    connection.query(sql,[newAptNum, sqFeet, ownerID, floorNum, aptNum], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
             if (error.code === "ER_DUP_ENTRY") {
