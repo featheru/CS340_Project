@@ -18,10 +18,6 @@ function Apts() {
     const [floorOptionList, setFloorOptionList] = useState([]);
     const [ownerOptionList, setOwnerOptionList] = useState([]);
     const [isShowing, setIsShowing] = useState(false);
-    const [floorNum, setFloorNum] = useState([]);
-    const [aptNum, setAptNum] = useState([]);
-    const [sqFeet, setSqFeet] = useState([]);
-    const [ownerID, setOwnerID] = useState([]);
     const [aptForUpdate, setAptForUpdate] = useState([]);
 
     const toggle = (isShowing) => {
@@ -124,16 +120,16 @@ function Apts() {
     }
 
     const updateApts = async(aptForUpdate, floorNum, aptNum, ownerID, sqFeet) => {
-        if(typeof floorNum === "object"){
+        if(typeof floorNum === "object" || floorNum === ''){
             floorNum = aptForUpdate.floorNum;
         }
-        if(typeof aptNum === "object"){
+        if(typeof aptNum === "object" || aptNum === ''){
             aptNum = aptForUpdate.aptNum;
         }
-        if(typeof ownerID === "object" || !ownerID){
-            ownerID = aptForUpdate.ownerID;
+        if(typeof ownerID === "object" || !ownerID || ownerID === 'NULL'){
+            ownerID = null;
         }
-        if(typeof sqFeet === "object"){
+        if(typeof sqFeet === "object" || sqFeet === ''){
             sqFeet = aptForUpdate.sqFeet;
         }
         const response = await fetch(`${AddressInUse}/PUT/apts/${aptForUpdate.aptNum}`, {
@@ -256,11 +252,11 @@ function Apts() {
         <p class = "DatabaseText">Apartments database table tracks specific information regarding an apartment including the floor number, and apartment number.</p>
         <button onClick={onAddClick}>+ Add New Item</button>
         <AptList apts={aptList} filterResults={filterResults}/>
-        <Modal isShowing={isShowing} hide={toggle} aptForUpdate={aptForUpdate} setAptNum={setAptNum} setFloorNum={setFloorNum} setOwnerID={setOwnerID} setSqFeet={setSqFeet} updateApts={updateApts} floorNum={floorNum} aptNum={aptNum} sqFeet={sqFeet} ownerID={ownerID}/>
+        <Modal isShowing={isShowing} hide={toggle} aptForUpdate={aptForUpdate} updateApts={updateApts} floorOptionList={floorOptionList} FloorMap = {FloorMap} ownerOptionList={ownerOptionList} OwnerMap={OwnerMap}/>
         </>
     )
 }
-const Modal = ({ isShowing, hide ,aptForUpdate, setFloorNum, setAptNum, setOwnerID, setSqFeet, updateApts, floorNum, aptNum, ownerID, sqFeet}) => isShowing ? ReactDOM.createPortal(
+const Modal = ({ isShowing, hide ,aptForUpdate, updateApts, floorOptionList, ownerOptionList, FloorMap, OwnerMap}) => isShowing ? ReactDOM.createPortal(
     <React.Fragment>
         <div className="modal-overlay"/>
         <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
@@ -272,14 +268,19 @@ const Modal = ({ isShowing, hide ,aptForUpdate, setFloorNum, setAptNum, setOwner
                 </div>
                 <form>
                     <p>Apt Number</p>
-                    <input placeholder={aptForUpdate.aptNum} type={"number"} onChange={e => setAptNum(e.target.value)}/>
+                    <input id= "aptNumInp" placeholder={aptForUpdate.aptNum} type={"number"}/>
                     <p>Floor Number</p>
-                    <input placeholder={aptForUpdate.floorNum} type={"number"} onChange={e => setFloorNum(e.target.value)}/>
-                    <p>Owner ID</p>
-                    <input placeholder={aptForUpdate.ownerID} type={"number"} onChange={e => setOwnerID(e.target.value)}/>
+                    <select id = "floorNumInp" defaultValue={aptForUpdate.floorNum}>
+                        {floorOptionList.map((item,idx) => <FloorMap item={item} idx = {idx}/>)}
+                    </select>
+                    <p>Owner</p>
+                    <select id = "ownerIDInp" defaultValue={aptForUpdate.ownerID}>
+                        <option id = "None" key="None" value= "NULL"></option>
+                        {ownerOptionList.map((item,idx) => <OwnerMap item={item} idx = {idx}/>)}
+                    </select>
                     <p>Sq Feet</p>
-                    <input placeholder={aptForUpdate.sqFeet} type={"number"} onChange={e => setSqFeet(e.target.value)}/>
-                    <MdUpdate onClick={e => updateApts(aptForUpdate, floorNum, aptNum, ownerID, sqFeet)}/>
+                    <input id = "sqFeetInp" placeholder={aptForUpdate.sqFeet} type={"number"}/>
+                    <MdUpdate onClick={e => updateApts(aptForUpdate, document.getElementById("floorNumInp").value, document.getElementById("aptNumInp").value, document.getElementById("ownerIDInp").value, document.getElementById("sqFeetInp").value)}/>
                 </form>
             </div>
         </div>

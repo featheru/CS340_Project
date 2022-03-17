@@ -526,7 +526,7 @@ app.put('/PUT/apts/:aptNum', function(req, res)
             }
             res.end();
         }
-        if (results.changedRows === 1){
+        else if (results.changedRows === 1){
             res.status(201);
         } else {
             res.status(425);
