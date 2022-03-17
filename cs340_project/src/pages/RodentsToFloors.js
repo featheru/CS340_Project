@@ -163,8 +163,8 @@ function RodentsToFloors() {
             <table>
                 <thead>
                 <tr>
-                    <th>Rodent ID [int]<FilterColumn fieldToSearch={"rodentName"}/></th>
-                    <th>Floor Number [int]<FilterColumn fieldToSearch={"floorNum"}/></th>
+                    <th>Rodent ID [int]</th>
+                    <th>Floor Number [int]</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
