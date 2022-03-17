@@ -82,10 +82,10 @@ function AptFloors() {
     }
 
     const updateAptFloors = async(aptFloorForUpdate, floorNum, fireExits) => {
-        if(typeof floorNum === "object"){
+        if(typeof floorNum === "object" || floorNum === ''){
             floorNum = aptFloorForUpdate.floorNum;
         }
-        if(typeof fireExits === "object"){
+        if(typeof fireExits === "object" || fireExits === ''){
             fireExits = aptFloorForUpdate.fireExits;
         }
         const response = await fetch(`${AddressInUse}/PUT/aptFloors/${aptFloorForUpdate.floorNum}`, {
@@ -185,13 +185,13 @@ function AptFloors() {
         <p>Tracks apartment floors, and number of fire exits on each floor.</p>
         <button onClick={onAddClick}>+ Add New Item</button>
         <AptFloorList aptFloors={aptFloorList} filterResults={filterResults}/>
-        <Modal isShowing={isShowing} hide={toggle} aptFloorForUpdate={aptFloorForUpdate} setFloorNum={setFloorNum} setFireExits={setFireExits} updateAptFloors={updateAptFloors} floorNum={floorNum} fireExits={fireExits}/>
+        <Modal isShowing={isShowing} hide={toggle} aptFloorForUpdate={aptFloorForUpdate} updateAptFloors={updateAptFloors} numFormat={numFormat}/>
         </>
 
     )
 }
 
-const Modal = ({ isShowing, hide ,aptFloorForUpdate, setFloorNum, setFireExits, updateAptFloors, floorNum, fireExits}) => isShowing ? ReactDOM.createPortal(
+const Modal = ({ isShowing, hide ,aptFloorForUpdate, updateAptFloors, numFormat}) => isShowing ? ReactDOM.createPortal(
     <React.Fragment>
         <div className="modal-overlay"/>
         <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
@@ -203,10 +203,10 @@ const Modal = ({ isShowing, hide ,aptFloorForUpdate, setFloorNum, setFireExits, 
                 </div>
                 <form>
                     <p>Floor Number</p>
-                    <input placeholder={aptFloorForUpdate.floorNum} type={"number"} onChange={e => setFloorNum(e.target.value)}/>
+                    <input id="floorNumInp" placeholder={aptFloorForUpdate.floorNum} onKeyUp={(id) => numFormat(id)} type={"number"} />
                     <p>Fire Exits</p>
-                    <input placeholder={aptFloorForUpdate.fireExits} type={"number"} onChange={e => setFireExits(e.target.value)}/>
-                    <MdUpdate onClick={e => updateAptFloors(aptFloorForUpdate, floorNum, fireExits)}/>
+                    <input id="fireExitsInp" placeholder={aptFloorForUpdate.fireExits} onKeyUp={(id) => numFormat(id)} type={"number"}/>
+                    <MdUpdate onClick={e => updateAptFloors(aptFloorForUpdate, document.getElementById("floorNumInp").value, document.getElementById("fireExitsInp").value)}/>
                 </form>
             </div>
         </div>
