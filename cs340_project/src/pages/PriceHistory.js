@@ -140,9 +140,7 @@ function PriceHistory() {
             buyerID = phForUpdate.buyerID;
         }
         if(typeof price === "object" || price ===''){
-            price = phForUpdate.price;
             price = phForUpdate.price.slice(1);
-
         }
         if(typeof dateSale ==="object" || dateSale ===''){
             dateSale = phForUpdate.dateSale;
@@ -150,6 +148,7 @@ function PriceHistory() {
         if(typeof aptNum ==="object"){
             aptNum = phForUpdate.aptNum;
         }
+        price = parseFloat(price).toFixed(2);
 
         const response = await fetch(`${AddressInUse}/PUT/priceHistory/${phForUpdate.invoiceNum}`, {
             method: 'PUT',
@@ -272,13 +271,13 @@ function PriceHistory() {
         <p>Tracks purchase history of apartments in building by storing buyer, seller, date of Sale, and price</p>
         <button onClick={onAddClick}>+ Add New Item</button>
         <PhList PHmap={phList} filterResults={filterResults}/>
-        <Modal isShowing={isShowing} hide={toggle} phForUpdate={phForUpdate} updatePh={updatePh} ownerOptionList={ownerOptionList} aptOptionList={aptOptionList} OwnerMap={OwnerMap} AptMap={AptMap}/>
+        <Modal isShowing={isShowing} hide={toggle} phForUpdate={phForUpdate} updatePh={updatePh} ownerOptionList={ownerOptionList} aptOptionList={aptOptionList} OwnerMap={OwnerMap} AptMap={AptMap} numFormat={numFormat}/>
         </>
         
     )
 }
 
-const Modal = ({ isShowing, hide ,phForUpdate, updatePh, aptOptionList, ownerOptionList, OwnerMap, AptMap}) => isShowing ? ReactDOM.createPortal(
+const Modal = ({ isShowing, hide ,phForUpdate, updatePh, aptOptionList, ownerOptionList, OwnerMap, AptMap, numFormat}) => isShowing ? ReactDOM.createPortal(
     <React.Fragment>
         <div className="modal-overlay"/>
         <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
@@ -302,7 +301,7 @@ const Modal = ({ isShowing, hide ,phForUpdate, updatePh, aptOptionList, ownerOpt
                         {ownerOptionList.map((item,idx) => <OwnerMap item={item} idx = {idx}/>)}
                     </select>
                     <p>Price</p>
-                    <input id = {"priceInp"} placeholder={phForUpdate.price} type={"number"} step={"0.2"}/>
+                    <input id = {"priceInp"} placeholder={phForUpdate.price} onKeyUp={(id) => numFormat(id)} type={"number"} step={"0.2"}/>
                     <p>Apt</p>
                     <select id = "aptNumInp" defaultValue={phForUpdate.aptNum}>
                         {aptOptionList.map((item,idx) => <AptMap item={item} idx = {idx}/>)}
