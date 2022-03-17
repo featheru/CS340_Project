@@ -17,9 +17,6 @@ function AptOwners() {
     const [addField, setAddField] = useState([])
     const [aptOwnerForUpdate, setAptOwnerForUpdate] = useState([])
     const [isShowing, setIsShowing] = useState(false);
-    const [firstName, setFirstName] = useState([]);
-    const [lastName, setLastName] = useState([]);
-    const [ssn, setSsn] = useState([]);
 
     const loadAptOwners = async () => {
         const response = await fetch(`${AddressInUse}/GET/aptOwners`);
@@ -99,15 +96,16 @@ function AptOwners() {
         }
     }
     const updateAptOwners = async(aptOwnerForUpdate, firstName, lastName, ssn) => {
-        if(typeof firstName === "object"){
+        if(typeof firstName === "object" || firstName === ''){
             firstName = aptOwnerForUpdate.firstName;
         }
-        if(typeof lastName === "object"){
+        if(typeof lastName === "object" || lastName === ''){
             lastName = aptOwnerForUpdate.lastName;
         }
-        if(typeof ssn === "object"){
+        if(typeof ssn === "object" || ssn === ''){
             ssn = aptOwnerForUpdate.ssn;
         }
+        ssn = ssn.replaceAll("-", "")
 
         const response = await fetch(`${AddressInUse}/PUT/aptOwners/${aptOwnerForUpdate.ownerID}`, {
             method: 'PUT',
@@ -231,12 +229,12 @@ function AptOwners() {
         <p>Tracks current and past apartment owners at Beaver Development by first name, last name, and SSN</p>
         <button onClick={onAddClick}>+ Add New Item</button>
         <AptOwnerList aptOwners={aptOwnerList} filterResults={filterResults}/>
-        <Modal isShowing={isShowing} hide={toggle} aptOwnerForUpdate={aptOwnerForUpdate} setFirstname={setFirstName} setLastName={setLastName} setSsn={setSsn} updateAptOwners={updateAptOwners} firstName={firstName} lastName={lastName} ssn={ssn}/>
+        <Modal isShowing={isShowing} hide={toggle} aptOwnerForUpdate={aptOwnerForUpdate} updateAptOwners={updateAptOwners} SSNInputFormat={SSNInputFormat} FirstNameFormat={FirstNameFormat} LastNameFormat={LastNameFormat}/>
         </>
     )
 }
 
-const Modal = ({ isShowing, hide ,aptOwnerForUpdate, setFirstname, setLastName, setSsn, updateAptOwners, firstName, lastName,ssn}) => isShowing ? ReactDOM.createPortal(
+const Modal = ({ isShowing, hide ,aptOwnerForUpdate, updateAptOwners, SSNInputFormat, FirstNameFormat, LastNameFormat}) => isShowing ? ReactDOM.createPortal(
     <React.Fragment>
         <div className="modal-overlay"/>
         <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
@@ -250,12 +248,12 @@ const Modal = ({ isShowing, hide ,aptOwnerForUpdate, setFirstname, setLastName, 
                     <p>Owner ID</p>
                     <text>{aptOwnerForUpdate.ownerID}</text>
                     <p>First Name</p>
-                    <input placeholder={aptOwnerForUpdate.firstName} type={"text"} onChange={e => setFirstname(e.target.value)}/>
+                    <input id="firstNameInp" placeholder={aptOwnerForUpdate.firstName} type={"text"} onKeyUp={FirstNameFormat}/>
                     <p>Last Name</p>
-                    <input placeholder={aptOwnerForUpdate.lastName} type={"text"} onChange={e => setLastName(e.target.value)}/>
+                    <input id="lastNameInp" placeholder={aptOwnerForUpdate.lastName} type={"text"} onKeyUp={LastNameFormat}/>
                     <p>SSN [Optional]</p>
-                    <input placeholder={aptOwnerForUpdate.ssn} maxLength={9} minLength={9}  type={"text"} onChange={e => setSsn(e.target.value)}/>
-                    <MdUpdate onClick={e => updateAptOwners(aptOwnerForUpdate, firstName, lastName, ssn)}/>
+                    <input id="ssnInp" placeholder={aptOwnerForUpdate.ssn}  type={"text"} onKeyUp={SSNInputFormat}/>
+                    <MdUpdate onClick={e => updateAptOwners(aptOwnerForUpdate, document.getElementById("firstNameInp").value, document.getElementById("lastNameInp").value, document.getElementById("ssnInp").value)}/>
                 </form>
             </div>
         </div>
