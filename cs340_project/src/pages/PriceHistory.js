@@ -19,11 +19,6 @@ function PriceHistory() {
     const [aptOptionList, setAptOptionList] = useState([]);
     const [isShowing, setIsShowing] = useState(false);
     const [phForUpdate, setPhForUpdate] = useState([]);
-    const [sellerId, setSellerID] = useState([]);
-    const [buyerID, setBuyerID] = useState([]);
-    const [price, setPrice] = useState([]);
-    const [dateSale, setDateSale] = useState([]);
-    const [aptNum, setAptNum] = useState([]);
 
     const loadPriceHistory = async () => {
         const response = await fetch(`${AddressInUse}/GET/priceHistory/`);
@@ -138,18 +133,18 @@ function PriceHistory() {
     }
 
     const updatePh = async(phForUpdate, sellerId, buyerID, price, aptNum, dateSale) => {
-        if(typeof sellerId === "object"){
+        if(typeof sellerId === "object" || sellerId === ''){
             sellerId = phForUpdate.sellerID;
         }
-        if(typeof buyerID === "object"){
+        if(typeof buyerID === "object" || buyerID === ''){
             buyerID = phForUpdate.buyerID;
         }
-        if(typeof price === "object"){
+        if(typeof price === "object" || price ===''){
             price = phForUpdate.price;
-            price = price.slice(1);
-            price = parseFloat(price);
+            price = phForUpdate.price.slice(1);
+
         }
-        if(typeof dateSale ==="object"){
+        if(typeof dateSale ==="object" || dateSale ===''){
             dateSale = phForUpdate.dateSale;
         }
         if(typeof aptNum ==="object"){
@@ -277,13 +272,13 @@ function PriceHistory() {
         <p>Tracks purchase history of apartments in building by storing buyer, seller, date of Sale, and price</p>
         <button onClick={onAddClick}>+ Add New Item</button>
         <PhList PHmap={phList} filterResults={filterResults}/>
-        <Modal isShowing={isShowing} hide={toggle} phForUpdate={phForUpdate} setSellerID={setSellerID} setBuyerID={setBuyerID} setPrice={setPrice} setDateSale={setDateSale} setAptNum={setAptNum} updatePh={updatePh} sellerID={sellerId} buyerID={buyerID} price={price} dateSale={dateSale} aptNum={aptNum}/>
+        <Modal isShowing={isShowing} hide={toggle} phForUpdate={phForUpdate} updatePh={updatePh} ownerOptionList={ownerOptionList} aptOptionList={aptOptionList} OwnerMap={OwnerMap} AptMap={AptMap}/>
         </>
         
     )
 }
 
-const Modal = ({ isShowing, hide ,phForUpdate, setSellerID, setBuyerID, setPrice, setDateSale, setAptNum, updatePh, sellerID, buyerID, price, dateSale, aptNum}) => isShowing ? ReactDOM.createPortal(
+const Modal = ({ isShowing, hide ,phForUpdate, updatePh, aptOptionList, ownerOptionList, OwnerMap, AptMap}) => isShowing ? ReactDOM.createPortal(
     <React.Fragment>
         <div className="modal-overlay"/>
         <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
@@ -296,17 +291,26 @@ const Modal = ({ isShowing, hide ,phForUpdate, setSellerID, setBuyerID, setPrice
                 <form>
                     <p>Invoice Num</p>
                     <text>{phForUpdate.invoiceNum}</text>
-                    <p>Seller ID</p>
-                    <input placeholder={phForUpdate.sellerID} type={"number"} onChange={e => setSellerID(e.target.value)}/>
-                    <p>Buyer ID</p>
-                    <input placeholder={phForUpdate.buyerID} type={"number"} onChange={e => setBuyerID(e.target.value)}/>
+                    <p>Seller</p>
+                    <select id = "sellerIDInp" defaultValue={phForUpdate.sellerID}>
+                        <option id = "None" key="None" value= "NULL"></option>
+                        {ownerOptionList.map((item,idx) => <OwnerMap item={item} idx = {idx}/>)}
+                    </select>
+                    <p>Buyer</p>
+                    <select id = "buyerIDInp" defaultValue={phForUpdate.buyerID}>
+                        <option id = "None" key="None" value= "NULL"></option>
+                        {ownerOptionList.map((item,idx) => <OwnerMap item={item} idx = {idx}/>)}
+                    </select>
                     <p>Price</p>
-                    <input placeholder={phForUpdate.price} type={"number"} step={"0.2"} onChange={e => setPrice(e.target.value)}/>
-                    <p>Apt #</p>
-                    <input placeholder={phForUpdate.aptNum} type={"number"} onChange={e => setAptNum(e.target.value)}/>
+                    <input id = {"priceInp"} placeholder={phForUpdate.price} type={"number"} step={"0.2"}/>
+                    <p>Apt</p>
+                    <select id = "aptNumInp" defaultValue={phForUpdate.aptNum}>
+                        {aptOptionList.map((item,idx) => <AptMap item={item} idx = {idx}/>)}
+                    </select>
                     <p>Date of Sale</p>
-                    <input placeholder={phForUpdate.dateSale} type={"date"} onChange={e => setDateSale(e.target.value)}/>
-                    <MdUpdate onClick={e => updatePh(phForUpdate, sellerID, buyerID, price, aptNum, dateSale)}/>
+                    <input id = "dateSaleInp" defaultValue={phForUpdate.dateSale} type={"date"}/>
+                    <div/>
+                    <MdUpdate onClick={e => updatePh(phForUpdate, document.getElementById("sellerIDInp").value, document.getElementById("buyerIDInp").value, document.getElementById("priceInp").value, document.getElementById("aptNumInp").value, document.getElementById("dateSaleInp").value)}/>
                 </form>
             </div>
         </div>
