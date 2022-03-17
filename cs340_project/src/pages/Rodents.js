@@ -17,7 +17,6 @@ function Rodents() {
     const [addField, setAddField] = useState([]);
     const [isShowing, setIsShowing] = useState(false);
     const [rodentForUpdate, setRodentForUpdate] = useState([])
-    const [rodentName, setRodentName] = useState([]);
 
     const toggle = (isShowing) => {
         setIsShowing(!isShowing);
@@ -82,7 +81,7 @@ function Rodents() {
     }
 
     const updateRodents = async(rodentForUpdate, rodentName) => {
-        if(typeof rodentName === "object"){
+        if(typeof rodentName === "object" || rodentName === ''){
             rodentName = rodentForUpdate.rodentName;
         }
         const response = await fetch(`${AddressInUse}/PUT/rodents/${rodentForUpdate.rodentID}`, {
@@ -178,12 +177,12 @@ function Rodents() {
         <p class = "DatabaseText">Tracks past and present rodents by name and ID</p>
         <button onClick={onAddClick}>+ Add New Item</button>
         <RodentList rodents = {rodentList} filterResults={filterResults}/>
-        <Modal isShowing={isShowing} hide={toggle} rodentForUpdate={rodentForUpdate} setRodentName={setRodentName} updateRodent={updateRodents} rodentName={rodentName}/>
+        <Modal isShowing={isShowing} hide={toggle} rodentForUpdate={rodentForUpdate} updateRodent={updateRodents} RodentNameFormat={RodentNameFormat}/>
         </>
     )
 }
 
-const Modal = ({ isShowing, hide ,rodentForUpdate, setRodentName, updateRodent, rodentName}) => isShowing ? ReactDOM.createPortal(
+const Modal = ({ isShowing, hide ,rodentForUpdate, updateRodent, RodentNameFormat}) => isShowing ? ReactDOM.createPortal(
     <React.Fragment>
         <div className="modal-overlay"/>
         <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
@@ -197,8 +196,8 @@ const Modal = ({ isShowing, hide ,rodentForUpdate, setRodentName, updateRodent, 
                     <p>Rodent ID</p>
                     <text>{rodentForUpdate.rodentID}</text>
                     <p>Rodent Name</p>
-                    <input placeholder={rodentForUpdate.rodentName} type={"text"} onChange={e => setRodentName(e.target.value)}/>
-                    <MdUpdate onClick={e => updateRodent(rodentForUpdate, rodentName)}/>
+                    <input id="rodentNameInp" placeholder={rodentForUpdate.rodentName} type={"text"} onKeyUp={RodentNameFormat}/>
+                    <MdUpdate onClick={e => updateRodent(rodentForUpdate, document.getElementById("rodentNameInp").value)}/>
                 </form>
             </div>
         </div>
