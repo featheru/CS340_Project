@@ -81,16 +81,13 @@ function AptFloors() {
         }
     }
 
-    const updateAptFloors = async(aptFloorForUpdate, floorNum, fireExits) => {
-        if(typeof floorNum === "object" || floorNum === ''){
-            floorNum = aptFloorForUpdate.floorNum;
-        }
+    const updateAptFloors = async(aptFloorForUpdate, fireExits) => {
         if(typeof fireExits === "object" || fireExits === ''){
             fireExits = aptFloorForUpdate.fireExits;
         }
         const response = await fetch(`${AddressInUse}/PUT/aptFloors/${aptFloorForUpdate.floorNum}`, {
             method: 'PUT',
-            body: JSON.stringify({floorNum:floorNum, fireExits:fireExits}),
+            body: JSON.stringify({fireExits:fireExits}),
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -203,10 +200,10 @@ const Modal = ({ isShowing, hide ,aptFloorForUpdate, updateAptFloors, numFormat}
                 </div>
                 <form>
                     <p>Floor Number</p>
-                    <input id="floorNumInp" placeholder={aptFloorForUpdate.floorNum} onKeyUp={(id) => numFormat(id)} type={"number"} />
+                    <text>{aptFloorForUpdate.floorNum}</text>
                     <p>Fire Exits</p>
                     <input id="fireExitsInp" placeholder={aptFloorForUpdate.fireExits} onKeyUp={(id) => numFormat(id)} type={"number"}/>
-                    <MdUpdate onClick={e => updateAptFloors(aptFloorForUpdate, document.getElementById("floorNumInp").value, document.getElementById("fireExitsInp").value)}/>
+                    <MdUpdate onClick={e => updateAptFloors(aptFloorForUpdate, document.getElementById("fireExitsInp").value)}/>
                 </form>
             </div>
         </div>

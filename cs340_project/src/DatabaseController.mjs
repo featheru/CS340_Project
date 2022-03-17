@@ -459,11 +459,10 @@ app.delete('/DELETE/rodentsToFloors/:rodentID/:floorNum', function(req, res)
 
 app.put('/PUT/aptFloors/:floorNum', function(req, res)
 {
-    let newFloorNum = req.body.floorNum;
     let floorNum = req.params.floorNum;
     let fireExits = req.body.fireExits;
-    let sql = "UPDATE AptFloors SET floorNum = ?, fireExits = ? WHERE floorNum = ?";
-    connection.query(sql,[newFloorNum, fireExits, floorNum], function(error, results) {
+    let sql = "UPDATE AptFloors SET fireExits = ? WHERE floorNum = ?";
+    connection.query(sql,[fireExits, floorNum], function(error, results) {
         if(error){
             res.write(JSON.stringify(error,results));
             if (error.code === "ER_DUP_ENTRY") {
