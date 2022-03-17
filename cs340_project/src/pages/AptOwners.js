@@ -24,7 +24,6 @@ function AptOwners() {
     const loadAptOwners = async () => {
         const response = await fetch(`${AddressInUse}/GET/aptOwners`);
         const aptOwnersList = await response.json();
-        console.log(aptOwnersList);
         aptOwnersList.forEach((item) => item.ssn = ComposeSSN(item.ssn));
         setAptOwnersList(aptOwnersList);
     }
@@ -33,11 +32,16 @@ function AptOwners() {
     }
 
     const ComposeSSN = (ssn) => {
-        return "xxx-xx-" + ssn.slice(5,9);
+        if (ssn.length > 0){
+            return "xxx-xx-" + ssn.slice(5,9);
+        }
+        
     } 
 
     const DeComposeSSN = (ssn) => {
-        return ssn.slice(0,3) + ssn.slice(4,6) + ssn.slice(7,11);
+        if (ssn.length > 0){
+            return ssn.slice(0,3) + ssn.slice(4,6) + ssn.slice(7,11);
+        }
     }
 
     const addAptOwners = async() => {
@@ -52,7 +56,7 @@ function AptOwners() {
         } else if (lastName.length < 1) {
             alert("Invalid Last Name");
             return;
-        } else if (ssn.length !== 0 || ssn.length !== 9) {
+        } else if (ssn.length !== 0 && ssn.length !== 9) {
             alert("Insufficient length of ssn");
             return;
         }
@@ -104,6 +108,7 @@ function AptOwners() {
         if(typeof ssn === "object"){
             ssn = aptOwnerForUpdate.ssn;
         }
+
         const response = await fetch(`${AddressInUse}/PUT/aptOwners/${aptOwnerForUpdate.ownerID}`, {
             method: 'PUT',
             body: JSON.stringify({firstName:firstName, lastName:lastName, ssn:ssn}),
@@ -169,7 +174,7 @@ function AptOwners() {
                     <td></td>
                     <td><input id="firstNameInp" placeholder="First Name e.g. Dan" onKeyUp={FirstNameFormat}/></td>
                     <td><input id="lastNameInp" placeholder="Last Name e.g. Smith" onKeyUp={LastNameFormat}/></td>
-                    <td><input id="ssnInp" placeholder="SSN e.g. 111-22-3333" onKeyUp={SSNInputFormat}/></td>
+                    <td><input id="ssnInp" placeholder="[Optional] SSN e.g. 111-22-3333" onKeyUp={SSNInputFormat}/></td>
                     <td><MdAdd onClick = {addAptOwners}/></td>
                     <td><MdCancel onClick = {removeAddClick}/></td>
                 </tr>
@@ -248,8 +253,8 @@ const Modal = ({ isShowing, hide ,aptOwnerForUpdate, setFirstname, setLastName, 
                     <input placeholder={aptOwnerForUpdate.firstName} type={"text"} onChange={e => setFirstname(e.target.value)}/>
                     <p>Last Name</p>
                     <input placeholder={aptOwnerForUpdate.lastName} type={"text"} onChange={e => setLastName(e.target.value)}/>
-                    <p>SSN</p>
-                    <input placeholder={aptOwnerForUpdate.ssn} maxLength={8} minLength={8}  type={"text"} onChange={e => setSsn(e.target.value)}/>
+                    <p>SSN [Optional]</p>
+                    <input placeholder={aptOwnerForUpdate.ssn} maxLength={9} minLength={9}  type={"text"} onChange={e => setSsn(e.target.value)}/>
                     <MdUpdate onClick={e => updateAptOwners(aptOwnerForUpdate, firstName, lastName, ssn)}/>
                 </form>
             </div>
@@ -259,3 +264,5 @@ const Modal = ({ isShowing, hide ,aptOwnerForUpdate, setFirstname, setLastName, 
 
 
 export default AptOwners;
+
+//

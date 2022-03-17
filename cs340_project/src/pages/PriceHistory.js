@@ -25,14 +25,22 @@ function PriceHistory() {
     const [dateSale, setDateSale] = useState([]);
     const [aptNum, setAptNum] = useState([]);
 
-    const loadPriceHistory = async (address) => {
+    const loadPriceHistory = async () => {
+        const response = await fetch(`${AddressInUse}/GET/priceHistory/`);
+        const phList = await response.json();
+        console.log(phList);
+        phList.forEach(formatDisplay);
+        setPHList(phList);
+        await ownerOptions();
+        await aptOptions();
+    }
+
+    const loadPriceHistoryWithID = async (address) => {
         const response = await fetch(`${AddressInUse}/GET/priceHistory/${address}`);
         const phList = await response.json();
         console.log(phList);
         phList.forEach(formatDisplay);
         setPHList(phList);
-        ownerOptions();
-        aptOptions();
     }
 
     const toggle = (isShowing) => {
@@ -65,7 +73,7 @@ function PriceHistory() {
         if(id == null){
             id = '';
         }
-        await loadPriceHistory(id);
+        await loadPriceHistoryWithID(id);
     }
 
     function numFormat(event) {
@@ -103,9 +111,9 @@ function PriceHistory() {
                 'Content-Type': 'application/json'
             }
         });
-        if(response.status === 201){
+        if(response.status >= 200 && response.status < 400){
             alert("Successfully added the record!");
-            loadPriceHistory();
+            await loadPriceHistory();
             removeAddClick();
         } else {
             if (response.status === 410) {
@@ -117,7 +125,6 @@ function PriceHistory() {
     }
 
     const delPH = async(invoiceNum) => {
-        console.log(`Starting process with ${invoiceNum}`)
         const response = await fetch(`${AddressInUse}/DELETE/priceHistory/${invoiceNum}`, {
             method: 'DELETE'
         });
@@ -158,6 +165,7 @@ function PriceHistory() {
         })
         if(response.status === 201){
             alert("Successfully updated the record!");
+            await loadPriceHistory();
             window.location.reload();
         }
         else if(response.status === 425){

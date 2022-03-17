@@ -66,11 +66,10 @@ app.get('/GET/aptOwners', function(req, res)
     connection.query("SELECT * FROM `AptOwners`",  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
-            res.status(404);
-            res.end();
+            res.status(404).end();
         }
         res.json(results);
-        res.end();
+        res.status(201).end();
     });                                                 
 });
 
@@ -94,11 +93,10 @@ app.get('/GET/apts', function(req, res)
     connection.query(qString,  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
-            res.status(404);
-            res.end();
+            res.status(404).end();
         }
         res.json(results);
-        res.end();
+        res.status(201).end();
     });                                                 
 });
 
@@ -129,6 +127,7 @@ app.get('/GET/priceHistory', function(req, res)
             res.status(404);
             res.end();
         }
+        res.status(201);
         res.json(results);
         res.end();
     });                                                 
@@ -288,16 +287,15 @@ app.post('/POST/priceHistory', function(req, res)
     var inserts = [req.body.sellerID, req.body.buyerID, req.body.aptNum, req.body.dateSale, req.body.price];
     connection.query(sql,inserts,function(error, results, fields){
         if(error){
+            //res.write(JSON.stringify(error));
             if (error.code === "ER_DUP_ENTRY") {
-                res.status(410);
+                res.status(410).end();
             } else {
-                res.status(407);
+                res.status(407).end();
             }
-            res.write(JSON.stringify(error));
-            res.end();
+            
         }else{
-            res.status(201);
-            res.end();
+            res.status(201).end();
         }
     });
 });

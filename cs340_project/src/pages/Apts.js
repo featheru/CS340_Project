@@ -29,13 +29,21 @@ function Apts() {
     }
 
     const loadApts = async (address) => {
-        const response = await fetch(`${AddressInUse}/GET/apts/${address}`);
+        const response = await fetch(`${AddressInUse}/GET/apts/`);
         const aptList = await response.json();
         setAptList(aptList);
         console.log(aptList);
         aptList.forEach(formatDisplay);
         floorOptions();
         ownerOptions();
+    }
+
+    const loadAptsWithID = async (address) => {
+        const response = await fetch(`${AddressInUse}/GET/apts/${address}`);
+        const aptList = await response.json();
+        setAptList(aptList);
+        console.log(aptList);
+        aptList.forEach(formatDisplay);
     }
 
     function formatDisplay(item) {
@@ -110,7 +118,7 @@ function Apts() {
         if(id == null){
             id = '';
         }
-        await loadApts(id)
+        await loadAptsWithID(id)
     }
 
     const updateApts = async(aptForUpdate, floorNum, aptNum, ownerID, sqFeet) => {
