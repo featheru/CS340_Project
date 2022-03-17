@@ -31,6 +31,8 @@ function AptOwners() {
     const ComposeSSN = (ssn) => {
         if (ssn.length > 0){
             return "xxx-xx-" + ssn.slice(5,9);
+        } else {
+            return "";
         }
         
     } 
@@ -38,6 +40,8 @@ function AptOwners() {
     const DeComposeSSN = (ssn) => {
         if (ssn.length > 0){
             return ssn.slice(0,3) + ssn.slice(4,6) + ssn.slice(7,11);
+        } else {
+            return "";
         }
     }
 
@@ -269,5 +273,3 @@ const Modal = ({ isShowing, hide ,aptOwnerForUpdate, updateAptOwners, SSNInputFo
 
 
 export default AptOwners;
-
-//
