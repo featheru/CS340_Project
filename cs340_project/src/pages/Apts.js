@@ -44,6 +44,8 @@ function Apts() {
         setAptList(aptList);
         console.log(aptList);
         aptList.forEach(formatDisplay);
+        floorOptions();
+        ownerOptions();
     }
 
     function formatDisplay(item) {

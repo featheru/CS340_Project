@@ -102,8 +102,11 @@ app.get('/GET/apts', function(req, res)
 
 app.get('/GET/apts/:id', function(req, res)
 {
-    connection.query(`SELECT * FROM Apts WHERE aptNum = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
-        if(error){
+    let searchID = req.params.id;
+    let sql = "SELECT AptOwners.ownerID, AptOwners.firstName, AptOwners.lastName, Apts.aptNum, Apts.sqFeet, Apts.floorNum FROM Apts LEFT JOIN AptOwners ON Apts.ownerID = AptOwners.ownerID WHERE Apts.aptNum = ?;";
+    console.log(sql,[searchID]);
+    connection.query(sql,[searchID], function(error, results) {
+    if(error){
             res.write(JSON.stringify(error));
             res.status(404);
             res.end();
@@ -135,7 +138,13 @@ app.get('/GET/priceHistory', function(req, res)
 
 app.get('/GET/priceHistory/:id', function(req, res)
 {
-    connection.query(`SELECT * FROM PriceHistory WHERE invoiceNum = ${req.params.id}`,  {timeout: 40000} , function(error, results, fields){
+    const searchID = req.params.id;
+    let sql = 'SELECT PH.invoiceNum, AO1.ownerID AS "sellerID", AO1.firstName AS "sellerFirstName", AO1.lastName AS "sellerLastName", AO2.ownerID AS "buyerID", AO2.firstName AS "buyerFirstName", AO2.lastName AS "buyerLastName", ' +
+        'PH.aptNum, PH.dateSale, PH.price FROM PriceHistory AS PH ' +
+        'LEFT JOIN AptOwners AS AO1 ON PH.sellerID = AO1.ownerID ' +
+        'LEFT JOIN AptOwners AS AO2 ON PH.buyerID = AO2.ownerID ' +
+        'LEFT JOIN Apts ON Apts.aptNum = PH.aptNum WHERE PH.invoiceNum = ?;'
+    connection.query(sql, [searchID] , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.status(404);
@@ -188,7 +197,9 @@ app.get('/GET/rodentsToFloors', function(req, res)
 
 app.get('/GET/rodentsToFloors/rodent/:rodentID', function(req, res)
 {
-    connection.query(`SELECT * FROM RodentsToFloors WHERE rodentID = ${req.params.rodentID}`,  {timeout: 40000} , function(error, results, fields){
+    const searchID = req.params.id;
+    let sql = "SELECT Rodents.rodentID,Rodents.rodentName,RodentsToFloors.floorNum FROM Rodents JOIN RodentsToFloors ON Rodents.rodentID = RodentsToFloors.rodentID WHERE RodentsToFloors.rodentID = ?;"
+    connection.query(sql, [searchID],  {timeout: 40000} , function(error, results, fields){
         if(error){
             res.write(JSON.stringify(error));
             res.status(404);
