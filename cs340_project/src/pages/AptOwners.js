@@ -253,7 +253,14 @@ const Modal = ({ isShowing, hide ,aptOwnerForUpdate, updateAptOwners, SSNInputFo
                     <input id="lastNameInp" placeholder={aptOwnerForUpdate.lastName} type={"text"} onKeyUp={LastNameFormat}/>
                     <p>SSN [Optional]</p>
                     <input id="ssnInp" placeholder={aptOwnerForUpdate.ssn}  type={"text"} onKeyUp={SSNInputFormat}/>
-                    <MdUpdate onClick={e => updateAptOwners(aptOwnerForUpdate, document.getElementById("firstNameInp").value, document.getElementById("lastNameInp").value, document.getElementById("ssnInp").value)}/>
+                    <MdUpdate onClick={e => {
+                        if(document.getElementById("ssnInp").value.length !== 11){
+                            alert('SSN must be 9 digits long (excluding dashes).')
+                        } else{
+                            updateAptOwners(aptOwnerForUpdate, document.getElementById("firstNameInp").value, document.getElementById("lastNameInp").value, document.getElementById("ssnInp").value)
+
+                        }
+                    }}/>
                 </form>
             </div>
         </div>
