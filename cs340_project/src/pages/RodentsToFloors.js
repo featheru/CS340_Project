@@ -195,12 +195,12 @@ function RodentsToFloors() {
         <p>Tracks floors that a rodent currently occupies(which could be many!)</p>
         <button onClick={onAddClick}>+ Add New Item</button>
         <RTFList rtfList={rodentToFloorList}/>
-        <Modal isShowing={isShowing} hide={toggle} rtfForUpdate={rtfForUpdate} setRodentID={setRodentID} setFloorNum={setFloorNum} updateRtf={updateRtf} rodentID={rodentID} floorNum={floorNum}/>
+        <Modal isShowing={isShowing} hide={toggle} rtfForUpdate={rtfForUpdate} rodentOptionList={rodentOptionList} floorOptionList={floorOptionList} updateRtf={updateRtf} FloorMap={FloorMap} RodentMap={RodentMap}/>
         </>
         
     )
 }
-const Modal = ({ isShowing, hide ,rtfForUpdate, setRodentID, setFloorNum, updateRtf, floorNum, rodentID}) => isShowing ? ReactDOM.createPortal(
+const Modal = ({ isShowing, hide ,rtfForUpdate, updateRtf, rodentOptionList, floorOptionList, RodentMap, FloorMap}) => isShowing ? ReactDOM.createPortal(
     <React.Fragment>
         <div className="modal-overlay"/>
         <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
@@ -211,11 +211,14 @@ const Modal = ({ isShowing, hide ,rtfForUpdate, setRodentID, setFloorNum, update
                     </button>
                 </div>
                 <form>
-                    <p>Rodent ID</p>
-                    <input placeholder={rtfForUpdate.rodentID} type={"number"} onChange={e => setRodentID(e.target.value)}/>
-                    <p>Floor Number</p>
-                    <input placeholder={rtfForUpdate.floorNum} type={"number"} onChange={e => setFloorNum(e.target.value)}/>
-                    <MdUpdate onClick={e => updateRtf(rtfForUpdate, rodentID, floorNum)}/>
+                    <p>Rodent</p>
+                    <select id = "rodentNameInp" defaultValue={rtfForUpdate.rodentID}>
+                        {rodentOptionList.map((item,idx) => <RodentMap item={item} idx = {idx}/>)}
+                    </select>                    <p>Floor Number</p>
+                    <select id = "floorNumInp" defaultValue={rtfForUpdate.floorNum}>
+                        {floorOptionList.map((item,idx) => <FloorMap item={item} idx = {idx}/>)}
+                    </select>
+                    <MdUpdate onClick={e => updateRtf(rtfForUpdate, document.getElementById("rodentNameInp").value, document.getElementById("floorNumInp").value)}/>
                 </form>
             </div>
         </div>
